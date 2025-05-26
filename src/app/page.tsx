@@ -1,6 +1,34 @@
+"use client";
 import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Home() {
+  const [data, setData] = useState();
+
+  const dataFetch = useCallback(async () => {
+    const response = await fetch("/backend/test", {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const result = await response.json();
+    setData(result);
+  }, []);
+
+  useEffect(() => {
+    // Define and immediately invoke async function
+    (async () => {
+      await dataFetch();
+    })();
+  }, [dataFetch]);
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      // Here you can also render data to script or do other operations
+    }
+  }, [data]); // This runs whenever data changes
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
