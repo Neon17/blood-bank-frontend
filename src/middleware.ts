@@ -3,10 +3,42 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-async function authMiddleware(request: NextRequest) {
+// Define your protected and auth routes
+const protectedRoutes = ['/dashboard', '/profile', '/admin'];
+const authRoutes = ['/login', '/register'];
+
+// Just to redirect from login/register to dashboard if logged in
+async function authRedirect(request: NextRequest) {
     const cookieStore = await cookies();
-    // const token = cookieStore.get('auth_token')?.value;
+    const token = cookieStore.get('auth_token')?.value;
+    if (token) {
+
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+    return NextResponse.next();
+}
+
+// Check authenticated token validity (is it expired?)
+async function isAuthenticated(token: string | undefined) {
+    // Verify token
+    if (token) {
+        try {
+            const response = await axios.get('http://localhost:3000/backend/api/user', { headers: { Authorization: `Bearer ${token}` } });
+            const data = await response.data;
+            if (data.status === 'error') {
+                return false;
+            }
+            return response.status === 200;
+        }
+        catch (error) {
+            return false;
+        }
+    }
+}
+
+async function authMiddleware(request: NextRequest) {
     const token = request.cookies.get('auth_token')?.value;
+
     // Protected routes
     const protectedRoutes = ['/profile', '/dashboard', '/admin'];
     const isProtectedRoute = protectedRoutes.some((route) => {
@@ -19,18 +51,8 @@ async function authMiddleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    // Verify token
-    if (token) {
-        try {
-            const response = await axios.get('http://localhost:3000/backend/api/user', { headers: { Authorization: `Bearer ${token}` } });
-            const data = await response.data;
-            if (data.status === 'error') {
-                return NextResponse.redirect(new URL('/login', request.url));
-            }
-        }
-        catch (error) {
-            return NextResponse.redirect(new URL('/login', request.url));
-        }
+    if (isProtectedRoute && !await isAuthenticated(token)) {
+        return NextResponse.redirect(new URL('/login', request.url));
     }
 
     return NextResponse.next();
@@ -66,6 +88,16 @@ async function rateLimitMiddleware(request: NextRequest) {
 }
 
 export async function middleware(request: NextRequest){
+    const pathname = request.nextUrl.pathname;
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_token')?.value;
+
+    // Handle auth routes (login, register)
+    if (authRoutes.some((route) => pathname.startsWith(route))) {
+        return authRedirect(request);
+    }
+
+    // Handle protected routes (dashboard, profile, admin)
     let response = await authMiddleware(request);
     console.log(response);
     if (response.status!=200) return response;
@@ -92,7 +124,7 @@ export const config = {
     '/dashboard/:path*',
     '/profile/:path*',
     '/admin/:path*',
-    '/settings/:path*',
-    '/api/:path*'
+    '/login',
+    '/register'
   ]
 }
