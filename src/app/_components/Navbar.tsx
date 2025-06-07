@@ -1,5 +1,3 @@
-
-
 export default function Navbar() {
     return (
         <nav className="bg-white dark:bg-gray-900">
@@ -35,6 +33,5 @@ export default function Navbar() {
                 </div>
             </div>
         </nav>
-
     )
 }

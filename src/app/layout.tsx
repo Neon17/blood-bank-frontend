@@ -1,14 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
 import Navbar from './_components/Navbar'
 import Footer from './_components/Footer'
 import { AuthInfoContextProvider } from './authInfo'
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  themeColor: '#ffffff', // Force light theme
   title: {
     default: 'Smart Blood Bank',
     template: '%s | Smart Blood Bank'
@@ -51,6 +50,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+          <link 
+          href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.0/dist/tailwind.min.css" 
+          rel="stylesheet" 
+        />
+      </head>
       <body>
         <AuthInfoContextProvider>
         <div className="min-h-screen flex flex-col w-full h-full">

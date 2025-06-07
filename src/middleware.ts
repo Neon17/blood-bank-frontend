@@ -44,8 +44,6 @@ async function authMiddleware(request: NextRequest) {
     const isProtectedRoute = protectedRoutes.some((route) => {
         return request.nextUrl.pathname.startsWith(route);
     })
-    console.log("hello");
-    console.log(token); // undefined here always
 
     if (isProtectedRoute && !token) {
         return NextResponse.redirect(new URL('/login', request.url));
@@ -99,15 +97,12 @@ export async function middleware(request: NextRequest){
 
     // Handle protected routes (dashboard, profile, admin)
     let response = await authMiddleware(request);
-    console.log(response);
     if (response.status!=200) return response;
 
     response = await roleMiddleware(request);
-    console.log(response);
     if (response.status!=200) return response;
 
     response = await rateLimitMiddleware(request);
-    console.log(response);
     return response;
 }
 

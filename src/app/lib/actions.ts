@@ -9,7 +9,19 @@ export async function profile () {
         const data = await response.data;
         return data;
     } catch (error: any | { message: string }) {
-        console.log(error);
+        return {
+            status: 'error',
+            message: error.message
+        }
+    }
+}
+
+export async function test() {
+    try {
+        const response = await api.get('/test');
+        const data = await response.data;
+        return data;
+    } catch (error: any | { message: string }) {
         return {
             status: 'error',
             message: error.message
