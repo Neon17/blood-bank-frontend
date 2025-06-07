@@ -63,7 +63,7 @@ export default function RootLayout({
             <Navbar />
           </header>
 
-          <main className="flex items-center justify-center w-full h-full m-0 p-0 root-main-layout">
+          <main className="flex min-h-screen items-center justify-center w-full h-min-screen m-0 p-0 root-main-layout">
             {children}
           </main>
 
