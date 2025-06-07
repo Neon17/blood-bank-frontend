@@ -3,13 +3,6 @@ import React, { useState } from 'react'
 
 
 export default function Signup() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-
-    const [currentStep, setCurrentStep] = useState(1);
-
     const [errors, setErrors] = useState({
         name: '',
         email: '',
@@ -38,13 +31,6 @@ export default function Signup() {
             }));
             return;
         }
-
-        // console.log(formData);
-        // const response = await fetch('/backend/api/signup');
-        // const data = await response.json();
-        // if (data.error) {
-        //     setError(data.error);
-        // }
     }
 
     return (

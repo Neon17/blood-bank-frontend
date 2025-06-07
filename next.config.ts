@@ -28,6 +28,10 @@ const nextConfig: NextConfig = {
             key: 'Access-Control-Allow-Headers',
             value: 'Content-Type, Authorization', // To support Authorization Header
           },
+          { 
+            key: 'Access-Control-Allow-Credentials', 
+            value: 'true' 
+          },
         ],
       },
     ];

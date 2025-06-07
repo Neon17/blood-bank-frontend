@@ -6,3 +6,10 @@ export type User = {
     created_at: Date;
     updated_at: Date;
 }
+
+export type AuthResponse = {
+    status?: string,
+    token?: string,
+    user?: User,
+    message?: string
+}

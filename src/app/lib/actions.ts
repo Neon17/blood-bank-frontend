@@ -1,24 +1,18 @@
 "use server"
 
-//data fetching is done here
-//like fetching data from an user
+import { redirect } from "next/navigation";
+import api from "./axios";
 
-export async function fetchProfile(){
+export async function profile () {
     try {
-        const data = await fetch("http://localhost:3000/backend/profile");
-        return data.json();
-    } catch (error) {
-        console.log(error); 
+        const response = await api.get('/profile');
+        const data = await response.data;
+        return data;
+    } catch (error: any | { message: string }) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: error.message
+        }
     }
 }
-
-export async function test(){
-    // const url = new URL('/backend/test', process.env.NEXT_PUBLIC_API_URL);
-    try {
-        const data = await fetch('http://localhost:3000/backend/test');
-        const result = await data.json();
-        return result;
-    } catch (error) {
-        console.log(error);
-    }
-}   
