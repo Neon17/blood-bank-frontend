@@ -1,5 +1,6 @@
 "use client";
 import { authenticate } from "@/app/lib/auth";
+import { redirect } from 'next/navigation'
 import { useState } from "react"
 
 export default function Login() {
@@ -22,6 +23,9 @@ export default function Login() {
             if (data.message)
                 setError(data.message);
             console.error(data.message);
+        }
+        else {
+            redirect('/dashboard');
         }
         console.log(data);
     }

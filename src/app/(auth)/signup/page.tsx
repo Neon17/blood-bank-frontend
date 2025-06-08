@@ -1,4 +1,6 @@
 "use client";
+import { signUp } from '@/app/lib/auth';
+import { redirect } from 'next/navigation';
 import React, { useState } from 'react'
 
 
@@ -9,6 +11,7 @@ export default function Signup() {
         password: '',
         confirmPassword: ''
     });
+    const [error, setError] = useState('');
 
     const handleSubmit = async (formData: FormData) => {
         const name = formData.get('name') as string;
@@ -31,6 +34,17 @@ export default function Signup() {
             }));
             return;
         }
+
+        const data = await signUp(formData);
+        if (data.status === 'error') {
+            if (data.message)
+                setError(data.message);
+            console.error(data.message);
+        }
+        else {
+            redirect('/dashboard');
+        }
+        console.log(data);
     }
 
     return (

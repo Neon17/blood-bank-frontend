@@ -11,9 +11,12 @@ const authRoutes = ['/login', '/register'];
 async function authRedirect(request: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get('auth_token')?.value;
-    if (token) {
-
-        return NextResponse.redirect(new URL('/dashboard', request.url));
+    if (token!=null) {
+        if (await isAuthenticated(token)) {
+            return NextResponse.redirect(new URL('/dashboard', request.url));
+        }
+        cookieStore.delete('auth_token');
+        return NextResponse.redirect(new URL('/login', request.url));
     }
     return NextResponse.next();
 }
@@ -34,6 +37,7 @@ async function isAuthenticated(token: string | undefined) {
             return false;
         }
     }
+    return false;
 }
 
 async function authMiddleware(request: NextRequest) {
