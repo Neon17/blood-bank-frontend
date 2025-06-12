@@ -29,7 +29,6 @@ body {
 }
 
 .root-main-layout {
-  background-image: url('/background.webp');
   background-size: cover;
   box-shadow: inset 0px 0px 0px 1px rgba(26, 26, 0, 0.16);
 }

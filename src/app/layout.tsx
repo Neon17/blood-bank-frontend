@@ -50,12 +50,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-          <link 
-          href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.0/dist/tailwind.min.css" 
-          rel="stylesheet" 
-        />
-      </head>
       <body>
         <AuthInfoContextProvider>
         <div className="min-h-screen flex flex-col w-full h-full">
@@ -63,7 +57,7 @@ export default function RootLayout({
             <Navbar />
           </header>
 
-          <main className="flex min-h-screen items-center justify-center w-full h-min-screen m-0 p-0 root-main-layout">
+          <main className="flex min-h-screen items-center justify-center w-full h-min-screen m-0 p-0 root-main-layout bg-blue-100">
             {children}
           </main>
 
