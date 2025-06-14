@@ -1,11 +1,12 @@
 "use server"
 
 import api from "./axios";
+import { BloodRequest, User } from "./definitions";
 
 export async function profile () {
     try {
         const response = await api.get('/profile');
-        const data = await response.data;
+        const data: User = await response.data;
         return data;
     } catch (error: any | { message: string }) {
         return {
@@ -18,7 +19,10 @@ export async function profile () {
 export async function BloodRequests() {
     try {
         const response = await api.get('/blood/requests');
-        const data = await response.data;
+        const data: [{
+            status: string,
+            data: BloodRequest
+        }] = await response.data;
         return data;
     } catch (error: any | { message: string }) {
         return {
