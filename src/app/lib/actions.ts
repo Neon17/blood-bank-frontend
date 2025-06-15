@@ -5,7 +5,7 @@ import { BloodRequest, User } from "./definitions";
 
 export async function profile () {
     try {
-        const response = await api.get('/profile');
+        const response = await api.get('/user');
         const data: User = await response.data;
         return data;
     } catch (error: any | { message: string }) {

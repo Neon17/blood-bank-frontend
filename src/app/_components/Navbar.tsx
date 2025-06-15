@@ -2,9 +2,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "../authInfo";
 
 export default function Navbar() {
     const [IsOpen, SetIsOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(useAuth().isLoggedIn);
+    const [user, setUser] = useState(useAuth().user);
     const pathname = usePathname();
     return (
         <>
@@ -33,11 +36,24 @@ export default function Navbar() {
                             </li>
                             <li>
 
-                                <div className="relative inline-block text-left">
-                                    <button id="dropdownButton" onClick={() => { SetIsOpen(!IsOpen); console.log(IsOpen) }} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                        Profile
-                                    </button>
-                                </div>
+                                {!user &&
+                                    <div className="relative inline-block text-left">
+                                        <a id="dropdownButton" href="/login" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 m-1 :hover:bg-blue-700">
+                                            Login
+                                        </a>
+                                        <a id="dropdownButton" href="/signup" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 m-1 :hover:bg-blue-700">
+                                            Register
+                                        </a>
+                                    </div>
+                                }
+                                {
+                                    user &&
+                                    <div className="relative inline-block text-left">
+                                        <button id="dropdownButton" onClick={() => { SetIsOpen(!IsOpen); console.log(IsOpen) }} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                            Profile
+                                        </button>
+                                    </div>
+                                }
 
                                 {IsOpen && <div id="dropdownMenu" className="absolute mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                                     <a href="" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">See Profile</a>

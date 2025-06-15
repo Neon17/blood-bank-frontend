@@ -28,7 +28,7 @@ async function isAuthenticated(token: string | undefined) {
         try {
             const response = await axios.get('http://localhost:3000/backend/api/user', { headers: { Authorization: `Bearer ${token}` } });
             const data = await response.data;
-            if (data.status === 'error') {
+            if (data.status) {
                 return false;
             }
             return response.status === 200;
