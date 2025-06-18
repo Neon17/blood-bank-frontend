@@ -4,6 +4,23 @@ export type User = {
     email: string;
     email_verified_at: Date;
     dob: Date;
+    will_donate: boolean;
+    verified_as_donor: boolean;
+    blood_type: string;
+    last_donated: Date;
+    last_verified: Date;
+    address: string;
+    city: string;
+    country: string;
+    current_city: string;
+    latitude: number;
+    longitude: number;
+    phone_number: string;
+    role: string;
+    password: string;
+    remember_token: string;
+    verification_photo: string;
+    profile_photo: string;
     created_at: Date;
     updated_at: Date;
 }

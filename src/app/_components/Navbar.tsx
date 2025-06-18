@@ -10,7 +10,7 @@ export default function Navbar() {
     const pathname = usePathname();
     return (
         <>
-            <nav className="bg-white">
+            <nav className="bg-white container justify-self-center">
                 <div className="flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">
                         <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
@@ -45,18 +45,19 @@ export default function Navbar() {
                                         </a>
                                     </div>
                                 }
-                                {
-                                    user &&
-                                    <div className="relative inline-block text-left">
-                                        <button id="dropdownButton" onClick={() => { SetIsOpen(!IsOpen); console.log(IsOpen) }} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                            Profile
-                                        </button>
-                                    </div>
+                                {user &&
+                                    <>
+                                        <div className="relative inline-block text-left">
+                                            <button id="dropdownButton" onClick={() => { SetIsOpen(!IsOpen); console.log(IsOpen) }} className="px-4 py-2 text-blue-600 rounded-lg hover:text-blue-800 hover:cursor-pointer">
+                                                {user.name}
+                                            </button>
+                                        </div>
+                                    </>
                                 }
 
                                 {IsOpen && <div id="dropdownMenu" className="absolute mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                                    <a href="" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">See Profile</a>
-                                    <a href="" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+                                    <Link href="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => { SetIsOpen(!IsOpen); }}>See Profile</Link>
+                                    <Link href="/logout" className="block px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => { SetIsOpen(!IsOpen); }}>Logout</Link>
                                 </div>}
                             </li>
                         </ul>
