@@ -6,8 +6,7 @@ import { useAuth } from "../authInfo";
 
 export default function Navbar() {
     const [IsOpen, SetIsOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(useAuth().isLoggedIn);
-    const [user, setUser] = useState(useAuth().user);
+    const { isLoggedIn, user } = useAuth();
     const pathname = usePathname();
     return (
         <>

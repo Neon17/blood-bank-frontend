@@ -32,7 +32,6 @@ export const AuthInfoContextProvider = ({ children }: { children: React.ReactNod
         const fetchUser = async() => {
             try {
                 const response: User|ErrorResponseType  = await profile();
-                console.log(response);
                 // console.log(data);
                 if (!response.hasOwnProperty("status")) {
                     const data = response;

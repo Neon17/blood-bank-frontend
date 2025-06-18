@@ -1,20 +1,49 @@
+import { BloodDonors } from "../lib/actions"
+import { User } from "../lib/definitions";
+
 export default async function Donors() {
+    const data = await BloodDonors();
 
     return (
         <main className="flex flex-col min-h-screen w-full items-center justify-center text-black requests-page">
-            <h1 className="text-4xl font-bold">Requests</h1>
+            <h1 className="text-4xl font-bold">Donor</h1>
 
             <div className="flex flex-wrap justify-center gap-4 mt-6">
+
+                {data && data.data?.map((elem: User, index: Number) => (
                     <div
+                        key={index}
                         className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm"
                     >
-                        <a href="#">
-                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                                "No Donor API made"
-                            </h5>
-                        </a>
                         <p className="mb-3 font-normal text-gray-700">
-                            This is a sample donor description.
+                            Requested By: {elem.user.name}
+                        </p>
+                        <p className="mb-3 font-normal text-gray-700">
+                            Blood Type: {elem.blood_type}
+                        </p>
+                        <p className="mb-3 font-normal text-gray-700">
+                            Quantity: {elem.quantity}
+                        </p>
+                        <p className="mb-3 font-normal text-gray-700">
+                            Date: {elem.date_time}
+                        </p>
+                        <p className="mb-3 font-normal text-gray-700">
+                            Exact location: {elem.exact_location}
+                        </p>
+                        <p className="mb-3 font-normal text-gray-700">
+                            Contact Number: {elem.contact_number}
+                        </p>
+                        <p className="mb-3 font-normal text-gray-700">
+                            City: {elem.quantity}
+                        </p>
+                        <p className="mb-3 font-normal text-gray-700">
+                            Country: {elem.quantity}
+                        </p>
+                        <p className="mb-3 font-normal text-gray-700">
+                            Verified By: {elem.quantity}
+                        </p>
+                        <p className="mb-3 font-normal text-gray-700">
+                            Verification Photo: {elem.verification_photo}
                         </p>
                         <a
                             href="#"
@@ -38,6 +67,7 @@ export default async function Donors() {
                             </svg>
                         </a>
                     </div>
+                ))}
                 
             </div>
 

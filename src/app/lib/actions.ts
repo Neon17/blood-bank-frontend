@@ -21,10 +21,27 @@ export async function BloodRequests() {
         const response = await api.get('/blood/requests');
         const data: [{
             status: string,
-            data: BloodRequest
+            data: BloodRequest[]
         }] = await response.data;
         return data;
     } catch (error: any | { message: string }) {
+        return {
+            status: 'error',
+            message: error.message
+        }
+    }
+}
+
+export async function BloodDonors() {
+    try {
+        const response = await api.get('/donors');
+        const data : [{
+            status: string,
+            data: User[]
+        }] = await response.data;
+        return data;
+    }
+    catch (error: any | { message: string }) {
         return {
             status: 'error',
             message: error.message

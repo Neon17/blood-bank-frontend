@@ -27,7 +27,6 @@ export default function Login() {
         else {
             redirect('/dashboard');
         }
-        console.log(data);
     }
 
     return (

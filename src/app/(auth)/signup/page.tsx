@@ -44,7 +44,6 @@ export default function Signup() {
         else {
             redirect('/dashboard');
         }
-        console.log(data);
     }
 
     return (
