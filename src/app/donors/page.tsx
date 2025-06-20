@@ -12,35 +12,23 @@ export default async function Donors() {
 
                 {data && data.data?.map((elem: User, index: Number) => (
                     <div
-                        key={index}
+                        key={index.toString()}
                         className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm"
                     >
                         <p className="mb-3 font-normal text-gray-700">
-                            Requested By: {elem.user.name}
+                            Name: {elem.name}
                         </p>
                         <p className="mb-3 font-normal text-gray-700">
                             Blood Type: {elem.blood_type}
                         </p>
                         <p className="mb-3 font-normal text-gray-700">
-                            Quantity: {elem.quantity}
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700">
-                            Date: {elem.date_time}
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700">
-                            Exact location: {elem.exact_location}
+                            Verified as Donor: {elem.verified_as_donor ? "Yes" : "No"}
                         </p>
                         <p className="mb-3 font-normal text-gray-700">
                             Contact Number: {elem.contact_number}
                         </p>
                         <p className="mb-3 font-normal text-gray-700">
-                            City: {elem.quantity}
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700">
-                            Country: {elem.quantity}
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700">
-                            Verified By: {elem.quantity}
+                            Current City: {elem.current_city}
                         </p>
                         <p className="mb-3 font-normal text-gray-700">
                             Verification Photo: {elem.verification_photo}

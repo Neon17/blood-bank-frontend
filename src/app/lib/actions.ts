@@ -16,6 +16,26 @@ export async function profile () {
     }
 }
 
+export async function updateProfile(formData: FormData) {
+    try {
+        for(const [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+        formData.append('_method', 'PUT');
+        const response = await api.post('/updateMe', formData);
+        const data: {
+            status: string,
+            data: User
+        } = await response.data;
+        return data;
+    } catch (error: any | { message: string }) {
+        return {
+            status: 'error',
+            message: error.message
+        }
+    }
+}
+
 export async function BloodRequests() {
     try {
         const response = await api.get('/blood/requests');

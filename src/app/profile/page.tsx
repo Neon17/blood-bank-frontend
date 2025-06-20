@@ -2,9 +2,13 @@
 
 import { User } from "@/app/lib/definitions";
 import { useAuth } from "../authInfo";
+import { updateProfile } from "../lib/actions";
+import { useState } from "react";
 
 const Profile = () => {
     const { user, isLoggedIn } = useAuth();
+    const { error, setError } = useState();
+    const {success, setSuccess } = useState();
 
     if (!user) return <div>Loading...</div>;
 
