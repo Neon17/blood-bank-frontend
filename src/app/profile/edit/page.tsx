@@ -2,25 +2,38 @@
 
 import { useAuth } from "../../authInfo";
 import { updateProfile } from "@/app/lib/actions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import MapPicker from "@/app/_components/MapPicker";
 
 const EditProfile = () => {
-    const { user, isLoggedIn } = useAuth();
+    const { user } = useAuth();
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [location, setLocation] = useState({
-        lat: 0,
-        lng: 0,
-        city: "",
-        country: ""
+        lat: user?.latitude ?? 27.7172,
+        lng: user?.longitude ?? 85.3240,
+        city: user?.city ?? 'Kathmandu',
+        country: user?.country ?? 'Nepal'
     });
+    console.log(user?.latitude, user?.longitude);
+
+    useEffect(() => {
+        if (user){
+            setLocation({
+                lat: user?.latitude ?? 27.7172,
+                lng: user?.longitude ?? 85.3240,
+                city: user?.city ?? 'Kathmandu',
+                country: user?.country ?? 'Nepal'
+            });
+        }
+    }, [user]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         const name = document.getElementById('name');
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
+        formData.append('location', JSON.stringify(location));
         const response = await updateProfile(formData);
 
         if (response.status === 'error') {
@@ -39,9 +52,10 @@ const EditProfile = () => {
     return (
         <div className="w-full h-full">
             <div className="flex items-center justify-center p-3 w-full h-full">
-
-                <div className="flex justify-end">
-                    <MapPicker onChange={setLocation}/>
+                <div className="flex justify-end h-full">
+                    { user &&
+                        <MapPicker location={location} onChange={setLocation} />
+                    }
                 </div>
 
                 <div className="max-w-md md:max-w-xl w-full flex flex-col justify-start gap-8 bg-white p-4 rounded-md">

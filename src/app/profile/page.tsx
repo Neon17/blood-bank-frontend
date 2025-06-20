@@ -3,7 +3,7 @@
 import { User } from "@/app/lib/definitions";
 import { useAuth } from "../authInfo";
 import { updateProfile } from "../lib/actions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MapPicker from "../_components/MapPicker";
 
 const Profile = () => {
@@ -11,19 +11,30 @@ const Profile = () => {
     const { error, setError } = useState();
     const { success, setSuccess } = useState();
     const [location, setLocation] = useState({
-        lat: 0,
-        lng: 0,
-        city: "",
-        country: ""
+        lat: user?.latitude ?? 27.7172,
+        lng: user?.longitude ?? 85.3240,
+        city: user?.city ?? 'Kathmandu',
+        country: user?.country ?? 'Nepal'
     });
+
+    useEffect(() => {
+        if (user) {
+            setLocation({
+                lat: user?.latitude ?? 27.7172,
+                lng: user?.longitude ?? 85.3240,
+                city: user?.city ?? 'Kathmandu',
+                country: user?.country ?? 'Nepal'
+            });
+        }
+    }, [user]);
 
     if (!user) return <div>Loading...</div>;
 
     return (
-        <div className="w-full h-full flex justify-center md:px-2">
+        <div className="w-full h-full flex justify-center md:px-2 w-full h-full">
 
-            <div className="flex justify-end">
-                <MapPicker onChange={setLocation} />
+            <div className="flex justify-end h-full">
+                <MapPicker location={location} onChange={setLocation} />
             </div>
             <div className="max-w-md w-full flex flex-col gap-8 bg-white p-4 rounded-md">
                 <h1 className="text-2xl text-center m-3">User Profile</h1>
