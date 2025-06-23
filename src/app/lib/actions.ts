@@ -69,6 +69,22 @@ export async function BloodDonors() {
     }
 }
 
+export async function finishBloodRequests(id: string) {
+    try {
+        const response = await api.post(`/blood/requests/${id}/finish`);
+        const data: [{
+            status: string,
+            data: BloodRequest[]
+        }] = await response.data;
+        return data;
+    } catch (error: any | { message: string }) {
+        return {
+            status: 'error',
+            message: error.message
+        }
+    }
+}
+
 export async function test() {
     try {
         const response = await api.get('/test');
