@@ -36,71 +36,71 @@ const Profile = () => {
             <div className="flex justify-end h-full">
                 <MapPicker location={location} onChange={setLocation} />
             </div>
-            <div className="max-w-md w-full flex flex-col gap-8 bg-white p-4 rounded-md">
+            <div className="max-w-md w-full flex flex-col gap-8 bg-gray-200 dark:bg-gray-800 p-4 rounded-md">
                 <h1 className="text-2xl text-center m-3">User Profile</h1>
                 <form>
                     <div className="mb-5">
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-1">Email:</label>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-800 dark:text-gray-100 mb-1">Email:</label>
                         <input
                             type="email"
                             id="email"
                             name="email"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             value={user.email}
                             required readOnly
                         />
                     </div>
 
                     <div className="mb-5">
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-1">Name:</label>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-800 dark:text-gray-100 mb-1">Name:</label>
                         <input
                             type="text"
                             id="name"
                             name="name"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             value={user.name}
                             required readOnly
                         />
                     </div>
 
                     <div className="mb-5">
-                        <label htmlFor="address" className="block text-sm font-medium text-gray-900 mb-1">Address:</label>
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-800 dark:text-gray-100 mb-1">Address:</label>
                         <input
                             type="text"
                             id="address"
                             name="address"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             value={user.address || ''} readOnly
                         />
                     </div>
 
                     <div className="mb-5">
-                        <label htmlFor="dob" className="block text-sm font-medium text-gray-900 mb-1">Date of Birth:</label>
+                        <label htmlFor="dob" className="block text-sm font-medium text-gray-800 dark:text-gray-100 mb-1">Date of Birth:</label>
                         <input
                             type="date"
                             id="dob"
                             name="dob"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             value={user.dob?.split('T')[0] || ''} readOnly
                         />
                     </div>
 
                     {/* Readonly Fields */}
                     <div className="mb-5">
-                        <label className="block text-sm font-medium text-gray-900 mb-1">Role:</label>
+                        <label className="block text-sm font-medium text-gray-800 dark:text-gray-100 mb-1">Role:</label>
                         <input
                             type="text"
-                            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             value={user.role || '-'}
                             readOnly
                         />
                     </div>
 
                     <div className="mb-5">
-                        <label className="block text-sm font-medium text-gray-900 mb-1">Verified as Donor:</label>
+                        <label className="block text-sm font-medium text-gray-800 dark:text-gray-100 mb-1">Verified as Donor:</label>
                         <input
                             type="text"
-                            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             value={user.verified_as_donor ? "Yes" : "No"}
                             readOnly
                         />

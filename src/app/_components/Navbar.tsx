@@ -56,9 +56,9 @@ export default function Navbar() {
                                     </>
                                 }
 
-                                {IsOpen && <div id="dropdownMenu" className="absolute mt-2 border border-gray-200 rounded-md shadow-lg z-10">
-                                    <Link href="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => { SetIsOpen(!IsOpen); }}>See Profile</Link>
-                                    <Link href="/logout" className="block px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => { SetIsOpen(!IsOpen); }}>Logout</Link>
+                                {IsOpen && <div id="dropdownMenu" className="absolute mt-2 border border-gray-200 bg-gray-300 dark:bg-gray-700 rounded-md shadow-lg z-10">
+                                    <Link href="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-900" onClick={() => { SetIsOpen(!IsOpen); }}>See Profile</Link>
+                                    <Link href="/logout" className="block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-900" onClick={() => { SetIsOpen(!IsOpen); }}>Logout</Link>
                                 </div>}
                             </li>
                         </ul>
