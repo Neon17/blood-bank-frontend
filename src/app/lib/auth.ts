@@ -17,10 +17,9 @@ export async function authenticate(formData: FormData): Promise<AuthResponse> {
 
     return { status: 'success', user: data.user };
   } catch (error: any) {
-    console.log(error);
     return { 
-      status: "Authentication failed",
-      message: error.message 
+      status: "error",
+      message: error.message || 'An unexpected error occurred' 
     };
   }
 }

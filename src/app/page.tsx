@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="min-w-full min-h-full min-h-screen">
 
-      <div className="flex flex-col justify-evenly gap-10 items-center p-5 min-h-screen blood-intro-page">
+      <div className="flex flex-col justify-evenly gap-10 items-center p-5 min-h-screen blood-intro-page bg-gray-100 dark:bg-gray-800">
 
         <div className="flex flex-col w-full gap-3 items-center">
           <h1 className="welcometitle text-4xl font-bold">
@@ -28,7 +28,7 @@ export default function Home() {
 
       </div>
 
-      <div className="flex flex-col gap-10 items-center p-5 justify-center min-h-screen description-page bg-blue-300">
+      <div className="flex flex-col gap-10 items-center p-5 justify-center min-h-screen description-page bg-blue-300 dark:bg-blue-700">
 
         <div className="about-us-container flex items-center">
           <h2 className="text-2xl font-bold">
@@ -48,7 +48,7 @@ export default function Home() {
 
       </div>
 
-      <div className="flex flex-col gap-10 justify-center items-center justify-center p-5 min-h-screen description-page bg-green-300">
+      <div className="flex flex-col gap-10 justify-center items-center justify-center p-5 min-h-screen description-page bg-green-300 dark:bg-green-600">
 
         <div className="about-us-container flex items-center">
           <h2 className="text-2xl font-bold">
@@ -68,7 +68,7 @@ export default function Home() {
 
       </div>
 
-      <div className="flex flex-col gap-10 items-center p-5 min-h-screen justify-center description-page bg-yellow-300">
+      <div className="flex flex-col gap-10 items-center p-5 min-h-screen justify-center description-page bg-yellow-300 dark:bg-yellow-600">
 
         <div className="about-us-container flex items-center">
           <h2 className="text-2xl font-bold">

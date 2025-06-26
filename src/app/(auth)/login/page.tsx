@@ -20,23 +20,42 @@ export default function Login() {
 
         // Reset errors
         setError('');
-        const data = await authenticate(formData);
-        if (data.status === 'error') {
-            if (data.message)
-                setError(data.message);
-            console.error(data.message);
+        try {
+            const data = await authenticate(formData);
+
+            if (data?.status === 'error') {
+                if (data.message) {
+                    setError(data.message);
+                    console.error(data.message);
+                }
+            } else {
+                setUser(data?.user);
+                setIsLoggedIn(true);
+                redirect('/dashboard');
+            }
+        } catch (error: any) {
+            console.error(error);
+
+            if (error?.code === 'ERR_BAD_REQUEST') {
+                setError(error.message || 'Bad request');
+            } else {
+                // setError('An unexpected error occurred.');
+                console.error(error);
+                setError(error.message);
+            }
         }
-        else {
-            setUser(data?.user);
-            setIsLoggedIn(true);
-            redirect('/dashboard');
-        }
+
     }
 
     return (
         <div className="p-5 w-full">
 
             <form action={handleFormData} className="max-w-md mx-auto p-8 rounded-lg flex flex-col bg-white">
+                {error &&
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span className="block sm:inline">{error}</span>
+                    </div>
+                }
                 <div className="mb-5">
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Your email</label>
                     <input type="email" id="email" name="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@flowbite.com" required />
