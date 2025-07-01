@@ -1,8 +1,8 @@
-import { BloodRequests } from "../lib/actions"
+import { bloodRequests } from "../lib/actions"
 import { BloodRequest } from "../lib/definitions";
 
 export default async function Requests() {
-    const data = await BloodRequests();
+    const data = await bloodRequests();
 
     return (
         <main className="flex flex-col min-h-screen w-full items-center justify-center requests-page">
@@ -11,7 +11,7 @@ export default async function Requests() {
             <div className="flex flex-wrap justify-center gap-4 mt-6">
                 {data && data.data?.map((elem: BloodRequest, index: Number) => (
                     <div
-                        key={index}
+                        key={index.toString()}
                         className="max-w-sm p-6 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm"
                     >
                         <p className="mb-3 font-normal text-gray-700 dark:text-gray-300">

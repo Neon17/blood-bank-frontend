@@ -1,8 +1,8 @@
-import { BloodDonors } from "../lib/actions"
+import { bloodDonors } from "../lib/actions"
 import { User } from "../lib/definitions";
 
 export default async function Donors() {
-    const data = await BloodDonors();
+    const data = await bloodDonors();
 
     return (
         <main className="flex flex-col min-h-screen w-full items-center justify-center requests-page">
