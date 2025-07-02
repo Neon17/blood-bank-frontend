@@ -2,16 +2,16 @@
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-300 dark:bg-gray-900">
-            <div className="container mx-auto w-full p-4 py-6 lg:py-8">
+        <footer className="bg-red-300 dark:bg-red-700">
+            <div className="max-w-7xl mx-auto w-full p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0">
-                        <a href="https://flowbite.com/" className="flex items-center">
+                        <a href="/" className="flex items-center">
                             <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" />
                             <span className="self-center text-2xl font-semibold whitespace-nowrae">Blood Bank</span>
                         </a>
                     </div>
-                    <div className="grid place-items-center dark:bg-gray-900">
+                    <div className="grid place-items-center">
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-6">
                             <div>
                                 <h2 className="mb-6 text-sm font-semibold uppercase">Resources</h2>

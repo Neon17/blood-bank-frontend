@@ -47,10 +47,10 @@ const EditProfile = () => {
         }
     }
 
-    if (!user) return <div>Loading...</div>;
+    if (!user) return <div className="w-full h-screen pt-5 text-center">Loading...</div>;
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full max-w-7xl mx-auto">
             <div className="flex items-center justify-center p-3 w-full h-full">
                 <div className="flex justify-end h-full">
                     { user &&

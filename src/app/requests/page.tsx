@@ -8,7 +8,7 @@ export default async function Requests() {
     var error = '';
 
     return (
-        <main className="flex flex-col min-h-screen w-full requests-page p-3 container">
+        <main className="flex flex-col max-w-7xl mx-auto min-h-screen w-full requests-page p-3 container">
             <h1 className="text-4xl font-bold text-center m-10">Requests</h1>
             <div className="button-container my-2 mt-5 w-full">
                 <a type="button" href="/requests/create" className="text-white bg-blue-700 hover:cursor-pointer hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -29,7 +29,7 @@ export default async function Requests() {
                 {data && data.data?.map((elem: BloodRequest, index: Number) => (
                     <div
                         key={index.toString()}
-                        className="max-w-sm p-6 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm"
+                        className="p-6 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm"
                     >
                         <p className="mb-3 font-normal text-gray-700 dark:text-gray-300">
                             Requested By: {elem.user.name}

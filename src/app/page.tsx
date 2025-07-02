@@ -2,95 +2,121 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="min-w-full min-h-full min-h-screen">
+    <div className="w-full bg-gray-50">
 
-      <div className="flex flex-col gap-10 items-center justify-evenly p-5 min-h-screen blood-intro-page bg-gray-100 dark:bg-gray-800">
+      {/* Hero Section */}
+      <section className="flex flex-col md:flex-row items-center justify-between pt-5 px-8 md:py-16 dark:bg-gray-900  mx-auto min:h-[600px]">
 
-        <div className="flex flex-col w-full gap-3 items-center">
-          <h1 className="welcometitle text-4xl font-bold">
-            Blood Donation
-          </h1>
-          <h2 className="welcometitlebelow text-3xl font-bold">
-            Welcome to Blood Donation
-          </h2>
-        </div>
+        <div className="section-container max-w-7xl flex flex-col md:flex-row items-center justify-between px-8 mx-auto min:h-[600px]">
 
-
-        <div className="blood-image-description md:flex justify-center w-full h-full">
-          <div className="image-container p-2 md:w-1/2 h-full flex justify-center">
-            <Image src="/blood.jpg" alt="blood" width={500} height={500} />
-          </div>
-
-          <div className="some-description p-2 md:w-1/2 h-full flex">
-            <p className="text-box h-full text-lg leading-relaxed">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni atque nostrum at, eveniet quas sint blanditiis maiores amet, praesentium soluta beatae? Quibusdam aliquam labore eius impedit reiciendis. Amet aliquid, ducimus ipsam sint, debitis reprehenderit cupiditate repudiandae asperiores corporis molestias non assumenda iusto.
+          {/* Left Text */}
+          <div className="md:w-1/2 space-y-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-red-700 dark:text-red-300">
+              Every Drop Counts
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
+              Join our community of life-savers. Your donation can make a difference.
             </p>
+            <div className="flex gap-4">
+              <button className="bg-red-600 text-white px-3 py-2 md:px-6 md:py-3 rounded shadow hover:bg-red-700 transition">
+                Become a Donor
+              </button>
+              <button className="border border-red-500 text-red-600 dark:text-red-400 px-3 py-2 md:px-6 md:py-3 rounded hover:bg-red-100 hover:dark:bg-gray-700 hover:cursor-pointer transition">
+                Find Donors
+              </button>
+            </div>
           </div>
+
+          {/* Right Image */}
+          <div className="md:w-1/2 h-full flex p-3 justify-center mb-10 md:mb-0">
+            <img src="/blood.png" alt="blood cells" className="rounded-xl shadow-lg h-full w-full object-cover" />
+          </div>
+
         </div>
 
-      </div>
+      </section>
 
-      <div className="flex flex-col gap-10 items-center p-5 justify-around min-h-screen description-page bg-blue-300 dark:bg-blue-700">
+      {/* Stats Section */}
+      <section className="py-10 px-6 dark:bg-gray-900">
 
-        <div className="about-us-container flex items-center">
-          <h2 className="text-2xl font-bold">
-            About Us
-          </h2>
-        </div>
-        <div className="about-description-container flex md:flex-row flex-col-reverse p-2 justify-center items-center w-full h-96">
-          <div className="some-description p-2 md:w-1/2 w-full h-full flex justify-center text-lg">
-            <p className="text-box leading-relaxed">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi quaerat, non neque obcaecati similique beatae corrupti facilis dolore iure fugit deleniti hic quisquam quia sapiente eius ullam consectetur cupiditate esse ipsam aspernatur illo ratione tenetur alias! Cupiditate repudiandae aliquam aspernatur consequatur est!
-            </p>
+        <div className="section-container max-w-7xl flex flex-col md:flex-row items-center justify-between  mx-auto min:h-[600px]">
+          <div className="flex flex-col md:flex-row justify-center items-center max-w-6xl mx-auto gap-8 text-center">
+            <div className='bg-white w-full md:w-auto p-12 rounded shadow-md dark:bg-gray-800'>
+              <p className="text-3xl font-bold text-red-700 dark:text-gray-200">1000+</p>
+              <p className="text-gray-600 dark:text-gray-300">Lives Saved</p>
+            </div>
+            <div className='bg-white w-full md:w-auto p-12 rounded shadow-md dark:bg-gray-800'>
+              <p className="text-3xl font-bold text-red-700 dark:text-gray-200">500+</p>
+              <p className="text-gray-600 dark:text-gray-300">Active Donors</p>
+            </div>
+            <div className='bg-white w-full md:w-auto p-12 rounded shadow-md dark:bg-gray-800'>
+              <p className="text-3xl font-bold text-red-700 dark:text-gray-200">24/7</p>
+              <p className="text-gray-600 dark:text-gray-300">Support</p>
+            </div>
           </div>
-          <div className="image-container p-2 md:w-1/2 w-full h-full flex justify-center">
-            <img src="group.jpeg" className="h-full object-fill" alt="United We Stand, Divided We Fall" />
-          </div>
+
         </div>
+      </section>
 
-      </div>
+      {/* Mission Section */}
+      <section className="bg-pink-50 dark:bg-gray-800 py-16 px-6 text-center">
+        <div className="section-container max-w-7xl py-16 px-6 mx-auto text-center">
 
-      <div className="flex flex-col gap-10 justify-evenly items-center justify-center p-5 min-h-screen description-page bg-green-300 dark:bg-green-600">
+          <h2 className="text-red-600 dark:text-red-400 font-bold uppercase text-sm mb-2">Our Mission</h2>
+          <h3 className="text-3xl md:text-4xl font-bold text-red-700 dark:text-red-300 mb-4">
+            Connecting Lives Through Blood Donation
+          </h3>
+          <p className="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12">
+            We're building a community where finding blood donors is quick, easy, and reliable. Our platform ensures that help is always within reach.
+          </p>
 
-        <div className="about-us-container flex items-center">
-          <h2 className="text-2xl font-bold">
-            Services
-          </h2>
-        </div>
-        <div className="about-description-container flex md:flex-row flex-col-reverse p-2 justify-center w-full h-96">
-          <div className="image-container p-2 md:w-1/2 w-full h-full flex justify-center">
-            <img src="services.jpg" className="h-full object-fill" alt="United We Stand, Divided We Fall" />
-          </div>
-          <div className="some-description p-2 md:w-1/2 w-full h-full flex justify-center items-center text-lg">
-            <p className="text-box h-full leading-relaxed">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi quaerat, non neque obcaecati similique beatae corrupti facilis dolore iure fugit deleniti hic quisquam quia sapiente eius ullam consectetur cupiditate esse ipsam aspernatur illo ratione tenetur alias! Cupiditate repudiandae aliquam aspernatur consequatur est!
-            </p>
-          </div>
-        </div>
-
-      </div>
-
-      <div className="flex flex-col gap-10 items-center p-5 min-h-screen justify-evenly description-page bg-yellow-300 dark:bg-yellow-600">
-
-        <div className="about-us-container flex items-center">
-          <h2 className="text-2xl font-bold">
-            Contact Us
-          </h2>
-        </div>
-        <div className="about-description-container flex md:flex-row flex-col-reverse p-2 justify-center w-full h-96">
-          <div className="some-description p-2 md:w-1/2 w-full h-full flex justify-center text-lg">
-            <p className="text-box leading-relaxed">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi quaerat, non neque obcaecati similique beatae corrupti facilis dolore iure fugit deleniti hic quisquam quia sapiente eius ullam consectetur cupiditate esse ipsam aspernatur illo ratione tenetur alias! Cupiditate repudiandae aliquam aspernatur consequatur est!
-            </p>
-          </div>
-          <div className="image-container p-2 md:w-1/2 w-full h-full flex justify-center">
-            <img src="contact.jpg" className="h-full object-fill" alt="United We Stand, Divided We Fall" />
+          <div className="flex flex-col md:flex-row justify-center gap-6 max-w-6xl mx-auto">
+            {[
+              { title: 'Quick Find', desc: 'Instant matching of blood donors by blood type and location.', icon: '🔍' },
+              { title: 'Real-time Availability', desc: 'Donors can update their availability for emergency situations.', icon: '⏱️' },
+              { title: 'Emergency Notification', desc: 'Immediate alerts to matching donors via text, email, or mobile apps.', icon: '🚨' },
+            ].map((feature, index) => (
+              <div key={index} className="bg-white p-6 rounded shadow-md text-left flex-1">
+                <div className="text-4xl mb-3">{feature.icon}</div>
+                <h4 className="text-lg font-semibold mb-2 text-black">{feature.title}</h4>
+                <p className="text-gray-600">{feature.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
 
-      </div>
+      {/* How it Works Section */}
+      <section className="bg-gray-100 dark:bg-slate-900 py-16 px-6 text-center">
+        <div className="section-container py-16 px-6 text-center">
 
+          <h2 className="text-red-600 font-bold uppercase text-sm mb-2">How it Works</h2>
+          <h3 className="text-3xl md:text-4xl font-bold text-red-700 dark:text-red-200 mb-4">
+            Start Saving Lives in 4 Easy Steps
+          </h3>
+          <p className="text-gray-600 dark:text-gray-200 max-w-3xl mx-auto mb-12">
+            Our streamlined process makes it easy to become a donor and start making a difference in your community.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl mx-auto text-left">
+            {[
+              { step: '01', title: 'Registration', desc: 'Fill out a form to register as a donor. Your data is securely stored and used only when necessary.', icon: '📝' },
+              { step: '02', title: 'Verification', desc: 'After registration, verify your information to ensure accuracy.', icon: '✅' },
+              { step: '03', title: 'Participation in Donation', desc: 'Receive notifications for donation opportunities in your area.', icon: '❤️' },
+              { step: '04', title: 'Receive Notifications', desc: 'Get promptly informed about urgent requests matching your blood type.', icon: '📲' },
+            ].map((item, index) => (
+              <div key={index} className="bg-white p-6 rounded shadow-md relative">
+                <div className="absolute top-4 right-4 text-2xl font-bold text-gray-200">{item.step}</div>
+                <div className="text-4xl mb-3">{item.icon}</div>
+                <h4 className="text-lg font-semibold mb-2">{item.title}</h4>
+                <p className="text-gray-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
     </div>
+
   )
 }

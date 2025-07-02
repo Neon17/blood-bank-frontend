@@ -71,12 +71,12 @@ export default function EditRequest() {
 
     return (
         <>
-            <div className="flex">
+            <div className="flex max-w-7xl mx-auto p-3 justify-center items-center">
                 <MapPicker location={location} onChange={setLocation} />
                 <form id="edit-form" onSubmit={(e) => {
                     const formData = new FormData(e.currentTarget);
                     handleSubmit(formData, e);
-                }}  className="mx-auto w-full p-10 max-w-lg dark:bg-gray-800 rounded-lg">
+                }}  className="mx-auto w-full p-10 max-w-lg rounded-lg">
                     {success &&
                         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                             {success}
