@@ -94,11 +94,11 @@ const EditProfile = () => {
                         <div className="mb-5">
                             <label htmlFor="will_donate" className="block text-sm font-medium text-gray-900 mb-1 dark:text-gray-100">Will Donate?</label>
                             <p className="choice-container">
-                                <input type="radio" name="will_donate" className="m-2" value={1} id="" defaultChecked={user.will_donate} />
+                                <input type="radio" name="will_donate" className="m-2" defaultValue={1} id="" defaultChecked={user.will_donate} />
                                 Yes
                             </p>
                             <p className="choice-container">
-                                <input type="radio" name="will_donate" className="m-2" value={0} id="" defaultChecked={!user.will_donate} />
+                                <input type="radio" name="will_donate" className="m-2" defaultValue={0} id="" defaultChecked={!user.will_donate} />
                                 No
                             </p>
                             <p className="meaning-choice italic text-sm text-red-700">
@@ -124,7 +124,7 @@ const EditProfile = () => {
                                 id="dob"
                                 name="dob"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                defaultValue={user.dob?.split('T')[0] || ''}
+                                defaultValue={user.dob?.toString().split('T')[0] || ''}
                             />
                         </div>
 

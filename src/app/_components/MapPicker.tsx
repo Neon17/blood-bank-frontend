@@ -57,7 +57,7 @@ export default function MapPicker({
         const geocoder = L.Control.geocoder({
             defaultMarkGeocode: false,
         })
-            .on("markgeocode", function (e) {
+            .on("markgeocode", function (e:any) {
                 const latlng = e.geocode.center;
                 map.setView(latlng, 13);
                 placeMarker(latlng.lat, latlng.lng);

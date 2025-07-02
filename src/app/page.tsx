@@ -4,33 +4,33 @@ export default function Home() {
   return (
     <div className="min-w-full min-h-full min-h-screen">
 
-      <div className="flex flex-col justify-evenly gap-10 items-center p-5 min-h-screen blood-intro-page bg-gray-100 dark:bg-gray-800">
+      <div className="flex flex-col gap-10 items-center justify-evenly p-5 min-h-screen blood-intro-page bg-gray-100 dark:bg-gray-800">
 
-        <div className="container-layout-management container flex flex-col gap-10 justify-between">
-          <div className="flex flex-col w-full gap-3 items-center">
-            <h1 className="welcometitle text-4xl font-bold">
-              Blood Donation
-            </h1>
-            <h2 className="welcometitlebelow text-3xl font-bold">
-              Welcome to Blood Donation
-            </h2>
+        <div className="flex flex-col w-full gap-3 items-center">
+          <h1 className="welcometitle text-4xl font-bold">
+            Blood Donation
+          </h1>
+          <h2 className="welcometitlebelow text-3xl font-bold">
+            Welcome to Blood Donation
+          </h2>
+        </div>
+
+
+        <div className="blood-image-description md:flex justify-center w-full h-full">
+          <div className="image-container p-2 md:w-1/2 h-full flex justify-center">
+            <Image src="/blood.jpg" alt="blood" width={500} height={500} />
           </div>
-          <div className="blood-image-description md:flex justify-center w-full h-full">
-            <div className="image-container p-2 md:w-1/2 h-full flex justify-center">
-              <Image src="/blood.jpg" alt="blood" width={500} height={500}/>
-            </div>
 
-            <div className="some-description p-2 md:w-1/2 h-full flex">
-              <p className="text-box h-full text-lg leading-relaxed">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni atque nostrum at, eveniet quas sint blanditiis maiores amet, praesentium soluta beatae? Quibusdam aliquam labore eius impedit reiciendis. Amet aliquid, ducimus ipsam sint, debitis reprehenderit cupiditate repudiandae asperiores corporis molestias non assumenda iusto.
-              </p>
-            </div>
+          <div className="some-description p-2 md:w-1/2 h-full flex">
+            <p className="text-box h-full text-lg leading-relaxed">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni atque nostrum at, eveniet quas sint blanditiis maiores amet, praesentium soluta beatae? Quibusdam aliquam labore eius impedit reiciendis. Amet aliquid, ducimus ipsam sint, debitis reprehenderit cupiditate repudiandae asperiores corporis molestias non assumenda iusto.
+            </p>
           </div>
         </div>
 
       </div>
 
-      <div className="flex flex-col gap-10 items-center p-5 justify-center min-h-screen description-page bg-blue-300 dark:bg-blue-700">
+      <div className="flex flex-col gap-10 items-center p-5 justify-around min-h-screen description-page bg-blue-300 dark:bg-blue-700">
 
         <div className="about-us-container flex items-center">
           <h2 className="text-2xl font-bold">
@@ -50,7 +50,7 @@ export default function Home() {
 
       </div>
 
-      <div className="flex flex-col gap-10 justify-center items-center justify-center p-5 min-h-screen description-page bg-green-300 dark:bg-green-600">
+      <div className="flex flex-col gap-10 justify-evenly items-center justify-center p-5 min-h-screen description-page bg-green-300 dark:bg-green-600">
 
         <div className="about-us-container flex items-center">
           <h2 className="text-2xl font-bold">
@@ -70,7 +70,7 @@ export default function Home() {
 
       </div>
 
-      <div className="flex flex-col gap-10 items-center p-5 min-h-screen justify-center description-page bg-yellow-300 dark:bg-yellow-600">
+      <div className="flex flex-col gap-10 items-center p-5 min-h-screen justify-evenly description-page bg-yellow-300 dark:bg-yellow-600">
 
         <div className="about-us-container flex items-center">
           <h2 className="text-2xl font-bold">
