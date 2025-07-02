@@ -28,10 +28,10 @@ const Profile = () => {
         }
     }, [user]);
 
-    if (!user) return <div>Loading...</div>;
+    if (!user) return <div className="w-full text-center h-screen pt-5">Loading...</div>;
 
     return (
-        <div className="w-full h-full flex justify-center md:px-2 w-full h-full">
+        <div className="w-full h-full max-w-7xl mx-auto py-10 flex justify-center md:px-2 w-full h-full">
 
             <div className="flex justify-end h-full">
                 <MapPicker location={location} onChange={setLocation} />
