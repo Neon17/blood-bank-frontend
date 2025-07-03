@@ -17,6 +17,8 @@ L.Icon.Default.mergeOptions({
 export default function MapPicker({
     location,
     onChange,
+    height = "800px",
+    width = "800px"
 }: {
     location: {
         lat: number;
@@ -30,6 +32,8 @@ export default function MapPicker({
         city: string;
         country: string;
     }) => void;
+    height?: string;
+    width?: string;
 }) {
     const mapRef = useRef<L.Map | null>(null);
     const markerRef = useRef<L.Marker | null>(null);
@@ -103,5 +107,5 @@ export default function MapPicker({
         markerRef.current = L.marker([lat, lng]).addTo(mapRef.current);
     }
 
-    return <div id={mapContainerId} style={{ height: "800px", width: "800px" }} />;
+    return <div id={mapContainerId} style={{ height: height, width: width }} />;
 }

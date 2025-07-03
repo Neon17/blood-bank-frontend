@@ -57,9 +57,8 @@ export default function RootLayout({
         <ThemeProvider attribute={"class"} defaultTheme='dark' enableSystem disableTransitionOnChange>
           <AuthInfoContextProvider>
             <div className="min-h-screen flex flex-col w-full h-full">
-              <header className="shadow-sm bg-red-300 dark:bg-red-700">
+              
                 <Navbar />
-              </header>
 
               <main className="mx-auto m-0 p-0 w-full root-main-layout">
                 {children}

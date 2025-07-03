@@ -1,79 +1,96 @@
-import { bloodDonors } from "../lib/actions"
+"use client";
+
+import { useEffect, useState } from "react";
+import MapPicker from "../_components/MapPicker";
+import { bloodDonors } from "../lib/actions";
 import { User } from "../lib/definitions";
 
-export default async function Donors() {
-    const data = await bloodDonors();
+export default function Donors() {
+    const [data, setData] = useState<User[]>([]);
+    const [location, setLocation] = useState({
+        lat: 27.712,
+        lng: 85.3240,
+        city: "Pokhara",
+        country: "Nepal"
+    });
+
+    useEffect(() => {
+        const fetchDonors = async () => {
+            try {
+                const res = await bloodDonors();
+                setData(res.data ?? []);
+            } catch (err) {
+                console.error('Failed to load donors', err);
+            }
+        }
+        fetchDonors();
+    }, []);
 
     return (
-        <main className="flex flex-col min-h-screen max-w-7xl mx-auto p-3 requests-page container">
-            <h1 className="text-4xl font-bold text-center m-10">Donors</h1>
+        <main className="grid grid-cols-1 lg:grid-cols-2 min-h-screen w-full">
 
-            <div className="flex flex-wrap gap-4 mt-6">
-                <div className="button-container my-2 mt-5 w-full">
-                    <button type="button" className="text-white bg-blue-700 hover:cursor-pointer hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Register as Donor
-                    </button>
+            {/* Left: Map */}
+            <div className="h-full w-full overflow-hidden border-r">
+                <MapPicker location={location} onChange={setLocation} width="100%" height="100%" />
+            </div>
+
+            {/* Right: Panel */}
+            <div className="h-full w-full overflow-y-auto bg-white dark:bg-gray-900">
+                {/* Search Header */}
+
+                <div className="sticky top-0 bg-white dark:bg-gray-900 p-6 border-b z-10">
+                <a href="/donors/register" className="my-2 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 w-full text-center">
+                    Register as Donor
+                </a>
+
+                <div className="blood-donors-filter-container border mt-5 p-8 dark:bg-gray-800">
+
+                    <h1 className="text-2xl font-bold mb-4 mt-6">Search Blood Donors</h1>
+
+                    <div className="flex flex-col gap-3">
+                        <form action="" method="get" className="mb-3">
+
+                            <input type="text" placeholder="Search by City" className="p-2 border rounded w-full mb-2" />
+                            <select className="p-2 border rounded w-full dark:bg-gray-800">
+                                <option value="">Blood Type</option>
+                                <option value="A+">A+</option>
+                                <option value="B+">B+</option>
+                                <option value="O+">O+</option>
+                            </select>
+
+
+                            <button type="submit" className="my-2 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                Search
+                            </button>
+
+                        </form>
+
+                    </div>
+
+
+                </div>
                 </div>
 
+                {/* Donor Cards */}
+                <div className="p-6 space-y-4 max-h-screen overflow-y-auto">
+                    <h2 className="text-xl font-semibold mb-2">Nearby Donors</h2>
+
+                    {data.length === 0 && (
+                        <p className="text-gray-500 dark:text-gray-400">No donors found in this area.</p>
+                    )}
+
+                    {data.map((elem, idx) => (
+                        <div key={idx} className="p-4 border rounded shadow hover:shadow-md transition bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm">
+                            <h3 className="text-lg font-semibold">{elem.name}</h3>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Blood Type: {elem.blood_type}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Verified: {elem.verified_as_donor ? 'Yes' : 'No'}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">City: {elem.current_city}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {elem.contact_number}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
-
-            <div className="title-container text-center m-10">
-                <h1 className="text-4xl font-bold text-center">Users</h1>
-                <p className="text-sm text-center">users who are willing to donate</p>
-            </div>
-
-            <div className="flex flex-wrap gap-4 mt-6">
-
-                {data && data.data?.map((elem: User, index: Number) => (
-                    <div
-                        key={index.toString()}
-                        className="max-w-sm p-6 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm"
-                    >
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-300">
-                            Name: {elem.name}
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-300">
-                            Blood Type: {elem.blood_type}
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-300">
-                            Verified as Donor: {elem.verified_as_donor ? "Yes" : "No"}
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-300">
-                            Contact Number: {elem.contact_number}
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-300">
-                            Current City: {elem.current_city}
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-300">
-                            Verification Photo: {elem.verification_photo}
-                        </p>
-                        <a
-                            href="#"
-                            className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                        >
-                            Read more
-                            <svg
-                                className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 14 10"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                                />
-                            </svg>
-                        </a>
-                    </div>
-                ))}
-
-            </div>
-
 
         </main>
-    )
+    );
 }
