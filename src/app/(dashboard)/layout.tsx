@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -19,18 +20,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <aside className="w-64 bg-white dark:bg-gray-800 shadow-lg p-6 hidden md:block">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Smart Blood Bank</h2>
                 <nav className="space-y-4">
-                    <a href="/dashboard" className={`block px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${currentPath === '/dashboard' ? 'bg-blue-600 text-white' : ''}`}>
+                    <Link href="/dashboard" className={`block px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${currentPath === '/dashboard' ? 'bg-blue-600 text-white' : ''}`}>
                         Home
-                    </a>
-                    <a href="/profile" className={`block px-4 py-2 rounded-md  text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${(currentPath === '/profile' || currentPath === '/profile/edit') ? 'bg-blue-600 text-white' : ''}`}>
+                    </Link>
+                    <Link href="/profile" className={`block px-4 py-2 rounded-md  text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${(currentPath === '/profile' || currentPath === '/profile/edit') ? 'bg-blue-600 text-white' : ''}`}>
                         Profile
-                    </a>
-                    <a href="/donations" className={`block px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${currentPath === '/donations' ? 'bg-blue-600 text-white' : ''}`}>
+                    </Link>
+                    <Link href="/donations" className={`block px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${currentPath === '/donations' ? 'bg-blue-600 text-white' : ''}`}>
                         Donations
-                    </a>
-                    <a href="/settings" className={`block px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${currentPath === '/settings' ? 'bg-blue-600 text-white' : ''}`}>
+                    </Link>
+                    <Link href="/settings" className={`block px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${currentPath === '/settings' ? 'bg-blue-600 text-white' : ''}`}>
                         Settings
-                    </a>
+                    </Link>
                 </nav>
             </aside>
 
