@@ -1,8 +1,9 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useAuth } from '../../authInfo';
 import { useEffect, useState } from 'react';
-import MapPicker from '../../_components/MapPicker';
+const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 export default function ProfilePage() {
     const { user } = useAuth();

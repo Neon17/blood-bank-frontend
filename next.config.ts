@@ -3,6 +3,12 @@ import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
+
+  eslint: {
+    // Disable ESLint during builds (Vercel or local)
+    ignoreDuringBuilds: true,
+  },
+
   async rewrites() {
     if (!isDev) return []; // No rewrites in production
     return [

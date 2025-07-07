@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
-import MapPicker from "../_components/MapPicker";
 import ActionDropdown from "../_components/ActionDropdown";
 import { bloodRequests } from "../lib/actions";
 import { BloodRequest } from "../lib/definitions";
 import SearchRadiusSlider from "../_components/SearchRadiusSlider";
+import dynamic from "next/dynamic";
+const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 export default function Requests() {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<BloodRequest[]>();
     let success = '';
     let error = '';
 
@@ -22,8 +23,10 @@ export default function Requests() {
         const fetchRequests = async () => {
             try {
                 const res = await bloodRequests();
-                setData(res.data);
-                console.log(res.data);
+                if (res && "data" in res && res?.data) {
+                    setData(res.data);
+                    console.log(res.data);
+                }
                 console.log(data);
             } catch (err) {
                 console.error('Failed to load requests', err);
@@ -84,7 +87,7 @@ export default function Requests() {
                             <p className="text-sm text-gray-700 dark:text-gray-300">Contact Number: {elem.contact_number}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">City: {elem.city}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Country: {elem.country}</p>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">Verified By: {elem.verified_by || 'N/A'}</p>
+                            {/* <p className="text-sm text-gray-700 dark:text-gray-300">Verified By: {elem.verified_by || 'N/A'}</p> */}
                             <p className="text-sm text-gray-700 dark:text-gray-300">Verification Photo: {elem.verification_photo}</p>
 
                             <div className="flex gap-2 mt-4">

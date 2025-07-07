@@ -5,9 +5,24 @@ import { useRouter } from 'next/navigation';
 
 const steps = ['Personal Information', 'Medical History', 'Confirmation'];
 
+const InitialFormData = {
+  name: '',
+  phone: '',
+  blood_type: '',
+  address: '',
+  date_of_birth: '',
+  weight: '',
+  height: '',
+  last_donation: '',
+  medical_conditions: [] as string[],
+  medications: '',
+  health_status: '',
+  agreement: false,
+};
+
 export default function BecomeDonor() {
   const [activeStep, setActiveStep] = useState(0);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<typeof InitialFormData>({
     name: '',
     phone: '',
     blood_type: '',
@@ -26,7 +41,7 @@ export default function BecomeDonor() {
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -34,7 +49,7 @@ export default function BecomeDonor() {
     }));
   };
 
-  const handleMultiCheck = (e: any) => {
+  const handleMultiCheck = (e: React.ChangeEvent<any>) => {
     const { value, checked } = e.target;
     setFormData((prev) => {
       const current = new Set(prev.medical_conditions);

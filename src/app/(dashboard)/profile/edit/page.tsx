@@ -4,7 +4,8 @@ import { useAuth } from '@/app/authInfo';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { updateProfile } from '@/app/lib/actions';
-import MapPicker from '@/app/_components/MapPicker';
+import dynamic from 'next/dynamic';
+const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 export default function EditProfilePage() {
     const { user } = useAuth();
@@ -40,7 +41,7 @@ export default function EditProfilePage() {
 
         const response = await updateProfile(formData);
 
-        if (response.status === "error") {
+        if ("message" in response && response.status === "error") {
             setError(response.message);
         } else {
             setSuccess(true);

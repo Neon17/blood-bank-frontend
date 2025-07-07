@@ -37,19 +37,19 @@ async function _updateProfile(formData: FormData) {
 
 async function _bloodRequests() {
     const response = await api.get('/blood/requests');
-    const data: [{
+    const data: {
         status: string,
         data: BloodRequest[]
-    }] = await response.data;
+    } = await response.data;
     return data;
 }
 
 async function _bloodDonors() {
     const response = await api.get('/donors');
-    const data: [{
+    const data: {
         status: string,
         data: User[]
-    }] = await response.data;
+    } = await response.data;
     return data;
 }
 
@@ -78,10 +78,10 @@ async function _createBloodRequest(formData: FormData) {
 
 async function _bloodRequest(id:string){
     const response = await api.get(`/blood/requests/${id}`);
-    const data: [{
+    const data: {
         status: string,
-        data: BloodRequest[]
-    }] = await response.data;
+        data: BloodRequest
+    } = await response.data;
     return data;
 }
 
@@ -92,19 +92,19 @@ async function _updateBloodRequest(id: string, formData: FormData) {
     }
 
     const response = await api.patch(`/blood/requests/${id}`, object);
-    const data: [{
+    const data: {
         status: string,
         data: BloodRequest[]
-    }] = await response.data;
+    } = await response.data;
     return data;
 }
 
 async function _deleteBloodRequest(id: string) {
     const response = await api.delete(`/blood/requests/${id}`);
-    const data: [{
+    const data: {
         status: string,
-        data: BloodRequest[]
-    }] = await response.data;
+        data: BloodRequest
+    } = await response.data;
     return data;
 }
 

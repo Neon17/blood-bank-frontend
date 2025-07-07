@@ -15,8 +15,6 @@ export default function Signup() {
     const [error, setError] = useState('');
 
     const handleSubmit = async (formData: FormData) => {
-        const name = formData.get('name') as string;
-        const email = formData.get('email') as string;
         const password = formData.get('password') as string;
         const confirmPassword = formData.get('confirmPassword') as string;
 
@@ -52,6 +50,11 @@ export default function Signup() {
     return (
         <>
             <div className='p-5 w-full'>
+                { error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span className="block sm:inline">{error}</span>
+                    </div>
+                ) }
                 <form action={handleSubmit} className="mx-auto flex flex-col max-w-lg p-8 rounded-lg bg-gray-200 dark:bg-gray-800">
                     <div className="mb-5">
                         <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>

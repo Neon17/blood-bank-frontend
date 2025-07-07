@@ -1,8 +1,9 @@
 "use client"
-import MapPicker from "@/app/_components/MapPicker";
 import { createBloodRequest } from "@/app/lib/actions";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 export default function CreateRequest() {
     const router = useRouter();
@@ -28,7 +29,7 @@ export default function CreateRequest() {
 
         const response = await createBloodRequest(formData);
 
-        if (response.status === "error") {
+        if ( "message" in response && response.status === "error") {
             setError(response.message);
             console.error(response.message);
             alert(response.message);

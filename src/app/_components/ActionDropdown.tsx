@@ -10,12 +10,12 @@ export default function ActionDropdown({ id, error, success }: { id: string, err
 
     const handleDelete = async () => {
         const response = await deleteBloodRequest(id);
-        if (response.status === 'error') {
-            error = response.message;
+        if ("message" in response &&  response.status === 'error') {
+            // error = response.message;
             console.error(response.message);
         }
         else {
-            success = 'Request deleted successfully';
+            // success = 'Request deleted successfully';
             router.push('/requests');
         }
     }

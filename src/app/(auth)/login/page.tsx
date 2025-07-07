@@ -1,25 +1,22 @@
 "use client";
 import { useAuth } from "@/app/authInfo";
 import { authenticate } from "@/app/lib/auth";
-import { redirect } from 'next/navigation'
+import { AuthResponse } from "@/app/lib/definitions";
 import { useRouter } from "next/navigation";
 import { useState } from "react"
 
 export default function Login() {
     const router = useRouter();
-    const { user, setUser, isLoggedIn, setIsLoggedIn } = useAuth();
+    const { setUser, setIsLoggedIn } = useAuth();
     const [error, setError] = useState('');
-    const [errors, setErrors] = useState({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    });
+    // const [errors, setErrors] = useState({
+    //     name: '',
+    //     email: '',
+    //     password: '',
+    //     confirmPassword: ''
+    // });
 
     const handleFormData = async (formData: FormData) => {
-        const email = formData.get('email') as string;
-        const password = formData.get('password') as string;
-
         // Reset errors
         setError('');
         try {
@@ -31,19 +28,27 @@ export default function Login() {
                     console.error(data.message);
                 }
             } else {
-                setUser(data?.user);
-                setIsLoggedIn(true);
-                router.push('/dashboard');
+                if ("user" in data && data?.user) {
+                    setUser(data?.user);
+                    setIsLoggedIn(true);
+                    router.push('/dashboard');
+                }
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
 
-            if (error?.code === 'ERR_BAD_REQUEST') {
-                setError(error.message || 'Bad request');
-            } else {
-                // setError('An unexpected error occurred.');
-                console.error(error);
+            if (typeof error === 'object' && error !== null && 'code' in error && 'message' in error) {
+                const err = error as { code?: string; message?: string };
+
+                if (err.code === 'ERR_BAD_REQUEST') {
+                    setError(err.message || 'Bad request');
+                } else {
+                    setError(err.message || 'An unexpected error occurred.');
+                }
+            } else if (error instanceof Error) {
                 setError(error.message);
+            } else {
+                setError('An unknown error occurred.');
             }
         }
 

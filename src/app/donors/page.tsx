@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import MapPicker from "../_components/MapPicker";
 import { bloodDonors } from "../lib/actions";
 import { User } from "../lib/definitions";
+import dynamic from "next/dynamic";
+const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 export default function Donors() {
     const [data, setData] = useState<User[]>([]);
@@ -18,7 +19,9 @@ export default function Donors() {
         const fetchDonors = async () => {
             try {
                 const res = await bloodDonors();
-                setData(res.data ?? []);
+                if (res && "data" in res && res?.data) {
+                    setData(res?.data);
+                }
             } catch (err) {
                 console.error('Failed to load donors', err);
             }
@@ -85,7 +88,7 @@ export default function Donors() {
                             <p className="text-sm text-gray-700 dark:text-gray-300">Blood Type: {elem.blood_type}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Verified: {elem.verified_as_donor ? 'Yes' : 'No'}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">City: {elem.current_city}</p>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {elem.contact_number}</p>
+                            {/* <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {elem.contact_number}</p> */}
                         </div>
                     ))}
                 </div>

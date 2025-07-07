@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 
 
 const Footer = () => {
@@ -6,10 +8,10 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto w-full p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0">
-                        <a href="/" className="flex items-center">
-                            <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" />
+                        <Link href="/" className="flex items-center">
+                            <Image width={50} height={50} src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" />
                             <span className="self-center text-2xl font-semibold whitespace-nowrae">Blood Bank</span>
-                        </a>
+                        </Link>
                     </div>
                     <div className="grid place-items-center">
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-6">

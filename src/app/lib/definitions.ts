@@ -35,7 +35,7 @@ export type AuthResponse = {
 export type BloodRequest = {
     id: Number,
     blood_type: string,
-    quantity: string|number,
+    quantity: string,
     date_time: Date,
     exact_location: string,
     contact_number: string,

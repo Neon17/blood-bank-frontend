@@ -1,8 +1,10 @@
 "use client"
-import MapPicker from "@/app/_components/MapPicker";
 import { bloodRequest, deleteBloodRequest, updateBloodRequest } from "@/app/lib/actions";
+import { BloodRequest } from "@/app/lib/definitions";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 export default function EditRequest() {
     const params = useParams();
@@ -13,7 +15,7 @@ export default function EditRequest() {
         city: 'Kathmandu',
         country: 'Nepal'
     })
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<BloodRequest>();
 
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -21,13 +23,15 @@ export default function EditRequest() {
     const fetchData = async () => {
         console.log(`id = ${id}`);
         const res = await bloodRequest(id);
-        if (res.status === 'error') {
+        if ("message" in res) {
             setError(res.message);
             console.error(res.message);
             return;
         }
-        setData(res.data);
-        console.log(res.data);
+        else {
+            setData(res.data);
+            console.log(res.data);
+        }
     }
 
     useEffect(() => {
@@ -40,7 +44,7 @@ export default function EditRequest() {
 
     const handleDelete = async () => {
         const response = await deleteBloodRequest(id);
-        if (response.status === 'error') {
+        if ("message" in response && response.status === 'error') {
             setError(response.message);
             console.error(response.message);
         }
@@ -58,7 +62,7 @@ export default function EditRequest() {
 
         const response = await updateBloodRequest(id, formData);
 
-        if (response.status === "error") {
+        if ("message" in response) {
             setError(response.message);
             console.error(response.message);
         } else {
@@ -87,7 +91,7 @@ export default function EditRequest() {
                         </div>}
                     <div className="mb-5">
                         <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Blood Type</label>
-                        <select name="blood_type" id="countries" value={data?.blood_type} onChange={(e) => setData({ ...data, blood_type: e.target.value })}
+                        <select name="blood_type" id="countries" value={data?.blood_type} onChange={(e) => {if (data) setData({...data, blood_type: e.target.value})} }
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option value={""}>Choose a Blood Type</option>
                             <option value="A+">A+</option>
@@ -107,7 +111,7 @@ export default function EditRequest() {
                     </div>
                     <div className="mb-5">
                         <label htmlFor="base-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
-                        <input type="date" name="date_time" id="base-input" defaultValue={data?.date_time}
+                        <input type="date" name="date_time" id="base-input" defaultValue={data?.date_time.toDateString()}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
                     <div className="mb-5">
