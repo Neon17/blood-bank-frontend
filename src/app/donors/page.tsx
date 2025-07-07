@@ -88,8 +88,9 @@ export default function Donors() {
                             <h3 className="text-lg font-semibold">{elem.name}</h3>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Blood Type: {elem.blood_type}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Verified: {elem.verified_as_donor ? 'Yes' : 'No'}</p>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">City: {elem.current_city}</p>
-                            {/* <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {elem.contact_number}</p> */}
+                            <p className="text-sm text-gray-700 dark:text-gray-300">City: {elem.city}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Email: {elem.email}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {elem.phone_number}</p>
                         </div>
                     ))}
                 </div>
