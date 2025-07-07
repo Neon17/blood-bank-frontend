@@ -64,7 +64,7 @@ async function _finishBloodRequests(id: string) {
 }
 
 async function _createBloodRequest(formData: FormData) {
-    var object = {};
+    var object:any = {};
     for (const[key,value] of formData.entries()){
         object[key] = value;
     }
@@ -86,7 +86,7 @@ async function _bloodRequest(id:string){
 }
 
 async function _updateBloodRequest(id: string, formData: FormData) {
-    var object = {};
+    var object:any = {};
     for (const [key, value] of formData.entries()) {
         object[key] = value;
     }

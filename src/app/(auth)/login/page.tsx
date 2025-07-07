@@ -2,9 +2,11 @@
 import { useAuth } from "@/app/authInfo";
 import { authenticate } from "@/app/lib/auth";
 import { redirect } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { useState } from "react"
 
 export default function Login() {
+    const router = useRouter();
     const { user, setUser, isLoggedIn, setIsLoggedIn } = useAuth();
     const [error, setError] = useState('');
     const [errors, setErrors] = useState({
@@ -31,7 +33,7 @@ export default function Login() {
             } else {
                 setUser(data?.user);
                 setIsLoggedIn(true);
-                redirect('/dashboard');
+                router.push('/dashboard');
             }
         } catch (error: any) {
             console.error(error);

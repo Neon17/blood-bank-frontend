@@ -1,10 +1,11 @@
 "use client";
 import { signUp } from '@/app/lib/auth';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
 
 export default function Signup() {
+    const router = useRouter();
     const [errors, setErrors] = useState({
         name: '',
         email: '',
@@ -44,7 +45,7 @@ export default function Signup() {
             console.log(errors);
         }
         else {
-            redirect('/dashboard');
+            router.push('/login');
         }
     }
 

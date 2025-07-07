@@ -38,7 +38,7 @@ export default function EditProfilePage() {
         formData.append("lat", location.lat.toString());
         formData.append("lng", location.lng.toString());
 
-        const response = await updateProfile(user.id, formData);
+        const response = await updateProfile(formData);
 
         if (response.status === "error") {
             setError(response.message);
