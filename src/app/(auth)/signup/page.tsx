@@ -43,7 +43,7 @@ export default function Signup() {
             console.log(errors);
         }
         else {
-            router.push('/login');
+            router.push('/dashboard');
         }
     }
 
