@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 
 // Define your protected and auth routes
 const protectedRoutes = ['/dashboard', '/profile', '/admin'];
-const authRoutes = ['/login', '/register'];
+const authRoutes = ['/login', '/signup'];
 
 // Just to redirect from login/register to dashboard if logged in
 async function authRedirect(request: NextRequest) {
@@ -125,6 +125,6 @@ export const config = {
         '/profile/:path*',
         '/admin/:path*',
         '/login',
-        '/register'
+        '/signup'
     ]
 }

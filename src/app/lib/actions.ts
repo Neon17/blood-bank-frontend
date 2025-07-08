@@ -23,9 +23,10 @@ async function _profile() {
 }
 
 async function _updateProfile(formData: FormData) {
-    for (const [key, value] of formData.entries()) {
-        console.log(key, value);
-    }
+    // console.log("updating");
+    // for (const [key, value] of formData.entries()) {
+    //     console.log(key, value);
+    // }
     formData.append('_method', 'PUT');
     const response = await api.post('/updateMe', formData);
     const data: {

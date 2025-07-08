@@ -1,7 +1,6 @@
 "use client";
 import { useAuth } from "@/app/authInfo";
 import { authenticate } from "@/app/lib/auth";
-import { AuthResponse } from "@/app/lib/definitions";
 import { useRouter } from "next/navigation";
 import { useState } from "react"
 

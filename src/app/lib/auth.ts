@@ -19,7 +19,6 @@ async function _authenticate(formData: FormData): Promise<AuthResponse> {
     //   return { status: 'error', message: error.message+"Hello JS" };
     // }
     const response = await api.post(`/login`,formData);
-    console.log("Hello")
 
     const data = await response.data;
     if (data.status === 'error') {

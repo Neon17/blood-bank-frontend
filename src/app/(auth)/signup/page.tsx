@@ -1,10 +1,12 @@
 "use client";
+import { useAuth } from '@/app/authInfo';
 import { signUp } from '@/app/lib/auth';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
 
 export default function Signup() {
+    const { setUser, setIsLoggedIn } = useAuth();
     const router = useRouter();
     const [errors, setErrors] = useState({
         name: '',
@@ -35,26 +37,30 @@ export default function Signup() {
         }
 
         const data = await signUp(formData);
-        if (data.status === 'error') {
-            if (data.message){
+        if (!("user" in data)) {
+            if (data?.message) {
                 setError(data.message);
                 console.error(data.message);
             }
             console.log(errors);
         }
         else {
-            router.push('/dashboard');
+            if ("user" in data && data?.user) {
+                setUser(data?.user);
+                setIsLoggedIn(true);
+                router.push('/dashboard');
+            }
         }
     }
 
     return (
         <>
             <div className='p-5 w-full'>
-                { error && (
+                {error && (
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         <span className="block sm:inline">{error}</span>
                     </div>
-                ) }
+                )}
                 <form action={handleSubmit} className="mx-auto flex flex-col max-w-lg p-8 rounded-lg bg-gray-200 dark:bg-gray-800">
                     <div className="mb-5">
                         <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
