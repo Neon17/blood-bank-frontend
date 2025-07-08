@@ -32,11 +32,11 @@ export default function ProfilePage() {
         <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
 
             {/* Main Content */}
-            <main className="flex-1 p-6">
+            <main className="flex-1 sm:p-6 pt-5">
                 <div className="mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-8">
                     <h1 className="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Profile Overview</h1>
 
-                    <div className="grid md:grid-cols-2 gap-8">
+                    <div className="grid lg:grid-cols-2 gap-8">
                         {/* User Info */}
                         <div>
                             <div className="mb-4">

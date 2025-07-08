@@ -56,7 +56,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute={"class"} defaultTheme='dark' enableSystem disableTransitionOnChange>
           <AuthInfoContextProvider>
-            <div className="min-h-screen flex flex-col w-full h-full">
+            <div className="flex flex-col w-full h-full">
               
                 <Navbar />
 

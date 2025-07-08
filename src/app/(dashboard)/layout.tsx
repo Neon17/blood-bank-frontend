@@ -3,39 +3,64 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react"; // Hamburger and close icons
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const [ currentPath, setCurrentPath ] = useState(pathname);
+    const [currentPath, setCurrentPath] = useState(pathname);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
-    if (pathname) {
-      setCurrentPath(pathname);
-    }
-  }, [pathname]);
+        if (pathname) {
+            setCurrentPath(pathname);
+        }
+    }, [pathname]);
+
+    const navLinks = [
+        { href: "/dashboard", label: "Home" },
+        { href: "/profile", label: "Profile", activeOn: ["/profile", "/profile/edit"] },
+        { href: "/donations", label: "Donations" },
+        { href: "/settings", label: "Settings" },
+    ]
+
+    const isActive = (href: string, activeOn?: string[]) =>
+        activeOn?.includes(currentPath) || currentPath === href;
 
     return (
-        <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="flex min-h-screen h-full bg-gray-100 dark:bg-gray-900 relative">
+            {/* Mobile Hamburger Button */}
+            <div className={`md:hidden ${sidebarOpen ? "fixed" : "absolute"} top-4 left-4 z-1002`}>
+                <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-800 dark:text-white">
+                    {sidebarOpen ? <X size={28} /> : <Menu size={28} />}
+                </button>
+            </div>
+
             {/* Sidebar */}
-            <aside className="w-64 bg-white dark:bg-gray-800 shadow-lg p-6 hidden md:block">
+            <aside
+                className={`fixed top-0 pt-10 left-0 h-full min-h-screen w-64 bg-white dark:bg-gray-800 shadow-lg p-6 md:z-40 z-[1001] transform transition-transform duration-300 ease-in-out
+                ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:relative md:block`}
+            >
                 <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Smart Blood Bank</h2>
                 <nav className="space-y-4">
-                    <Link href="/dashboard" className={`block px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${currentPath === '/dashboard' ? 'bg-blue-600 text-white' : ''}`}>
-                        Home
-                    </Link>
-                    <Link href="/profile" className={`block px-4 py-2 rounded-md  text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${(currentPath === '/profile' || currentPath === '/profile/edit') ? 'bg-blue-600 text-white' : ''}`}>
-                        Profile
-                    </Link>
-                    <Link href="/donations" className={`block px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${currentPath === '/donations' ? 'bg-blue-600 text-white' : ''}`}>
-                        Donations
-                    </Link>
-                    <Link href="/settings" className={`block px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition ${currentPath === '/settings' ? 'bg-blue-600 text-white' : ''}`}>
-                        Settings
-                    </Link>
+                    {navLinks.map(({ href, label, activeOn }) => (
+                        <Link
+                            key={href}
+                            href={href}
+                            className={`block px-4 py-2 rounded-md transition ${
+                                isActive(href, activeOn)
+                                    ? "bg-blue-600 text-white"
+                                    : "text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white"
+                            }`}
+                            onClick={() => setSidebarOpen(false)} // auto-close on mobile
+                        >
+                            {label}
+                        </Link>
+                    ))}
                 </nav>
             </aside>
 
-            <main className="flex-1">{children}</main>
+            {/* Main Content */}
+            <main className="flex-1 p-4">{children}</main>
         </div>
     );
 }

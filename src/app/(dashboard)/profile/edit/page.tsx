@@ -52,8 +52,8 @@ export default function EditProfilePage() {
     if (!user) return <div className="text-center py-10 min-h-screen">Loading...</div>;
 
     return (
-        <div className="w-full max-w-5xl mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Edit Your Profile</h1>
+        <div className="w-full max-w-5xl mx-auto sm:p-6 pt-6">
+            <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white text-center">Edit Your Profile</h1>
 
             <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-4">
                 {error && <p className="bg-red-500 text-white p-3 rounded">{error}</p>}
@@ -99,7 +99,7 @@ export default function EditProfilePage() {
 
                 <div className="mt-10">
                     <h2 className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-200">Select Your Location</h2>
-                    <MapPicker location={location} onChange={setLocation} />
+                    <MapPicker width='100%' location={location} onChange={setLocation} />
                 </div>
             </div>
         </div>

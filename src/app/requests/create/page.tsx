@@ -44,8 +44,8 @@ export default function CreateRequest() {
 
     return (
         <>
-            <div className="flex max-w-7xl mx-auto p-3">
-                <MapPicker location={location} onChange={setLocation} />
+            <div className="flex flex-col md:flex-row max-w-7xl mx-auto p-3">
+                <MapPicker width={"100%"} height={"200px"} location={location} onChange={setLocation} />
                 <form id="edit-form" onSubmit={handleSubmit} className="mx-auto w-full p-5 max-w-lg rounded-lg">
                     {success &&
                         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">

@@ -35,7 +35,7 @@ export default function Donors() {
 
             {/* Left: Map */}
             <div className="h-full w-full overflow-hidden border-r">
-                <MapPicker location={location} onChange={setLocation} width="100%" height="100%" />
+                <MapPicker location={location} onChange={setLocation} width={"100%"} height={"100%"} />
             </div>
 
             {/* Right: Panel */}
