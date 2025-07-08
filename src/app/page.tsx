@@ -7,7 +7,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-between pt-5 sm:px-8 md:py-16 dark:bg-gray-900  mx-auto min:h-[600px]">
 
-        <div className="section-container max-w-7xl flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 mx-auto min:h-[600px]">
+        <div className="section-container max-w-7xl pt-10 flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 mx-auto min:h-[600px]">
 
           {/* Left Text */}
           <div className="md:w-1/2 space-y-6">
@@ -106,9 +106,9 @@ export default function Home() {
               { step: '04', title: 'Receive Notifications', desc: 'Get promptly informed about urgent requests matching your blood type.', icon: '📲' },
             ].map((item, index) => (
               <div key={index} className="bg-white p-6 rounded shadow-md relative">
-                <div className="absolute top-4 right-4 text-2xl font-bold text-gray-200">{item.step}</div>
+                <div className="absolute top-4 right-4 text-2xl font-bold text-gray-300">{item.step}</div>
                 <div className="text-4xl mb-3">{item.icon}</div>
-                <h4 className="text-lg font-semibold mb-2">{item.title}</h4>
+                <h4 className="text-lg font-semibold mb-2 text-gray-600">{item.title}</h4>
                 <p className="text-gray-600">{item.desc}</p>
               </div>
             ))}
