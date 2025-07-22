@@ -12,6 +12,7 @@ export default function Requests() {
     const [data, setData] = useState<BloodRequest[]>();
     let success = '';
     let error = '';
+    const [searchRadius, setSearchRadius] = useState<number>(1);
 
     const [location, setLocation] = useState({
         lat: 27.7172,
@@ -41,7 +42,7 @@ export default function Requests() {
 
             {/* Map Section */}
             <div className="h-full w-full overflow-hidden border-r">
-                <MapPicker location={location} onChange={setLocation} width="100%" height="100%" />
+                <MapPicker location={location} onChange={setLocation} radius={searchRadius} width="100%" height="100%" />
             </div>
 
             {/* Request Content Section */}
@@ -55,7 +56,7 @@ export default function Requests() {
                 </div>
 
                 <form action="/requests" className="mb-3" method="get">
-                    <SearchRadiusSlider />
+                    <SearchRadiusSlider radius={searchRadius} setRadius={setSearchRadius} />
                     <button type="submit" className="hover:cursor-pointer text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         Search
                     </button>

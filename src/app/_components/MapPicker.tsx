@@ -16,6 +16,7 @@ type Location = {
 type MapPickerProps = {
   location: Location;
   onChange: (location: Location) => void;
+  radius?: number | null;
   height?: string;
   width?: string;
 };
@@ -23,13 +24,37 @@ type MapPickerProps = {
 export default function MapPicker({
   location,
   onChange,
+  radius,
   height = "800px",
   width = "800px",
 }: MapPickerProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const markerRef = useRef<Marker | null>(null);
+  const circleRef = useRef<L.Circle | null>(null);
   const [mounted, setMounted] = useState(false);
   const mapContainerId = "map-leaflet";
+
+  useEffect(() => {
+    if (!mapRef.current || !markerRef.current) return;
+
+    const { lat, lng } = markerRef.current.getLatLng();
+
+    // Remove old circle
+    if (circleRef.current) {
+      circleRef.current.remove();
+    }
+
+    if (radius !== null && radius !== undefined) {
+      // Create new circle in meters
+      circleRef.current = L.circle([lat, lng], {
+        radius: radius * 1000,
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.3,
+      }).addTo(mapRef.current);
+    }
+  }, [radius]);
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -97,6 +122,15 @@ export default function MapPicker({
     if (!mapRef.current) return;
     if (markerRef.current) markerRef.current.remove();
     markerRef.current = L.marker([lat, lng]).addTo(mapRef.current);
+
+    if (circleRef.current) circleRef.current.remove();
+
+    circleRef.current = L.circle([lat, lng], {
+      radius: (radius ?? 1) * 1000,
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.3,
+    }).addTo(mapRef.current);
   }
 
   // Only render the map container on the client
