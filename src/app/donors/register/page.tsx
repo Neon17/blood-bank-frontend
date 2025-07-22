@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ExactLocation } from '@/app/lib/definitions';
+const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
-const steps = ['Personal Information', 'Medical History', 'Confirmation'];
+const steps = ['Personal Information', 'Medical History', 'Contact Location', 'Confirmation'];
 
 const InitialFormData = {
   name: '',
@@ -13,6 +16,12 @@ const InitialFormData = {
   date_of_birth: '',
   weight: '',
   height: '',
+  contact_location: {
+    lat: 0,
+    lng: 0,
+    city: '',
+    country: ''
+  }, //latititude and longitude
   last_donation: '',
   medical_conditions: [] as string[],
   medications: '',
@@ -22,6 +31,13 @@ const InitialFormData = {
 
 export default function BecomeDonor() {
   const [activeStep, setActiveStep] = useState(0);
+  const radius = useRef(2); //acceptable location within our exact contact address
+  const [location, setLocation] = useState<ExactLocation>({
+    lat: 27.712,
+    lng: 85.3240,
+    city: "Pokhara",
+    country: "Nepal"
+  });
   const [formData, setFormData] = useState<typeof InitialFormData>({
     name: '',
     phone: '',
@@ -30,6 +46,7 @@ export default function BecomeDonor() {
     date_of_birth: '',
     weight: '',
     height: '',
+    contact_location: location,
     last_donation: '',
     medical_conditions: [],
     medications: '',
@@ -71,11 +88,11 @@ export default function BecomeDonor() {
 
       <div className="formflex min-h-screen">
 
-        <div className="flex justify-between mb-6">
+        <div className="flex justify-between mb-6 bg-gray-200 dark:bg-gray-800 items-center">
           {steps.map((label, index) => (
             <div
               key={label}
-              className={`flex-1 text-center py-2 rounded ${index === activeStep ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-800'}`}
+              className={`text-center h-full p-2 py-4 rounded ${index === activeStep ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-800'}`}
             >
               {label}
             </div>
@@ -127,6 +144,14 @@ export default function BecomeDonor() {
           )}
 
           {activeStep === 2 && (
+            <>
+              <p className="mb-2">Please select your contact location within {radius.current} km reach</p>
+              <MapPicker location={location} onChange={setLocation} radius={radius.current} width='100%' height='500px'  />
+              <p className="mb-2 text-sm">(It will be updated in your profile too)</p>
+            </>
+          )}
+
+          {activeStep === 3 && (
             <>
               <div className="text-sm">
                 <p className="mb-2">By agreeing to become a donor, you confirm that:</p>

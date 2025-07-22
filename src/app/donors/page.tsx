@@ -5,6 +5,7 @@ import { bloodDonors } from "../lib/actions";
 import { User } from "../lib/definitions";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import SearchRadiusSlider from "../_components/SearchRadiusSlider";
 const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 export default function Donors() {
@@ -15,6 +16,7 @@ export default function Donors() {
         city: "Pokhara",
         country: "Nepal"
     });
+    const [searchRadius, setSearchRadius] = useState<number>(1);
 
     useEffect(() => {
         const fetchDonors = async () => {
@@ -35,7 +37,7 @@ export default function Donors() {
 
             {/* Left: Map */}
             <div className="h-full w-full overflow-hidden border-r">
-                <MapPicker location={location} onChange={setLocation} width={"100%"} height={"100%"} />
+                <MapPicker location={location} onChange={setLocation} radius={searchRadius} width={"100%"} height={"100%"} />
             </div>
 
             {/* Right: Panel */}
@@ -43,36 +45,32 @@ export default function Donors() {
                 {/* Search Header */}
 
                 <div className="sticky top-0 bg-white dark:bg-gray-900 p-6 border-b z-10">
-                <Link href="/donors/register" className="my-2 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 w-full text-center">
-                    Register as Donor
-                </Link>
+                    <Link href="/donors/register" className="my-2 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 w-full text-center">
+                        Register as Donor
+                    </Link>
 
-                <div className="blood-donors-filter-container border mt-5 p-8 dark:bg-gray-800">
+                    <div className="blood-donors-filter-container border mt-5 p-8 dark:bg-gray-800">
 
-                    <h1 className="text-2xl font-bold mb-4 mt-6">Search Blood Donors</h1>
+                        <h1 className="text-2xl font-bold mb-4 mt-6">Search Blood Donors</h1>
 
-                    <div className="flex flex-col gap-3">
-                        <form action="" method="get" className="mb-3">
+                        <div className="flex flex-col gap-3">
+                            <form action="" method="get" className="mb-3">
+                                <select className="p-2 border rounded w-full dark:bg-gray-800">
+                                    <option value="">Blood Type</option>
+                                    <option value="A+">A+</option>
+                                    <option value="B+">B+</option>
+                                    <option value="O+">O+</option>
+                                </select>
+                                <SearchRadiusSlider radius={searchRadius} setRadius={setSearchRadius} />
 
-                            <input type="text" placeholder="Search by City" className="p-2 border rounded w-full mb-2" />
-                            <select className="p-2 border rounded w-full dark:bg-gray-800">
-                                <option value="">Blood Type</option>
-                                <option value="A+">A+</option>
-                                <option value="B+">B+</option>
-                                <option value="O+">O+</option>
-                            </select>
+                                <button type="submit" className="my-2 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                    Search
+                                </button>
 
-
-                            <button type="submit" className="my-2 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                                Search
-                            </button>
-
-                        </form>
+                            </form>
+                        </div>
 
                     </div>
-
-
-                </div>
                 </div>
 
                 {/* Donor Cards */}

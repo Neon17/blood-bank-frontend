@@ -19,6 +19,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const navLinks = [
         { href: "/dashboard", label: "Home" },
         { href: "/profile", label: "Profile", activeOn: ["/profile", "/profile/edit"] },
+        { href: "/contacts", label: "Contacts" },
         { href: "/donations", label: "Donations" },
         { href: "/settings", label: "Settings" },
     ]

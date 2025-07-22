@@ -25,6 +25,13 @@ export type User = {
     updated_at: Date;
 }
 
+export type ExactLocation = {
+  lat: number;
+  lng: number;
+  city: string;
+  country: string;
+};
+
 export type AuthResponse = {
     status?: string,
     token?: string,

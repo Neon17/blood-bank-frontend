@@ -5,13 +5,7 @@ import L, { Map as LeafletMap, Marker, LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 import "leaflet-control-geocoder";
-
-type Location = {
-  lat: number;
-  lng: number;
-  city: string;
-  country: string;
-};
+import { ExactLocation as Location } from "../lib/definitions";
 
 type MapPickerProps = {
   location: Location;
