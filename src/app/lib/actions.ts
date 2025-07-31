@@ -2,7 +2,7 @@
 
 import { asyncErrorHandler } from "./asyncErrorHandler";
 import api from "./axios";
-import { BloodRequest, User } from "./definitions";
+import { BloodRequest, User, BloodDonor } from "./definitions";
 
 
 export const profile = asyncErrorHandler(_profile);
@@ -11,6 +11,7 @@ export const updateProfile = asyncErrorHandler(_updateProfile);
 export const bloodRequests = asyncErrorHandler(_bloodRequests);
 export const bloodRequest = asyncErrorHandler(_bloodRequest);
 export const bloodDonors = asyncErrorHandler(_bloodDonors);
+export const registerBloodDonor = asyncErrorHandler(_registerBloodDonor);
 export const finishBloodRequests = asyncErrorHandler(_finishBloodRequests);
 export const updateBloodRequest = asyncErrorHandler(_updateBloodRequest);
 export const deleteBloodRequest = asyncErrorHandler(_deleteBloodRequest);
@@ -50,6 +51,15 @@ async function _bloodDonors() {
     const data: {
         status: string,
         data: User[]
+    } = await response.data;
+    return data;
+}
+
+async function _registerBloodDonor(formData: BloodDonor) {
+    const response = await api.post('/blood/donors', formData);
+    const data: {
+        status: string,
+        data: BloodDonor
     } = await response.data;
     return data;
 }

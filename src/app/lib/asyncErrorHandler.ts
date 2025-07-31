@@ -2,57 +2,32 @@ export function asyncErrorHandler<T extends (...args: any[]) => Promise<any>>(fn
   return async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>> | {
     status: 'error';
     message: string;
+    errors?: any;
   }> => {
     try {
       return await fn(...args);
-    } catch (error: unknown) {
-      // Let Next.js special errors bubble through
+    } catch (error: any) {
+      // Let Next.js internal errors pass through
       if (
-        typeof error === 'object' &&
-        error !== null &&
-        'digest' in error &&
-        (error as { digest?: string }).digest === 'NEXT_REDIRECT' ||
-        (error as { digest?: string }).digest === 'NEXT_NOT_FOUND'
+        error?.digest === 'NEXT_REDIRECT' ||
+        error?.digest === 'NEXT_NOT_FOUND'
       ) {
         throw error;
       }
 
-      console.error("Error from asyncErrorHandler:", error);
-
-      if (
-        typeof error === 'object' &&
-        error !== null
-      ) {
-        const err = error as {
-          message?: string;
-          code?: string;
-          status?: number;
-        };
-
-        if (err.code === 'ERR_BAD_REQUEST') {
-          return {
-            status: 'error',
-            message: err.message || 'Bad request',
-          };
-        }
-
-        if (err.status === 500) {
-          return {
-            status: 'error',
-            message: 'Server problem, please try again later',
-          };
-        }
-
+      // Log Laravel response if available
+      if (error?.response?.data) {
         return {
           status: 'error',
-          message: err.message || 'Something went wrong',
+          message: error.response.data.message || 'An error occurred',
+          errors: error.response.data.errors || null
         };
       }
 
-      // Fallback for non-object error
+      // Fallback for other known error shapes
       return {
         status: 'error',
-        message: 'An unknown error occurred',
+        message: error?.message || 'An unknown error occurred',
       };
     }
   };

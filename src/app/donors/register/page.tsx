@@ -3,25 +3,24 @@
 import dynamic from 'next/dynamic';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ExactLocation } from '@/app/lib/definitions';
+import { BloodDonor, ExactLocation } from '@/app/lib/definitions';
+import { registerBloodDonor } from '@/app/lib/actions';
 const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 const steps = ['Personal Information', 'Medical History', 'Contact Location', 'Confirmation'];
 
 const InitialFormData = {
   name: '',
-  phone: '',
+  contact_phone: '',
   blood_type: '',
   address: '',
   date_of_birth: '',
   weight: '',
   height: '',
-  contact_location: {
-    lat: 0,
-    lng: 0,
-    city: '',
-    country: ''
-  }, //latititude and longitude
+  latitude: 0,
+  longitude: 0,
+  country: '',
+  city: '',
   last_donation: '',
   medical_conditions: [] as string[],
   medications: '',
@@ -40,13 +39,16 @@ export default function BecomeDonor() {
   });
   const [formData, setFormData] = useState<typeof InitialFormData>({
     name: '',
-    phone: '',
+    contact_phone: '',
     blood_type: '',
     address: '',
     date_of_birth: '',
     weight: '',
     height: '',
-    contact_location: location,
+    latitude: location.lat,
+    longitude: location.lng,
+    country: '',
+    city: '',
     last_donation: '',
     medical_conditions: [],
     medications: '',
@@ -76,9 +78,38 @@ export default function BecomeDonor() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Submitted successfully!');
+
+    // now array of medical conditions should be converted to comma separated string
+    const medical_conditions = formData.medical_conditions.join(',');
+    const actual_sending_object: BloodDonor = {
+      ...formData,
+      medical_conditions,
+      weight: +formData.weight,
+      height: +formData.height,
+      contact_number: +formData.contact_phone,
+      // date_of_birth: new Date(formData.date_of_birth),
+      last_donated_date: formData.last_donation,
+      current_health_status: formData.health_status,
+      current_medication: formData.medications
+    };
+
+    const response = await registerBloodDonor(actual_sending_object);
+
+    if ("message" in response && response.status === "error") {
+      console.log(response);
+      if (response.message === 'validation error'){
+        alert(`Submission Failed! Fill all the information correctly! Response is ${response}`);
+      }
+      else 
+        alert(`Submission Failed! Response is ${response.message}`);
+      console.error(response);
+    } else {
+      alert('Submitted successfully!');
+      setTimeout(() => router.push('/profile'), 1200);
+    }
+
     router.push('/profile');
   };
 
@@ -103,7 +134,7 @@ export default function BecomeDonor() {
           {activeStep === 0 && (
             <>
               <input name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" className="w-full p-2 border" required />
-              <input name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number" className="w-full p-2 border" required />
+              <input name="contact_phone" value={formData.contact_phone} onChange={handleChange} placeholder="Phone Number" className="w-full p-2 border" required />
               <select name="blood_type" value={formData.blood_type} onChange={handleChange} className="w-full p-2 border" required>
                 <option value="">Select Blood Type</option>
                 {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(type => <option key={type} value={type}>{type}</option>)}
@@ -146,7 +177,7 @@ export default function BecomeDonor() {
           {activeStep === 2 && (
             <>
               <p className="mb-2">Please select your contact location within {radius.current} km reach</p>
-              <MapPicker location={location} onChange={setLocation} radius={radius.current} width='100%' height='500px'  />
+              <MapPicker location={location} onChange={setLocation} radius={radius.current} width='100%' height='500px' />
               <p className="mb-2 text-sm">(It will be updated in your profile too)</p>
             </>
           )}
