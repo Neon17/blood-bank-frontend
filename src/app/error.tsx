@@ -9,8 +9,8 @@ export default function Error({
 }) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center text-black error-page">
-      <h1 className="text-4xl font-bold">Something went wrong!</h1>
-      <p className="mt-4 text-lg">{error.message}</p>
+      <h1 className="text-4xl font-bold  dark:text-white">Something went wrong!</h1>
+      <p className="mt-4 text-lg  dark:text-white">{error.message}</p>
       <button
         onClick={() => reset()}
         className="mt-6 rounded bg-blue-500 px-4 py-2 text-white"

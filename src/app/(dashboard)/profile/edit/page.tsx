@@ -7,6 +7,13 @@ import { updateProfile } from '@/app/lib/actions';
 import dynamic from 'next/dynamic';
 const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
+type Error = {
+    name?: string,
+    email?: string,
+    address?: string,
+    dob? :string
+}
+
 export default function EditProfilePage() {
     const { user } = useAuth();
     const router = useRouter();
@@ -17,6 +24,7 @@ export default function EditProfilePage() {
         country: 'Nepal',
     });
     const [error, setError] = useState('');
+    const [errors, setErrors] = useState<Error>({});
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
@@ -43,6 +51,8 @@ export default function EditProfilePage() {
 
         if ("message" in response && response.status === "error") {
             setError(response.message);
+            setErrors(response.errors);
+            console.error(response.errors);
         } else {
             setSuccess(true);
             setTimeout(() => router.push('/profile'), 1200);
@@ -56,22 +66,30 @@ export default function EditProfilePage() {
             <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white text-center">Edit Your Profile</h1>
 
             <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-4">
-                {error && <p className="bg-red-500 text-white p-3 rounded">{error}</p>}
+                {error && <p className="dark:bg-red-500 text-white p-3 rounded">{error}</p>}
                 {success && <p className="bg-green-500 text-white p-3 rounded">Updated successfully</p>}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Email
+                            <p className="text-red-500 px-0.5 inline">*</p>
+                        </label>
                         <input type="email" name="email" defaultValue={user.email} className="w-full bg-gray-100 dark:bg-gray-700 text-sm p-2 rounded" required />
+                        { errors && errors.email && <p className='text-red-700 dark:text-red-400'>{errors.email}</p> }
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Name</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Name
+                            <p className="text-red-500 px-0.5 inline">*</p>
+                        </label>
                         <input type="text" name="name" defaultValue={user.name} className="w-full bg-gray-100 dark:bg-gray-700 text-sm p-2 rounded" required />
+                        { errors && errors.name && <p className='text-red-700 dark:text-red-400'>{errors.name}</p> }
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Will Donate?</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Will Donate?
+                            <p className="text-red-500 px-0.5 inline">*</p>
+                        </label>
                         <div className="flex gap-4 mt-1">
                             <label className="flex items-center gap-2">
                                 <input type="radio" name="will_donate" value="1" defaultChecked={user.will_donate === true} />
@@ -85,20 +103,28 @@ export default function EditProfilePage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Address</label>
-                        <input type="text" name="address" defaultValue={user.address} className="w-full bg-gray-100 dark:bg-gray-700 text-sm p-2 rounded" />
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Address
+                            <p className="text-red-500 px-0.5 inline">*</p>
+                        </label>
+                        <input type="text" name="address" defaultValue={(user.address == '0')? '': user.address} className="w-full bg-gray-100 dark:bg-gray-700 text-sm p-2 rounded" />
+                        { errors && errors.address && <p className='text-red-700 dark:text-red-400'>{errors.address}</p> }
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Date of Birth</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Date of Birth
+                            <p className="text-red-500 px-0.5 inline">*</p>
+                        </label>
                         <input type="date" name="dob" defaultValue={user.dob?.toString().split("T")[0]} className="w-full bg-gray-100 dark:bg-gray-700 text-sm p-2 rounded" />
+                        { errors && errors.dob && <p className='text-red-700 dark:text-red-400'>{errors.dob}</p> }
                     </div>
 
                     <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Save Changes</button>
                 </form>
 
                 <div className="mt-10">
-                    <h2 className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-200">Select Your Location</h2>
+                    <h2 className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-200">Select Your Location
+                        <p className="text-red-500 px-0.5 inline">Within 1 km*</p>
+                    </h2>
                     <MapPicker width='100%' location={location} onChange={setLocation} />
                 </div>
             </div>
