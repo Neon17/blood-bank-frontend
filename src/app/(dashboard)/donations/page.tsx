@@ -9,7 +9,7 @@ export default function DonationsPage() {
             <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">My Donations</h1>
             
             {/* Make table horizontally scrollable on small screens */}
-            <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md overflow-x-auto">
+            <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md overflow-x-auto border">
                 <table className="min-w-full text-sm">
                     <thead>
                         <tr className="text-left text-gray-600 dark:text-gray-300">

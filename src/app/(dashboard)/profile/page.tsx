@@ -29,11 +29,11 @@ export default function ProfilePage() {
     if (!user) return <div className="flex justify-center items-center h-screen text-gray-600">Loading...</div>;
 
     return (
-        <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="flex min-h-screen dark:bg-gray-900">
 
             {/* Main Content */}
             <main className="flex-1 sm:p-6 pt-5">
-                <div className="mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-8">
+                <div className="mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-8 border shadow-md">
                     <h1 className="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Profile Overview</h1>
 
                     <div className="grid lg:grid-cols-2 gap-8">

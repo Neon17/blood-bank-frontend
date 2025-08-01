@@ -65,7 +65,7 @@ export default function EditProfilePage() {
         <div className="w-full max-w-5xl mx-auto sm:p-6 pt-6">
             <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white text-center">Edit Your Profile</h1>
 
-            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-4">
+            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-4 border">
                 {error && <p className="dark:bg-red-500 text-white p-3 rounded">{error}</p>}
                 {success && <p className="bg-green-500 text-white p-3 rounded">Updated successfully</p>}
 
