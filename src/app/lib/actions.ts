@@ -4,7 +4,7 @@ import { asyncErrorHandler } from "./asyncErrorHandler";
 import api from "./axios";
 import { BloodRequest, User, BloodDonor } from "./definitions";
 
-
+export const getAllUsers = asyncErrorHandler(_getAllUsers);
 export const profile = asyncErrorHandler(_profile);
 export const createBloodRequest = asyncErrorHandler(_createBloodRequest);
 export const updateProfile = asyncErrorHandler(_updateProfile);
@@ -25,6 +25,15 @@ export const test = asyncErrorHandler(_test);
 async function _profile() {
     const response = await api.get('/user');
     const data: User = await response.data;
+    return data;
+}
+
+async function _getAllUsers () {
+    const response = await api.get('/users');
+    const data : {
+        status: string,
+        data: User[]
+    } = await response.data;
     return data;
 }
 

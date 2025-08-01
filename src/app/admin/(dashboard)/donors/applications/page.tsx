@@ -114,7 +114,7 @@ export default function Page() {
 
       <div className="overflow-x-auto border rounded border-gray-300 dark:border-gray-700">
         <table className="min-w-full text-sm text-left text-gray-800 dark:text-gray-300 bg-gray-100 dark:bg-gray-900">
-          <thead className="bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+          <thead className="bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-center">
             <tr>
               <th className="px-4 py-3">#</th>
               <th className="px-4 py-3">Blood</th>
