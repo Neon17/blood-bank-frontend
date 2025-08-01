@@ -29,7 +29,7 @@ export default function CreateRequest() {
 
         const response = await createBloodRequest(formData);
 
-        if ( "message" in response && response.status === "error") {
+        if ("message" in response && response.status === "error") {
             setError(response.message);
             console.error(response.message);
             alert(response.message);
@@ -44,9 +44,10 @@ export default function CreateRequest() {
 
     return (
         <>
-            <div className="flex flex-col md:flex-row max-w-7xl mx-auto p-3">
-                <MapPicker width={"100%"} height={"100%"} location={location} onChange={setLocation} />
-                <form id="edit-form" onSubmit={handleSubmit} className="mx-auto w-full p-5 max-w-lg rounded-lg">
+            <img src="/wall_simplified.jpg" className="w-full h-screen fixed" alt="Wall Background" />
+            <div className="flex flex-col md:flex-row max-w-7xl mx-auto p-3 z-[40] relative bg-white dark:bg-gray-800 my-5 justify-center items-center">
+                <MapPicker width={"100%"} location={location} onChange={setLocation} />
+                <form id="edit-form" onSubmit={handleSubmit} className="mx-auto w-full p-5 max-w-lg rounded-lg bg-white dark:bg-gray-800">
                     {success &&
                         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                             {success}

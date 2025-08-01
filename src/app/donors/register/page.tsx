@@ -99,10 +99,10 @@ export default function BecomeDonor() {
 
     if ("message" in response && response.status === "error") {
       console.log(response);
-      if (response.message === 'validation error'){
+      if (response.message === 'validation error') {
         alert(`Submission Failed! Fill all the information correctly! Response is ${response}`);
       }
-      else 
+      else
         alert(`Submission Failed! Response is ${response.message}`);
       console.error(response);
     } else {
@@ -114,110 +114,113 @@ export default function BecomeDonor() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 text-center">Become a Blood Donor</h1>
+    <>
+      <img src="/wall_simplified.jpg" alt="Wall Background" className='fixed h-screen w-full' />
+      <div className="max-w-2xl mx-auto p-6 relative">
+        <h1 className="text-2xl font-bold mb-6 text-center dark:bg-gray-800 bg-white p-3">Become a Blood Donor</h1>
 
-      <div className="formflex min-h-screen">
+        <div className="formflex min-h-screen">
 
-        <div className="flex justify-between mb-6 bg-gray-200 dark:bg-gray-800 items-center">
-          {steps.map((label, index) => (
-            <div
-              key={label}
-              className={`text-center h-full p-2 py-4 rounded ${index === activeStep ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-800'}`}
-            >
-              {label}
-            </div>
-          ))}
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4 border p-5 rounded dark:bg-gray-800">
-          {activeStep === 0 && (
-            <>
-              <input name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" className="w-full p-2 border" required />
-              <input name="contact_phone" value={formData.contact_phone} onChange={handleChange} placeholder="Phone Number" className="w-full p-2 border" required />
-              <select name="blood_type" value={formData.blood_type} onChange={handleChange} className="w-full p-2 border" required>
-                <option value="">Select Blood Type</option>
-                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(type => <option key={type} value={type}>{type}</option>)}
-              </select>
-              <input name="address" value={formData.address} onChange={handleChange} placeholder="Address" className="w-full p-2 border" required />
-              <input name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} type="date" className="w-full p-2 border" required />
-            </>
-          )}
-
-          {activeStep === 1 && (
-            <>
-              <input name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight (kg)" type="number" className="w-full p-2 border" required />
-              <input name="height" value={formData.height} onChange={handleChange} placeholder="Height (cm)" type="number" className="w-full p-2 border" required />
-              <input name="last_donation" value={formData.last_donation} onChange={handleChange} type="date" className="w-full p-2 border" />
-
-              <fieldset className="border p-4">
-                <legend className="text-sm font-medium">Medical Conditions</legend>
-                {['Diabetes', 'Heart Disease', 'High Blood Pressure', 'HIV/AIDS', 'Hepatitis'].map((condition) => (
-                  <label key={condition} className="block">
-                    <input type="checkbox" value={condition} onChange={handleMultiCheck} checked={formData.medical_conditions.includes(condition)} className="mr-2" />
-                    {condition}
-                  </label>
-                ))}
-              </fieldset>
-
-              <textarea name="medications" value={formData.medications} onChange={handleChange} placeholder="Current Medications" className="w-full p-2 border" rows={2}></textarea>
-
-              <fieldset className="border p-4">
-                <legend className="text-sm font-medium">Current Health Status</legend>
-                {['excellent', 'good', 'fair', 'poor'].map(status => (
-                  <label key={status} className="block">
-                    <input type="radio" name="health_status" value={status} onChange={handleChange} checked={formData.health_status === status} className="mr-2" />
-                    {status}
-                  </label>
-                ))}
-              </fieldset>
-            </>
-          )}
-
-          {activeStep === 2 && (
-            <>
-              <p className="mb-2">Please select your contact location within {radius.current} km reach</p>
-              <MapPicker location={location} onChange={setLocation} radius={radius.current} width='100%' height='500px' />
-              <p className="mb-2 text-sm">(It will be updated in your profile too)</p>
-            </>
-          )}
-
-          {activeStep === 3 && (
-            <>
-              <div className="text-sm">
-                <p className="mb-2">By agreeing to become a donor, you confirm that:</p>
-                <ul className="list-disc list-inside mb-2">
-                  <li>You are at least 18 years old</li>
-                  <li>You weigh at least 50kg</li>
-                  <li>You are in good health</li>
-                </ul>
+          <div className="flex justify-between mb-6 bg-gray-200 dark:bg-gray-800 bg-white items-center">
+            {steps.map((label, index) => (
+              <div
+                key={label}
+                className={`text-center h-full p-2 py-4 rounded ${index === activeStep ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800'}`}
+              >
+                {label}
               </div>
-              <label className="block">
-                <input type="checkbox" name="agreement" checked={formData.agreement} onChange={handleChange} className="mr-2" required />
-                I agree to the terms and conditions
-              </label>
-            </>
-          )}
-
-          <div className="flex justify-between">
-            {activeStep > 0 && (
-              <button type="button" onClick={handleBack} className="bg-gray-300 px-4 py-2 rounded">
-                Back
-              </button>
-            )}
-            {activeStep < steps.length - 1 ? (
-              <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-4 py-2 rounded">
-                Next
-              </button>
-            ) : (
-              <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
-                Submit
-              </button>
-            )}
+            ))}
           </div>
-        </form>
 
+          <form onSubmit={handleSubmit} className="space-y-4 border p-5 rounded dark:bg-gray-800 bg-white">
+            {activeStep === 0 && (
+              <>
+                <input name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" className="w-full p-2 border" required />
+                <input name="contact_phone" value={formData.contact_phone} onChange={handleChange} placeholder="Phone Number" className="w-full p-2 border" required />
+                <select name="blood_type" value={formData.blood_type} onChange={handleChange} className="w-full p-2 border" required>
+                  <option value="">Select Blood Type</option>
+                  {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(type => <option key={type} value={type}>{type}</option>)}
+                </select>
+                <input name="address" value={formData.address} onChange={handleChange} placeholder="Address" className="w-full p-2 border" required />
+                <input name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} type="date" className="w-full p-2 border" required />
+              </>
+            )}
+
+            {activeStep === 1 && (
+              <>
+                <input name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight (kg)" type="number" className="w-full p-2 border" required />
+                <input name="height" value={formData.height} onChange={handleChange} placeholder="Height (cm)" type="number" className="w-full p-2 border" required />
+                <input name="last_donation" value={formData.last_donation} onChange={handleChange} type="date" className="w-full p-2 border" />
+
+                <fieldset className="border p-4">
+                  <legend className="text-sm font-medium">Medical Conditions</legend>
+                  {['Diabetes', 'Heart Disease', 'High Blood Pressure', 'HIV/AIDS', 'Hepatitis'].map((condition) => (
+                    <label key={condition} className="block">
+                      <input type="checkbox" value={condition} onChange={handleMultiCheck} checked={formData.medical_conditions.includes(condition)} className="mr-2" />
+                      {condition}
+                    </label>
+                  ))}
+                </fieldset>
+
+                <textarea name="medications" value={formData.medications} onChange={handleChange} placeholder="Current Medications" className="w-full p-2 border" rows={2}></textarea>
+
+                <fieldset className="border p-4">
+                  <legend className="text-sm font-medium">Current Health Status</legend>
+                  {['excellent', 'good', 'fair', 'poor'].map(status => (
+                    <label key={status} className="block">
+                      <input type="radio" name="health_status" value={status} onChange={handleChange} checked={formData.health_status === status} className="mr-2" />
+                      {status}
+                    </label>
+                  ))}
+                </fieldset>
+              </>
+            )}
+
+            {activeStep === 2 && (
+              <>
+                <p className="mb-2">Please select your contact location within {radius.current} km reach</p>
+                <MapPicker location={location} onChange={setLocation} radius={radius.current} width='100%' height='500px' />
+                <p className="mb-2 text-sm">(It will be updated in your profile too)</p>
+              </>
+            )}
+
+            {activeStep === 3 && (
+              <>
+                <div className="text-sm">
+                  <p className="mb-2">By agreeing to become a donor, you confirm that:</p>
+                  <ul className="list-disc list-inside mb-2">
+                    <li>You are at least 18 years old</li>
+                    <li>You weigh at least 50kg</li>
+                    <li>You are in good health</li>
+                  </ul>
+                </div>
+                <label className="block">
+                  <input type="checkbox" name="agreement" checked={formData.agreement} onChange={handleChange} className="mr-2" required />
+                  I agree to the terms and conditions
+                </label>
+              </>
+            )}
+
+            <div className="flex justify-between">
+              {activeStep > 0 && (
+                <button type="button" onClick={handleBack} className="bg-gray-300 px-4 py-2 rounded">
+                  Back
+                </button>
+              )}
+              {activeStep < steps.length - 1 ? (
+                <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-4 py-2 rounded">
+                  Next
+                </button>
+              ) : (
+                <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
+                  Submit
+                </button>
+              )}
+            </div>
+          </form>
+
+        </div>
       </div>
-    </div>
+    </>
   );
 }
