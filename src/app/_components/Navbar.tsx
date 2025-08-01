@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth } from "../authInfo";
+import { useAuth } from "../context/authInfo";
 import { ModeToggle } from "./ModeToggle";
 import { ChevronDown } from "lucide-react";
 

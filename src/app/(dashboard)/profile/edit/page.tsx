@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/app/authInfo';
+import { useAuth } from '@/app/context/authInfo';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { updateProfile } from '@/app/lib/actions';

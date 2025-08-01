@@ -1,8 +1,8 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useAuth } from "../context/authInfo";
+import { useAuth } from "../../context/authInfo";
 
-const Sidebar = dynamic(()=>import('../_components/Sidebar'), { ssr: false });
+const Sidebar = dynamic(() => import('../../_components/Sidebar'), { ssr: false });
 
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -10,8 +10,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     return (
         <div className="h-full w-full">
-            { user && user.role=='admin' && <Sidebar type="admin"/> }
-            { user && user.role!=='admin' && <Sidebar type="user"/>  }
+            <Sidebar type="admin" />
             <main className="min-h-screen w-full flex sm:justify-end justify-center pt-3">
                 <div className="sm:[width:calc(100vw-256px)] h-full p-3">
                     {children}

@@ -4,8 +4,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { User } from "./lib/definitions";
-import { profile } from "./lib/actions";
+import { User } from "../lib/definitions";
+import { profile } from "../lib/actions";
 
 type AuthInfoContextType = {
     isLoggedIn: boolean;

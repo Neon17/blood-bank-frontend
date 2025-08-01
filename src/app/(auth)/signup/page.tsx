@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from '@/app/authInfo';
+import { useAuth } from '@/app/context/authInfo';
 import { signUp } from '@/app/lib/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

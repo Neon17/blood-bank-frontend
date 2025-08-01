@@ -2,6 +2,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { User } from "./app/lib/definitions";
 
 // Define your protected and auth routes
 const protectedRoutes = ['/dashboard', '/profile', '/admin'];
@@ -32,7 +33,12 @@ async function isAuthenticated(token: string | undefined) {
             if (data.status) {
                 return false;
             }
-            return response.status === 200;
+            if (response.status === 200) {
+                const cookieStore = await cookies();
+                const user = <User>response.data;
+                cookieStore.set('user', JSON.stringify(user));
+                return true;
+            }
         }
         catch (error) {
             return false;
@@ -63,12 +69,17 @@ async function authMiddleware(request: NextRequest) {
 
 async function roleMiddleware(request: NextRequest) {
     const cookieStore = await cookies();
-    const userRole = cookieStore.get('user-role')?.value;
+    const rawUser = cookieStore.get('user')?.value;
+
+    const user = rawUser ? JSON.parse(rawUser) as User : null;
+    const userRole = user?.role;
 
     // Admin only routes
-    if (request.nextUrl.pathname.startsWith('/admin') && userRole !== '/admin') {
+    if (request.nextUrl.pathname.startsWith('/admin') && userRole !== 'admin') {
         return NextResponse.redirect(new URL('/login', request.url));
     }
+    // // Redirecting to admin dashboard if user role is admin
+    // if (request.nextUrl.pathname.startsWith('/dashboard') && userRole === '/admin' )
 
     return NextResponse.next();
 }

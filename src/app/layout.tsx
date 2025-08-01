@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Navbar from './_components/Navbar'
 import Footer from './_components/Footer'
-import { AuthInfoContextProvider } from './authInfo'
+import { AuthInfoContextProvider } from './context/authInfo'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 

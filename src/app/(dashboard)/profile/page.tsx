@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useAuth } from '../../authInfo';
+import { useAuth } from '../../context/authInfo';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
