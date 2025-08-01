@@ -39,25 +39,32 @@ export type AuthResponse = {
     message?: string
 }
 
-enum verification_status {
+export type ErrorResponse = {
+    status: string,
+    message: string,
+    errors?: []
+}
+
+export enum verification_status {
     "pending",
     "failed",
     "approved"
 }
 
 export type BloodDonor = {
+    id?: number|string,
     user_id?: number,
-    contact_number: number,
-    blood_type: string,
-    address: string,
-    date_of_birth: string,
+    contact_number?: number,
+    blood_type?: string,
+    address?: string,
+    date_of_birth?: string,
 
-    weight: number,
-    height: number,
-    last_donated_date: string,
-    medical_conditions: string,
-    current_medication: string,
-    current_health_status: string,
+    weight?: number,
+    height?: number,
+    last_donated_date?: string,
+    medical_conditions?: string,
+    current_medication?: string,
+    current_health_status?: string,
 
     latitude: number,
     longitude: number,
