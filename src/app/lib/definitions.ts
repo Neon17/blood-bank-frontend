@@ -51,8 +51,28 @@ export enum verification_status {
     "approved"
 }
 
+export type DonorRegistrationForm = {
+    id?: number | string,
+    name: '',
+    contact_phone: '',
+    blood_type: '',
+    address: '',
+    date_of_birth: '',
+    weight: '',
+    height: '',
+    latitude: number,
+    longitude: number,
+    country: '',
+    city: '',
+    last_donation: '',
+    medical_conditions: string[],
+    medications: '',
+    health_status: '',
+    agreement: false,
+}
+
 export type BloodDonor = {
-    id?: number|string,
+    id?: number | string,
     user_id?: number,
     contact_number?: number,
     blood_type?: string,
