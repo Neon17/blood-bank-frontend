@@ -93,6 +93,7 @@ export type BloodDonor = {
 
     verification_status?: verification_status,
     admin_message?: string
+    user? : User
 }
 
 export type BloodRequest = {

@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { deleteDonorApplication, donorApplications, updateDonorApplication } from "@/app/lib/actions";
+import { approveBloodDonorApplication, deleteDonorApplication, donorApplications, updateDonorApplication } from "@/app/lib/actions";
 import { BloodDonor, ExactLocation, verification_status } from "@/app/lib/definitions";
 import dynamic from "next/dynamic";
 const MapPicker = dynamic(import('@/app/_components/MapPicker'), { ssr: false });
@@ -23,6 +23,7 @@ export default function Page() {
   const [viewDonor, setViewDonor] = useState<BloodDonor | null>(null);
   const [editDonor, setEditDonor] = useState<BloodDonor | null>(null);
   const [deleteDonor, setDeleteDonor] = useState<BloodDonor | null>(null);
+  const [approveDonor, setApproveDonor] = useState<BloodDonor | null>(null);
 
   const [changeState, setChangeState] = useState(false);
 
@@ -35,16 +36,17 @@ export default function Page() {
 
   const router = useRouter();
 
+  const fetchData = async () => {
+    const res = await donorApplications();
+    if ("message" in res) setError(res.message);
+    else setData(res);
+  };
+
   useEffect(() => {
     if (editDonor) setLocation({ lat: editDonor.latitude, lng: editDonor.longitude, city: editDonor.city, country: editDonor.country })
   }, [editDonor])
 
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await donorApplications();
-      if ("message" in res) setError(res.message);
-      else setData(res);
-    };
     fetchData();
   }, [success]);
 
@@ -52,6 +54,7 @@ export default function Page() {
     setViewDonor(null);
     setEditDonor(null);
     setDeleteDonor(null);
+    setApproveDonor(null);
   };
 
   const handleDelete = async (user_id: number | undefined) => {
@@ -91,6 +94,34 @@ export default function Page() {
     }
   }
 
+  const handleApprove = async (id: number | undefined) => {
+    const approveData = {
+      ...approveDonor,
+      status: "approved",
+      latitude: location.lat,
+      longitude: location.lng,
+      city: location.country,
+      country: location.city
+    }
+
+    console.log(approveDonor);
+
+    if (!approveData.contact_number) return;
+    if (!id) return;
+    const res = await approveBloodDonorApplication(approveData);
+    if ("message" in res) {
+      setError(res.message);
+      alert('Error! ' + res.message);
+      console.log(res);
+    }
+    else {
+      fetchData();
+      console.log(res);
+      setApproveDonor(null);
+      setSuccess("Successfully Updated Donor Application!");
+    }
+  }
+
   const handleEditChange = async (event: ChangeEvent<HTMLInputElement>) => {
     // handle on change of input for Edit Form
     const { name, value, type } = event.target;
@@ -126,8 +157,8 @@ export default function Page() {
           </thead>
           <tbody>
             {data?.data.map((donor, index) => {
-              const statusValue = donor.verification_status ?? verification_status.pending;
-              const statusLabel = verification_status[statusValue];
+              const statusValue = donor.verification_status?.toString() ?? "pending";
+              const statusLabel = statusValue;
 
               return (
                 <tr key={index} className="border-t border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-800 text-center">
@@ -137,9 +168,9 @@ export default function Page() {
                   <td className="px-4 py-2">{donor.country}</td>
                   <td className="px-4 py-2">
                     <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${statusValue === verification_status.approved
+                      className={`px-2 py-1 rounded text-xs font-medium ${statusValue === "approved"
                         ? "bg-green-200 text-green-800 dark:bg-green-700 dark:text-green-100"
-                        : statusValue === verification_status.failed
+                        : statusValue === "failed"
                           ? "bg-red-200 text-red-800 dark:bg-red-700 dark:text-red-100"
                           : "bg-yellow-200 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-100"
                         }`}
@@ -154,7 +185,7 @@ export default function Page() {
                         <button onClick={() => { setViewDonor(donor); setOpenDropdown(null); }} className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">View</button>
                         <button onClick={() => { setEditDonor(donor); setOpenDropdown(null); }} className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Edit</button>
                         <button onClick={() => { setDeleteDonor(donor); setOpenDropdown(null); }} className="w-full px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">Delete</button>
-                        <button className="w-full px-4 py-2 text-green-600 dark:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700">Approve</button>
+                        <button onClick={() => { setApproveDonor(donor); setOpenDropdown(null); }} className="w-full px-4 py-2 text-green-600 dark:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700">Approve</button>
                       </div>
                     )}
                   </td>
@@ -245,6 +276,22 @@ export default function Page() {
             <div className="flex justify-end gap-2 mt-4">
               <button onClick={closeModals} className="px-4 py-2 bg-gray-500 text-white rounded">Cancel</button>
               <button onClick={handleUpdate} className="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Approve Model */}
+      {approveDonor && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white dark:bg-gray-900 p-6 rounded w-full max-w-md">
+            <h3 className="text-lg font-bold mb-4">Approve Donor</h3>
+            <p>Are you sure you want to approve <strong>{approveDonor.user?.name}</strong>?</p>
+            <div className="flex justify-end gap-2 mt-4">
+              <button onClick={closeModals} className="px-4 py-2 bg-gray-500 text-white rounded">Cancel</button>
+              {approveDonor.user_id &&
+                <button onClick={() => handleApprove(approveDonor.user_id)} className="px-4 py-2 bg-green-600 text-white rounded">Approve</button>
+              }
             </div>
           </div>
         </div>
