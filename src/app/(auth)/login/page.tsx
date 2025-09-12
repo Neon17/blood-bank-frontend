@@ -27,7 +27,7 @@ export default function Login() {
                     setError("Incomplete Data. Fill all required fields");
                 else if (data.message)
                     setError(data.message);
-                if ("errors" in data)  setErrors(data.errors);
+                if ("errors" in data) setErrors(data.errors);
                 console.error(data.message);
             } else {
                 if ("user" in data && data?.user) {
@@ -60,6 +60,9 @@ export default function Login() {
         <div className="p-5 w-full">
 
             <form action={handleFormData} className="max-w-md mx-auto p-8 rounded-lg flex flex-col bg-gray-200 dark:bg-gray-800 border">
+
+                <h3 className="welcome-back text-3xl text-center text-red-600 dark:text-red-400 py-2">Welcome Back</h3>
+                <p className="small-text-below-welcome-back text-sm text-center mb-5 pt-1 pb-3">Sign in to continue saving lives</p>
                 {error &&
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         <span className="block sm:inline">{error}</span>
@@ -80,10 +83,10 @@ export default function Login() {
                     <input type="password" id="password" name="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                     {errors && errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
                 </div>
-                <div className="flex">
-                    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 hover:cursor-pointer text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
-                    <p className="newtothiswebsite content-center px-3">Don't have an account?
-                        <Link href='/signup' className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 ps-1">Register</Link>
+                <button type="submit" className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 hover:cursor-pointer text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Login</button>
+                <div className="flex items-center justify-between">
+                    <p className="newtothiswebsite flex w-100 items-center justify-center p-3">Don't have an account?
+                        <Link href='/signup' className="text-center text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-200 ps-1">Register</Link>
                     </p>
                 </div>
             </form>

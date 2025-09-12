@@ -50,14 +50,14 @@ export default function Requests() {
                 <h1 className="text-3xl font-bold text-center mb-6">Blood Requests</h1>
 
                 <div className="mb-6">
-                    <Link href="/requests/create" className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 w-full text-center">
+                    <Link href="/requests/create" className="text-white bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-5 py-2.5 w-full text-center">
                         Create Blood Request
                     </Link>
                 </div>
 
                 <form action="/requests" className="mb-3" method="get">
                     <SearchRadiusSlider radius={searchRadius} setRadius={setSearchRadius} />
-                    <button type="submit" className="hover:cursor-pointer text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <button type="submit" className="hover:cursor-pointer text-white bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         Search
                     </button>
 
@@ -75,7 +75,7 @@ export default function Requests() {
                     </div>
                 )}
 
-                <div className="space-y-4 max-h-screen overflow-y-auto">
+                <div className="space-y-4 overflow-y-auto">
                     {data && data?.map((elem: BloodRequest, index: number) => (
                         <div
                             key={index}
@@ -95,7 +95,7 @@ export default function Requests() {
                             <div className="flex gap-2 mt-4">
                                 <a
                                     href="#"
-                                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
                                 >
                                     Read more
                                     <svg

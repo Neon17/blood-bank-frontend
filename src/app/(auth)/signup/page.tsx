@@ -9,7 +9,7 @@ import React, { useState } from 'react'
 export default function Signup() {
     const { setUser, setIsLoggedIn } = useAuth();
     const router = useRouter();
-    const [errors, setErrors] = useState<{ [key:string]: string|string[] }>({ });
+    const [errors, setErrors] = useState<{ [key: string]: string | string[] }>({});
     const [error, setError] = useState('');
 
     const handleSubmit = async (formData: FormData) => {
@@ -38,12 +38,12 @@ export default function Signup() {
                 setError(data.message);
                 console.error(data.message);
 
-                const keys = Object.keys(data.errors);  
+                const keys = Object.keys(data.errors);
                 const values = Object.values(data.errors);
 
                 const errorObject = Object.fromEntries(
                     keys.map((key, index) => [key, values[index]])
-                ) as {[key:string]: string[]};
+                ) as { [key: string]: string[] };
 
                 setErrors(errorObject);
             }
@@ -61,6 +61,14 @@ export default function Signup() {
         <>
             <div className='p-5 w-full'>
                 <form action={handleSubmit} className="mx-auto flex flex-col max-w-lg p-8 rounded-lg bg-gray-200 dark:bg-gray-800">
+                    <div className="community-title-register text-center pb-8">
+                        <h3 className="text-3xl text-red-600 dark:text-red-300 font-bold-semibold py-1 text-spacing-4">
+                            Join Our Community
+                        </h3>
+                        <p className="register-information text-black dark:text-white">
+                            Register to become a blood donor and save lives
+                        </p>
+                    </div>
                     {error && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <span className="block sm:inline">{error}</span>
@@ -68,36 +76,36 @@ export default function Signup() {
                     )}
                     <div className="mb-5">
                         <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name
-                            <p className="text-red-500 px-0.5 inline">*</p> 
+                            <p className="text-red-500 px-0.5 inline">*</p>
                         </label>
-                        <input type="text" id="name" name='name' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
+                        <input type="text" id="name" name='name' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                         {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                     </div>
                     <div className="mb-5">
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email
-                            <p className="text-red-500 px-0.5 inline">*</p> 
+                            <p className="text-red-500 px-0.5 inline">*</p>
                         </label>
-                        <input type="email" id="email" name='email' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="test@example.com" required/>
+                        <input type="email" id="email" name='email' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="test@example.com" required />
                         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                     </div>
                     <div className="mb-5">
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password
-                            <p className="text-red-500 px-0.5 inline">*</p> 
+                            <p className="text-red-500 px-0.5 inline">*</p>
                         </label>
-                        <input type="password" id="password" name='password' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
+                        <input type="password" id="password" name='password' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                         {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
                     </div>
                     <div className="mb-5">
                         <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password
-                            <p className="text-red-500 px-0.5 inline">*</p> 
+                            <p className="text-red-500 px-0.5 inline">*</p>
                         </label>
-                        <input type="password" id="confirm-password" name='confirmPassword' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
+                        <input type="password" id="confirm-password" name='confirmPassword' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                         {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
                     </div>
-                    <div className="flex">
-                        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 hover:cursor-pointer text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Register</button>
+                    <button type="submit" className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 hover:cursor-pointer text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Submit</button>
+                    <div className="flex justify-center py-2">
                         <p className="newtothiswebsite content-center ps-1">Already have an account?
-                            <Link href='/login' className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 ps-1">Login</Link>
+                            <Link href='/login' className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200 ps-1">Login</Link>
                         </p>
                     </div>
                 </form>
