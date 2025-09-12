@@ -1,6 +1,7 @@
 //some helper functions will be here
+"use server";
 
-export const formatDateToLocal = (
+export const formatDateToLocal = async (
   dateStr: string,
   locale: string = 'en-US',
 ) => {
@@ -13,3 +14,16 @@ export const formatDateToLocal = (
   const formatter = new Intl.DateTimeFormat(locale, options);
   return formatter.format(date);
 };
+
+export const getCityCountryByLatitudeLongitude = async (latitude: number, longitude: number) => {
+  try {
+    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=en`);
+    const data = await response.json();
+    return data;
+  }
+  catch (error){
+    console.log("Error occured at fetching country: ", error);
+    return null;
+  }
+};
+

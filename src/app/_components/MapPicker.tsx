@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 import "leaflet-control-geocoder";
 import { ExactLocation as Location } from "../lib/definitions";
+import { getCityCountryByLatitudeLongitude } from "../lib/utils";
 
 type MapPickerProps = {
   location: Location;
@@ -48,6 +49,34 @@ export default function MapPicker({
       }).addTo(mapRef.current);
     }
   }, [radius]);
+
+  const fillCityCountry = async () => {
+    const data = await getCityCountryByLatitudeLongitude(location.lat, location.lng);
+    if (data) {
+      if (data.address) {
+        const city = data.address.city || data.address.town || data.address.village;
+        const country = data.address.country;
+        console.log(`City: ${city}, Country: ${country}`);
+        onChange({
+          lat: location.lat,
+          lng: location.lng,
+          city: city,
+          country: country,
+        });
+      } else {
+        console.log("Address details not found.");
+      }
+    }
+    else {
+      console.error("Error during reverse geocoding, so setting default location to Kathmandu, Nepal");
+      onChange({
+        lat: location.lat,
+        lng: location.lng,
+        city: "Kathmandu Metropolitican City",
+        country: "Nepal"
+      })
+    }
+  }
 
 
   useEffect(() => {
@@ -112,10 +141,12 @@ export default function MapPicker({
     placeMarker(location.lat, location.lng);
   }, [location.lat, location.lng]);
 
-  function placeMarker(lat: number, lng: number) {
+  async function placeMarker(lat: number, lng: number) {
     if (!mapRef.current) return;
     if (markerRef.current) markerRef.current.remove();
+
     markerRef.current = L.marker([lat, lng]).addTo(mapRef.current);
+    fillCityCountry();
 
     if (circleRef.current) circleRef.current.remove();
 
