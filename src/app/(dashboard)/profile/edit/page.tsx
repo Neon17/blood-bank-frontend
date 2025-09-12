@@ -118,7 +118,7 @@ export default function EditProfilePage() {
                         { errors && errors.dob && <p className='text-red-700 dark:text-red-400'>{errors.dob}</p> }
                     </div>
 
-                    <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Save Changes</button>
+                    <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">Save Changes</button>
                 </form>
 
                 <div className="mt-10">

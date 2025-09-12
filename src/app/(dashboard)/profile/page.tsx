@@ -59,7 +59,7 @@ export default function ProfilePage() {
                                 <label className="block text-sm text-gray-600 dark:text-gray-300">Verified as Donor</label>
                                 <input className="w-full p-2 rounded border bg-gray-100 dark:bg-gray-700 dark:text-white" value={user.verified_as_donor ? "Yes" : "No"} readOnly />
                             </div>
-                            <Link href="/profile/edit" className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                            <Link href="/profile/edit" className="inline-block mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
                                 Edit Profile
                             </Link>
                         </div>

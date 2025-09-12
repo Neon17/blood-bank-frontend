@@ -74,8 +74,8 @@ export default function Sidebar(props: { type: string }) {
                             key={href}
                             href={href}
                             className={`block px-4 py-2 rounded-md transition ${isActive(href, activeOn)
-                                ? "bg-blue-600 text-white"
-                                : "text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white"
+                                ? "bg-red-600 text-white"
+                                : "text-gray-700 dark:text-gray-300 hover:bg-red-500 hover:text-white"
                                 }`}
                             onClick={() => setSidebarOpen(false)} // auto-close on mobile
                         >

@@ -28,6 +28,23 @@ export default function MapPicker({
   const circleRef = useRef<L.Circle | null>(null);
   const [mounted, setMounted] = useState(false);
   const mapContainerId = "map-leaflet";
+  const redIcon = L.divIcon({
+    className: 'custom-div-icon',
+    html: `
+    <svg width="30" height="40" viewBox="0 0 30 40">
+      <path
+        fill="red"
+        stroke="#fff"
+        stroke-width="2"
+        fill-rule="evenodd"
+        d="M15 0 C22.5 0 30 7.5 30 15 C30 22.5 15 40 15 40 C15 40 0 22.5 0 15 C0 7.5 7.5 0 15 0 Z 
+           M15 10 A5 5 0 1 0 15 10.0001 Z"
+      ></path>
+    </svg>`,
+    iconSize: [30, 40],
+    iconAnchor: [15, 40],
+    popupAnchor: [0, -40]
+  });
 
   useEffect(() => {
     if (!mapRef.current || !markerRef.current) return;
@@ -57,24 +74,16 @@ export default function MapPicker({
         const city = data.address.city || data.address.town || data.address.village;
         const country = data.address.country;
         console.log(`City: ${city}, Country: ${country}`);
-        onChange({
-          lat: location.lat,
-          lng: location.lng,
-          city: city,
-          country: country,
-        });
+        location.city = city;
+        location.country = country;
       } else {
         console.log("Address details not found.");
       }
     }
     else {
       console.error("Error during reverse geocoding, so setting default location to Kathmandu, Nepal");
-      onChange({
-        lat: location.lat,
-        lng: location.lng,
-        city: "Kathmandu Metropolitican City",
-        country: "Nepal"
-      })
+      location.city = "Kathmandu Metropolitican City",
+        location.country = "Nepal"
     }
   }
 
@@ -133,21 +142,21 @@ export default function MapPicker({
     });
 
     placeMarker(location.lat, location.lng);
+    fillCityCountry();
   }, [mounted]);
 
   useEffect(() => {
     if (!mapRef.current) return;
     mapRef.current.setView([location.lat, location.lng], 13);
     placeMarker(location.lat, location.lng);
+    fillCityCountry();
   }, [location.lat, location.lng]);
 
   async function placeMarker(lat: number, lng: number) {
     if (!mapRef.current) return;
     if (markerRef.current) markerRef.current.remove();
 
-    markerRef.current = L.marker([lat, lng]).addTo(mapRef.current);
-    fillCityCountry();
-
+    markerRef.current = L.marker([lat, lng], { icon: redIcon }).addTo(mapRef.current);
     if (circleRef.current) circleRef.current.remove();
 
     circleRef.current = L.circle([lat, lng], {
