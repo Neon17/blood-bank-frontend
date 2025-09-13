@@ -124,11 +124,11 @@ export default function CreateRequest() {
 
 
     return (
-        <div className="min-h-screen bg-gray-100 flex justify-center py-10 px-2">
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center py-10 px-2">
             <div className="w-full max-w-7xl flex flex-col items-center">
 
 
-                <div className="w-full max-w-3xl bg-white rounded-xl shadow-xl p-8">
+                <div className="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8">
                     <h2 className="text-3xl font-semibold text-center">Create Blood Request</h2>
 
                     {/* Stepper */}
@@ -150,7 +150,7 @@ export default function CreateRequest() {
                                         name="blood_type"
                                         value={formData.blood_type}
                                         onChange={handleChange}
-                                        className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-red-500"
+                                        className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-red-500 dark:bg-gray-700"
 
                                     >
                                         <option value="">Choose Blood Type</option>
@@ -164,7 +164,7 @@ export default function CreateRequest() {
                                 <InputField label="Quantity*" name="quantity" value={formData.quantity} onChange={handleChange} />
                                 {errors && errors.quantity && <div className="text-red-500">{errors.quantity}</div>}
 
-                                <InputField type="date*" label="Date" name="date_time" value={formData.date_time} onChange={handleChange} />
+                                <InputField type="date" label="Date" name="date_time" value={formData.date_time} onChange={handleChange} />
                                 {errors && errors.date_time && <div className="text-red-500">{errors.date_time}</div>}
 
                                 <InputField label="Exact Location*" name="exact_location" value={formData.exact_location} onChange={handleChange} />
@@ -209,7 +209,7 @@ export default function CreateRequest() {
 
                         {/* Step 4: Confirmation */}
                         {activeStep === 3 && (
-                            <div className="text-gray-700 text-sm space-y-2">
+                            <div className="text-gray-700 dark:text-gray-300 text-sm space-y-2">
                                 <p>Please review your request before submitting.</p>
                                 <ul className="list-disc list-inside">
                                     <li><strong>Blood Type:</strong> {formData.blood_type}</li>
