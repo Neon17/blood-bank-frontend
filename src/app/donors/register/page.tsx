@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { BloodDonor, ExactLocation, DonorRegistrationForm } from '@/app/lib/definitions';
 import { registerBloodDonor } from '@/app/lib/actions';
+import Stepper from '@/app/_components/Stepper';
 
 const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
@@ -32,6 +33,7 @@ type DonorFormErrors = {
 export default function BecomeDonor() {
   const [errors, setErrors] = useState<DonorFormErrors>({});
   const [activeStep, setActiveStep] = useState(0);
+  const [completedStep, setCompletedStep] = useState(0);
   const radius = useRef(2); //acceptable location within our exact contact address
   const [location, setLocation] = useState<ExactLocation>({
     lat: 27.712,
@@ -59,6 +61,11 @@ export default function BecomeDonor() {
     agreement: false,
   });
   const router = useRouter();
+
+  useEffect(()=>{
+    if (activeStep > completedStep)
+      setCompletedStep(completedStep + 1);
+  }, [activeStep]);
 
   // const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
@@ -135,59 +142,20 @@ export default function BecomeDonor() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center py-2">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center p-2 w-full">
       <div>
 
-        <div className="w-full bg-white dark:bg-gray-800 shadow-md rounded-lg p-3 lg:p-8 max-h-auto">
-          <h2 className="text-2xl lg:text-3xl font-semibold text-center mb-10">
+        <div className="w-full min-w-[300px] w-full md:w-auto bg-white dark:bg-gray-800 shadow-md rounded-lg p-3 lg:p-8 max-h-auto">
+          <h2 className="text-2xl lg:text-3xl font-semibold text-center pb-5 lg:mb-10">
             Become a Blood Donor
           </h2>
+          
 
           {/* Stepper */}
-          <div className="stepper flex pb-5">
-            {steps.map((label, index) => (
-              <React.Fragment key={index}>
-                {/* Step indicator and label */}
-                <div className="flex flex-col items-center text-center relative z-10 w-full sm:w-auto">
-                  <div
-                    className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 ease-in-out
-              ${index <= activeStep ? 'bg-red-600 border-red-600 text-white shadow-md' : 'bg-white border-gray-300 text-gray-500'}`}
-                  >
-                    {index <= activeStep - 1 ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                      <span className="font-semibold">{index + 1}</span>
-                    )}
-                  </div>
-                  <span
-                    className={`mt-3 text-sm font-medium whitespace-nowrap transition-colors duration-300 ease-in-out
-              ${index <= activeStep ? 'text-red-600' : 'text-gray-500'}`}
-                  >
-                    {label}
-                  </span>
-                </div>
-
-                {/* Separator line between steps */}
-                {index <= steps.length - 1 && (
-                  <div className="flex-auto h-0.5 relative my-4 sm:my-0 sm:mx-4">
-                    <div
-                      className={`absolute inset-0 h-full w-full transition-all duration-300 ease-in-out
-                ${index < activeStep ? 'bg-red-600' : 'bg-gray-300'}`}
-                    ></div>
-                  </div>
-                )}
-              </React.Fragment>
-            ))}
+          <div className="w-full justify-center items-center">
+            <Stepper completedStep={completedStep} values={steps} />
           </div>
+
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6 pt-5">

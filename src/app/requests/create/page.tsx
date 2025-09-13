@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { createBloodRequest } from "@/app/lib/actions";
+import Stepper from "@/app/_components/Stepper";
 
 const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 // import MapPicker from "@/app/_components/MapPicker";
@@ -28,6 +29,13 @@ export default function CreateRequest() {
     });
     const [success, setSuccess] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [completedStep, setCompletedStep] = useState(0);
+
+    useEffect(() => {
+        if (activeStep > completedStep) {
+            setCompletedStep(activeStep);
+        }
+    }, [activeStep])
 
     const [location, setLocation] = useState({
         lat: 27.7172,
@@ -116,28 +124,16 @@ export default function CreateRequest() {
 
 
     return (
-        <div className="min-h-screen bg-gray-100 flex justify-center py-10">
+        <div className="min-h-screen bg-gray-100 flex justify-center py-10 px-2">
             <div className="w-full max-w-7xl flex flex-col items-center">
 
 
                 <div className="w-full max-w-3xl bg-white rounded-xl shadow-xl p-8">
-                    <h2 className="text-3xl font-semibold text-center mb-10">Create Blood Request</h2>
+                    <h2 className="text-3xl font-semibold text-center">Create Blood Request</h2>
 
                     {/* Stepper */}
-                    <div className="flex justify-between mb-8">
-                        {steps.map((label, i) => (
-                            <div key={i} className="flex-1 flex flex-col items-center">
-                                <div
-                                    className={`flex items-center justify-center w-10 h-10 rounded-full border-2 
-                ${i === activeStep ? "bg-red-600 text-white border-red-600" : "border-gray-300 text-gray-500"}`}
-                                >
-                                    {i + 1}
-                                </div>
-                                <span className={`mt-2 text-sm ${i === activeStep ? "text-red-600 font-medium" : "text-gray-500"}`}>
-                                    {label}
-                                </span>
-                            </div>
-                        ))}
+                    <div className="w-full flex flex-row items-start justify-center w-full my-5">
+                        <Stepper values={steps} completedStep={completedStep} />
                     </div>
 
                     {error && <div className="w-full bg-red-600 text-white dark:bg-red-400 text-black p-3 mb-5">
