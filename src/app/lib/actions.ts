@@ -14,6 +14,7 @@ export const bloodDonors = asyncErrorHandler(_bloodDonors);
 
 export const donorApplications = asyncErrorHandler(_donorApplications);
 export const deleteDonorApplication = asyncErrorHandler(_deleteDonorApplication);
+export const editDonorApplication = asyncErrorHandler(_editDonorApplication);
 export const updateDonorApplication = asyncErrorHandler(_updateDonorApplication);
 export const myDonorApplication = asyncErrorHandler(_myDonorApplication);
 export const approveBloodDonorApplication = asyncErrorHandler(_approveBloodDonorApplication);
@@ -85,6 +86,18 @@ async function _deleteDonorApplication(id: string) {
     const data : { 
         status: string,
         data: BloodDonor
+    } = await response.data;
+    return data;
+}
+
+async function _editDonorApplication(id: string) {
+    const response = await api.get(`/blood/donors/${id}/edit`);
+    const data: {
+        status: string,
+        data: BloodDonor
+    } | {
+        status: string,
+        message: string
     } = await response.data;
     return data;
 }

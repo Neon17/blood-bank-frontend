@@ -51,7 +51,7 @@ export default function Sidebar(props: { type: string }) {
 
 
     const isActive = (href: string, activeOn?: string[]) =>
-        activeOn?.includes(currentPath) || currentPath === href;
+        activeOn?.includes(currentPath) || currentPath === href || currentPath?.startsWith(`${href}/`);
 
     return (
         <div className="flex min-h-screen h-full bg-gray-100 dark:bg-gray-900 fixed z-1002" id="dashboardsidebar">

@@ -4,13 +4,14 @@ import { myDonorApplication } from "@/app/lib/actions"
 import MapPickerWrapper from "@/app/_components/MapPickerWrapper";
 import { CheckCircle, MinusCircle, XCircle } from "lucide-react";
 import { verification_status } from "@/app/lib/definitions";
+import Link from "next/link";
 
 const steps = ['Personal Information', 'Medical History', 'Contact Location', 'Confirmation'];
 
 export default async function Page() {
     const radius = 2;
     const data = await myDonorApplication();
-    
+
     let badge = null;
     if (data && "data" in data && data.data) {
         const status = data.data.verification_status;
@@ -61,9 +62,12 @@ export default async function Page() {
             </div> */}
 
             <h2 className="text-2xl lg:text-4xl text-center">
-                Contact and Donor Registration Form
+                Contact Details
             </h2>
-            <p className="show-badges ps-3">
+            <p className="show-badges px-5 flex w-full justify-between">
+                <Link href={`/contacts/${data.data.id}/edit`} type="button" className="focus:outline-none text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-red-900">
+                    Edit
+                </Link>
                 {badge}
             </p>
 
@@ -85,7 +89,7 @@ export default async function Page() {
 
                     <div className="formflex min-h-screen">
 
-                        <form className="space-y-4 border p-5 rounded dark:bg-gray-800 bg-white">
+                        <form className="space-y-4 border p-5 rounded dark:bg-gray-800 bg-white mb-3">
                             <>
 
                                 <label htmlFor="contact_phone">
