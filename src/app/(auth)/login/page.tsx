@@ -20,8 +20,6 @@ export default function Login() {
         try {
             const data = await authenticate(formData);
 
-            console.log(data);
-
             if (data.status == 'error') {
                 if (data.message === 'validation error')
                     setError("Incomplete Data. Fill all required fields");

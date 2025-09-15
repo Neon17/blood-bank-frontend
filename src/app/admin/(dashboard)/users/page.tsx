@@ -18,7 +18,7 @@ export default function Page() {
                 setError(response.message);
             }
             else {
-                console.log(response);
+                // console.log(response);
                 setData(response.data);
             }
         }

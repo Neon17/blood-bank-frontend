@@ -4,12 +4,13 @@ import MapPicker from "./MapPicker";
 import { ExactLocation as Location } from "../lib/definitions";
 
 type MapPickerWrapperProps = {
-  location: Location;
+  location?: Location;           // Single active location
+  locations?: Location[];        // Multiple donor locations
   radius?: number | null;
   onChange?: ((location: Location) => void) | (() => void);
 };
 
-export default function MapPickerWrapper({ location, radius, onChange }: MapPickerWrapperProps) {
+export default function MapPickerWrapper({ location, locations, radius, onChange }: MapPickerWrapperProps) {
   const handleMapChange = (newLocation: Location) => {
     onChange?.(newLocation);
   };
@@ -17,6 +18,7 @@ export default function MapPickerWrapper({ location, radius, onChange }: MapPick
   return (
     <MapPicker
       location={location}
+      locations={locations}
       onChange={handleMapChange}
       radius={radius}
       width="100%"

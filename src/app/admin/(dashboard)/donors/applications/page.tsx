@@ -88,7 +88,6 @@ export default function Page() {
     const res = await updateDonorApplication(updateData);
     if ("message" in res) setError(res.message);
     else {
-      console.log(res);
       setEditDonor(null);
       setSuccess("Successfully Updated Donor Application!");
     }
@@ -104,19 +103,15 @@ export default function Page() {
       country: location.city
     }
 
-    console.log(approveDonor);
-
     if (!approveData.contact_number) return;
     if (!id) return;
     const res = await approveBloodDonorApplication(approveData);
     if ("message" in res) {
       setError(res.message);
       alert('Error! ' + res.message);
-      console.log(res);
     }
     else {
       fetchData();
-      console.log(res);
       setApproveDonor(null);
       setSuccess("Successfully Updated Donor Application!");
     }

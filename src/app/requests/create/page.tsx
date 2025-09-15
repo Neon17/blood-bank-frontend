@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { createBloodRequest } from "@/app/lib/actions";
@@ -77,7 +77,6 @@ export default function CreateRequest() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("handle submit called, active step = " + activeStep);
         if (activeStep < steps.length - 1) return;
 
         const data = new FormData();
@@ -99,10 +98,14 @@ export default function CreateRequest() {
                 location.city = "Kathmandu";
                 location.country = "Nepal";
             }
+            if (location.lat === 0 && location.lng === 0) {
+                location.lat = 27.7172;
+                location.lng = 85.3240;
+            }
             data.append("city", location.city);
             data.append("country", location.country);
-            data.append("lat", location.lat.toString());
-            data.append("lng", location.lng.toString());
+            data.append("latitude", location.lat.toString());
+            data.append("longitude", location.lng.toString());
 
             const res = await createBloodRequest(data);
 
@@ -180,6 +183,16 @@ export default function CreateRequest() {
                             <div>
                                 <p className="mb-2">Pick request location*</p>
                                 <MapPicker width="100%" height="400px" location={location} onChange={setLocation} />
+
+                                <div className="mt-2">
+                                    <InputField label="City*" className="mt-4" name="city" value={location.city} onChange={(e: ChangeEvent<HTMLInputElement>) => setLocation({ ...location, city: e.target.value })} />
+                                    {errors && errors.city && <div className="text-red-500">{errors.city}</div>}
+                                </div>
+
+                                <div className="mt-2">
+                                    <InputField label="Country*" name="country" value={location.country} onChange={(e: ChangeEvent<HTMLInputElement>) => setLocation({ ...location, country: e.target.value })} />
+                                    {errors && errors.country && <div className="text-red-500">{errors.country}</div>}
+                                </div>
                             </div>
                         )}
 

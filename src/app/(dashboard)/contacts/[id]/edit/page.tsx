@@ -25,9 +25,10 @@ type DonorApplicationError = {
     country?: string[]
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: Promise<{ id: string; }> }) {
     const radius = useRef(2);
     const [data, setData] = useState<BloodDonor>();
+    const [medical_conditions, setMedicalConditions] = useState<string[]>([]);
     const [error, setError] = useState('');
     const [errors, setErrors] = useState<DonorApplicationError>();
     const [success, setSuccess] = useState('');
@@ -37,6 +38,7 @@ export default function Page({ params }: { params: { id: string } }) {
         const data = await editDonorApplication(id);
         if ("data" in data) {
             setData(data.data);
+            setMedicalConditions(data.data.medical_conditions?.split(',') || []);
         }
         else {
             setError(data.message);
@@ -45,6 +47,12 @@ export default function Page({ params }: { params: { id: string } }) {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        if (data){
+            setData({
+                ...data,
+                medical_conditions: medical_conditions.join(',')
+            })
+        }
         const updated_data = await updateDonorApplication(data!);
         window.scrollTo({
             top: 0,
@@ -202,7 +210,7 @@ export default function Page({ params }: { params: { id: string } }) {
                                                     } else {
                                                         conditions.splice(conditions.indexOf(condition), 1);
                                                     }
-                                                    setData({ ...data, medical_conditions: conditions });
+                                                    setMedicalConditions(conditions);
                                                 }}
                                                 className="mr-2" />
                                             {condition}

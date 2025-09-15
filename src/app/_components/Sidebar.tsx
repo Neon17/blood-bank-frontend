@@ -29,7 +29,6 @@ export default function Sidebar(props: { type: string }) {
         if (pathname) {
             setCurrentPath(pathname);
         }
-        console.log(`user type = ${props.type}`);
     }, [pathname]);
 
     const userNavLinks = [

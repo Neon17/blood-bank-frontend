@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import ActionDropdown from "../_components/ActionDropdown";
 import { bloodRequests } from "../lib/actions";
-import { BloodRequest } from "../lib/definitions";
+import { BloodRequest, ExactLocation } from "../lib/definitions";
 import SearchRadiusSlider from "../_components/SearchRadiusSlider";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -14,12 +14,13 @@ export default function Requests() {
     let error = '';
     const [searchRadius, setSearchRadius] = useState<number>(1);
 
-    const [location, setLocation] = useState({
+    const [location, setLocation] = useState<ExactLocation>({
         lat: 27.7172,
         lng: 85.3240,
         city: "Kathmandu",
         country: "Nepal"
     });
+    const [locations, setLocations] = useState<ExactLocation[]>([]);
 
     useEffect(() => {
         const fetchRequests = async () => {
@@ -27,9 +28,22 @@ export default function Requests() {
                 const res = await bloodRequests();
                 if (res && "data" in res && res?.data) {
                     setData(res.data);
-                    console.log(res.data);
+                    setLocations(
+                        res?.data.map((request: BloodRequest) => ({
+                            lat: request.latitude,
+                            lng: request.longitude,
+                            city: request.city,
+                            country: request.country,
+                            label: {
+                                name: request.user?.name,
+                                contact_number: request.contact_number,
+                                blood_type: request.blood_type,
+                                date: request.date_time,
+                                quantity: request.quantity
+                            }
+                        }))
+                    )
                 }
-                console.log(data);
             } catch (err) {
                 console.error('Failed to load requests', err);
             }
@@ -42,7 +56,7 @@ export default function Requests() {
 
             {/* Map Section */}
             <div className="h-full w-full overflow-hidden border-r">
-                <MapPicker location={location} onChange={setLocation} radius={searchRadius} width="100%" height="100%" />
+                <MapPicker location={location} locations={locations} onChange={setLocation} radius={searchRadius} width="100%" height="100%" />
             </div>
 
             {/* Request Content Section */}

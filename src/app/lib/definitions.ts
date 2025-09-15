@@ -30,6 +30,7 @@ export type ExactLocation = {
     lng: number;
     city: string;
     country: string;
+    label?: object
 };
 
 export type AuthResponse = {
@@ -82,7 +83,7 @@ export type BloodDonor = {
     weight?: number,
     height?: number,
     last_donated_date?: string,
-    medical_conditions?: string[],
+    medical_conditions?: string,
     current_medication?: string,
     current_health_status?: string,
 

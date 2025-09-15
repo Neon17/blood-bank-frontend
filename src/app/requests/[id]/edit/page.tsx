@@ -21,7 +21,6 @@ export default function EditRequest() {
     const [success, setSuccess] = useState('');
 
     const fetchData = async () => {
-        console.log(`id = ${id}`);
         const res = await bloodRequest(id);
         if ("message" in res) {
             setError(res.message);
@@ -30,7 +29,6 @@ export default function EditRequest() {
         }
         else {
             setData(res.data);
-            console.log(res.data);
         }
     }
 

@@ -1,29 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { bloodDonors } from "../lib/actions";
-import { User } from "../lib/definitions";
+import { useEffect, useRef, useState } from "react";
+import { bloodDonors, donorApplications } from "../lib/actions";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import SearchRadiusSlider from "../_components/SearchRadiusSlider";
+import { BloodDonor, ExactLocation } from "../lib/definitions";
 const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 export default function Donors() {
-    const [data, setData] = useState<User[]>([]);
-    const [location, setLocation] = useState({
+    const [data, setData] = useState<BloodDonor[]>([]);
+    const [location, setLocation] = useState<ExactLocation>({
         lat: 27.712,
         lng: 85.3240,
         city: "Pokhara",
         country: "Nepal"
     });
+    const [locations, setLocations] = useState<ExactLocation[]>([]);
     const [searchRadius, setSearchRadius] = useState<number>(1);
 
     useEffect(() => {
         const fetchDonors = async () => {
             try {
-                const res = await bloodDonors();
+                const res = await donorApplications();
                 if (res && "data" in res && res?.data) {
                     setData(res?.data);
+                    setLocations(
+                        res?.data.map((donor: BloodDonor) => ({
+                            lat: donor.latitude,
+                            lng: donor.longitude,
+                            city: donor.city,
+                            country: donor.country,
+                            label: {
+                                name: donor.user?.name,
+                                contact_number: donor.contact_number,
+                                blood_type: donor.blood_type,
+                            }
+                        }))
+                    );
                 }
             } catch (err) {
                 console.error('Failed to load donors', err);
@@ -37,7 +51,7 @@ export default function Donors() {
 
             {/* Left: Map */}
             <div className="h-full w-full overflow-hidden border-r">
-                <MapPicker location={location} onChange={setLocation} radius={searchRadius} width={"100%"} height={"100%"} />
+                <MapPicker location={location} locations={locations} onChange={setLocation} radius={searchRadius} width={"100%"} height={"100%"} />
             </div>
 
             {/* Right: Panel */}
@@ -83,12 +97,12 @@ export default function Donors() {
 
                     {data.map((elem, idx) => (
                         <div key={idx} className="p-4 border rounded shadow hover:shadow-md transition bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm">
-                            <h3 className="text-lg font-semibold">{elem.name}</h3>
+                            <h3 className="text-lg font-semibold">{elem.user?.name}</h3>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Blood Type: {elem.blood_type}</p>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">Verified: {elem.verified_as_donor ? 'Yes' : 'No'}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Verified: {elem.user?.verified_as_donor ? 'Yes' : 'No'}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">City: {elem.city}</p>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">Email: {elem.email}</p>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {elem.phone_number}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Email: {elem.user?.email}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {elem.contact_number}</p>
                         </div>
                     ))}
                 </div>

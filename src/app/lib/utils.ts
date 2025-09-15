@@ -22,7 +22,7 @@ export const getCityCountryByLatitudeLongitude = async (latitude: number, longit
     return data;
   }
   catch (error){
-    console.log("Error occured at fetching country: ", error);
+    console.error("Error occured at fetching country: ", error);
     return null;
   }
 };

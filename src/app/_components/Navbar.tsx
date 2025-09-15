@@ -78,7 +78,7 @@ export default function Navbar() {
                                     }
                                     {user &&
                                         <div ref={dropdownRef} className="relative inline-block text-left">
-                                            <button id="dropdownButton" onClick={() => { SetIsOpen(!IsOpen); console.log(IsOpen) }} className="flex items-center px-4 text-red-600 dark:text-red-300 rounded-lg hover:text-red-800 dark:hover:text-red-400 hover:cursor-pointer">
+                                            <button id="dropdownButton" onClick={() => { SetIsOpen(!IsOpen);}} className="flex items-center px-4 text-red-600 dark:text-red-300 rounded-lg hover:text-red-800 dark:hover:text-red-400 hover:cursor-pointer">
                                                 {user.name.split(' ')[0].charAt(0).toUpperCase() + user.name.split(' ')[0].slice(1)}
                                                 <ChevronDown className="w-4 h-4 ml-1 inline text-gray-600 dark:text-gray-300" />
                                             </button>
