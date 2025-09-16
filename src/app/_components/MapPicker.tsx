@@ -104,6 +104,14 @@ export default function MapPicker({
     });
   }, []);
 
+  // update circle radius whenever radius changes
+  useEffect(() => {
+    if (circleRef.current && radius) {
+      circleRef.current.setRadius(radius * 1000);
+    }
+  }, [radius]);
+
+
   // Build a safe tuple center for setView
   function getInitialCenter(): [number, number] {
     const fromSingle = toNumberLatLng(location as any);

@@ -13,38 +13,66 @@ export default function Donors() {
     const [location, setLocation] = useState<ExactLocation>({
         lat: 27.712,
         lng: 85.3240,
-        city: "Pokhara",
+        city: "Kathmandu",
         country: "Nepal"
     });
     const [locations, setLocations] = useState<ExactLocation[]>([]);
     const [searchRadius, setSearchRadius] = useState<number>(1);
+    const [searchBloodType, setSearchBloodType] = useState<string>('');
+
+    const handleDonors = (res: {
+        status: string;
+        data: BloodDonor[];
+    } | {
+        status: "error";
+        message: string;
+        errors?: any;
+    }) => {
+        if (res && "data" in res && res?.data) {
+            setData(res?.data);
+            setLocations(
+                res?.data.map((donor: BloodDonor) => ({
+                    lat: donor.latitude,
+                    lng: donor.longitude,
+                    city: donor.city,
+                    country: donor.country,
+                    label: {
+                        name: donor.user?.name,
+                        contact_number: donor.contact_number,
+                        blood_type: donor.blood_type,
+                    }
+                }))
+            );
+        }
+        else {
+            console.error('Failed to load donors', res);
+        }
+    }
 
     useEffect(() => {
         const fetchDonors = async () => {
             try {
                 const res = await donorApplications();
-                if (res && "data" in res && res?.data) {
-                    setData(res?.data);
-                    setLocations(
-                        res?.data.map((donor: BloodDonor) => ({
-                            lat: donor.latitude,
-                            lng: donor.longitude,
-                            city: donor.city,
-                            country: donor.country,
-                            label: {
-                                name: donor.user?.name,
-                                contact_number: donor.contact_number,
-                                blood_type: donor.blood_type,
-                            }
-                        }))
-                    );
-                }
+                handleDonors(res);
             } catch (err) {
                 console.error('Failed to load donors', err);
             }
         }
         fetchDonors();
     }, []);
+
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        const preparedData = {
+            latitude: location.lat,
+            longitude: location.lng,
+            blood_group: searchBloodType,
+            radius: searchRadius
+        };
+        const data = await donorApplications(preparedData);
+        handleDonors(data);
+    }
 
     return (
         <main className="grid grid-cols-1 lg:grid-cols-2 min-h-screen w-full">
@@ -68,9 +96,9 @@ export default function Donors() {
                         <h1 className="text-2xl font-bold mb-4 mt-6">Search Blood Donors</h1>
 
                         <div className="flex flex-col gap-3">
-                            <form action="" method="get" className="mb-3">
-                                <select className="p-2 border rounded w-full dark:bg-gray-800">
-                                    <option value="">Blood Type</option>
+                            <form onSubmit={handleSubmit} method="get" className="mb-3">
+                                <select value={searchBloodType} onChange={(e) => setSearchBloodType(e.target.value)} className="p-2 border rounded w-full dark:bg-gray-800">
+                                    <option value="">Blood Group</option>
                                     <option value="A+">A+</option>
                                     <option value="B+">B+</option>
                                     <option value="O+">O+</option>

@@ -31,8 +31,8 @@ async function _profile() {
     return data;
 }
 
-async function _getAllUsers () {
-    const response = await api.get('/users');
+async function _getAllUsers ($query = {}) {
+    const response = await api.get('/users', { params: $query });
     const data : {
         status: string,
         data: User[]
@@ -54,8 +54,8 @@ async function _updateProfile(formData: FormData) {
     return data;
 }
 
-async function _bloodRequests() {
-    const response = await api.get('/blood/requests');
+async function _bloodRequests($query = {}) {
+    const response = await api.get('/blood/requests', { params: $query });
     const data: {
         status: string,
         data: BloodRequest[]
@@ -72,8 +72,8 @@ async function _bloodDonors() {
     return data;
 }
 
-async function _donorApplications(){
-    const response = await api.get('/blood/donors');
+async function _donorApplications($query = {}) {
+    const response = await api.get('/blood/donors', { params: $query });
     const data : {
         status: string,
         data: BloodDonor[]
