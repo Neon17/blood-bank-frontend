@@ -55,6 +55,11 @@ export default function ProfilePage() {
                                 <label className="block text-sm text-gray-600 dark:text-gray-300">Address</label>
                                 <input className="w-full p-2 rounded border bg-gray-100 dark:bg-gray-700 dark:text-white" value={user.address || ''} readOnly />
                             </div>
+                            {/* Blood Group */}
+                            <div className="mb-4">
+                                <label className="block text-sm text-gray-600 dark:text-gray-300">Blood Group</label>
+                                <input className="w-full p-2 rounded border bg-gray-100 dark:bg-gray-700 dark:text-white" value={user.blood_group || ''} readOnly />
+                            </div>
                             <div className="mb-4">
                                 <label className="block text-sm text-gray-600 dark:text-gray-300">Verified as Donor</label>
                                 <input className="w-full p-2 rounded border bg-gray-100 dark:bg-gray-700 dark:text-white" value={user.verified_as_donor ? "Yes" : "No"} readOnly />

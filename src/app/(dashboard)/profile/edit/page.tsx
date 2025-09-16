@@ -11,7 +11,8 @@ type Error = {
     name?: string,
     email?: string,
     address?: string,
-    dob? :string
+    dob? :string,
+    blood_group?: string
 }
 
 export default function EditProfilePage() {
@@ -100,6 +101,25 @@ export default function EditProfilePage() {
                                 No
                             </label>
                         </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Blood Group
+                            <p className="text-red-500 px-0.5 inline">*</p>
+                        </label>
+                        {/* Select option of Blood Group */}
+                        <select name="blood_group" defaultValue={user.blood_group} className="w-full bg-gray-100 dark:bg-gray-700 text-sm p-2 rounded">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                        { errors && errors.blood_group && <p className='text-red-700 dark:text-red-400'>{errors.blood_group}</p> }
                     </div>
 
                     <div>

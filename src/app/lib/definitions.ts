@@ -6,7 +6,7 @@ export type User = {
     dob: Date;
     will_donate: boolean;
     verified_as_donor: boolean;
-    blood_type: string;
+    blood_group: string;
     last_donated: Date;
     last_verified: Date;
     address: string;
