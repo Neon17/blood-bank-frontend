@@ -1,5 +1,5 @@
 "use client"
-import { bloodRequest, deleteBloodRequest, updateBloodRequest } from "@/app/lib/actions";
+import { bloodRequest, deleteRequestApplication, updateRequestApplicationByFormData } from "@/app/lib/actions";
 import { BloodRequest } from "@/app/lib/definitions";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
@@ -41,7 +41,7 @@ export default function EditRequest() {
     }, [params.id]);
 
     const handleDelete = async () => {
-        const response = await deleteBloodRequest(id);
+        const response = await deleteRequestApplication(id);
         if ("message" in response && response.status === 'error') {
             setError(response.message);
             console.error(response.message);
@@ -58,7 +58,7 @@ export default function EditRequest() {
         formData.append("lat", location.lat.toString());
         formData.append("lng", location.lng.toString());
 
-        const response = await updateBloodRequest(id, formData);
+        const response = await updateRequestApplicationByFormData(id, formData);
 
         if ("message" in response) {
             setError(response.message);
@@ -109,7 +109,7 @@ export default function EditRequest() {
                     </div>
                     <div className="mb-5">
                         <label htmlFor="base-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
-                        <input type="date" name="date_time" id="base-input" defaultValue={data?.date_time.toLocaleString()}
+                        <input type="date" name="date_time" id="base-input" defaultValue={data?.date_time && data?.date_time.toLocaleString()}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
                     <div className="mb-5">

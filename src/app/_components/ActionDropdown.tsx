@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { deleteBloodRequest } from "../lib/actions";
+import { deleteRequestApplication } from "../lib/actions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -10,7 +10,7 @@ export default function ActionDropdown({ id, error, success }: { id: string, err
     const [open, setOpen] = useState(false);
 
     const handleDelete = async () => {
-        const response = await deleteBloodRequest(id);
+        const response = await deleteRequestApplication(id);
         if ("message" in response &&  response.status === 'error') {
             // error = response.message;
             console.error(response.message);

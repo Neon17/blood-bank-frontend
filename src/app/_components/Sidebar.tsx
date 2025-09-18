@@ -44,6 +44,7 @@ export default function Sidebar(props: { type: string }) {
         { href: "/contacts", label: "Contacts" },
         { href: "/donations", label: "Donations" },
         { href: "/admin/donors/applications", label: "Donor Application" },
+        { href: "admin/requests/applications", label: "Request Application", activeOn: ["/admin/requests/applications", "admin/requests"] },
         { href: "/admin/users", label: "Users" },
         { href: "/settings", label: "Settings" },
     ]

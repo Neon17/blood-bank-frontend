@@ -9,8 +9,10 @@ export const profile = asyncErrorHandler(_profile);
 export const createBloodRequest = asyncErrorHandler(_createBloodRequest);
 export const updateProfile = asyncErrorHandler(_updateProfile);
 export const bloodRequests = asyncErrorHandler(_bloodRequests);
+export const allBloodRequests = asyncErrorHandler(_allBloodRequests);
 export const bloodRequest = asyncErrorHandler(_bloodRequest);
 export const bloodDonors = asyncErrorHandler(_bloodDonors);
+export const registerBloodDonor = asyncErrorHandler(_registerBloodDonor);
 
 export const donorApplications = asyncErrorHandler(_donorApplications);
 export const deleteDonorApplication = asyncErrorHandler(_deleteDonorApplication);
@@ -19,10 +21,18 @@ export const updateDonorApplication = asyncErrorHandler(_updateDonorApplication)
 export const myDonorApplication = asyncErrorHandler(_myDonorApplication);
 export const approveBloodDonorApplication = asyncErrorHandler(_approveBloodDonorApplication);
 
-export const registerBloodDonor = asyncErrorHandler(_registerBloodDonor);
-export const finishBloodRequests = asyncErrorHandler(_finishBloodRequests);
-export const updateBloodRequest = asyncErrorHandler(_updateBloodRequest);
-export const deleteBloodRequest = asyncErrorHandler(_deleteBloodRequest);
+export const editRequestApplication = asyncErrorHandler(_editRequestApplication);
+export const updateRequestApplicationByFormData = asyncErrorHandler(_updateBloodRequest);
+export const updateRequestApplication = asyncErrorHandler(_updateRequestApplication);
+export const myRequestApplication = asyncErrorHandler(_yourBloodRequest);
+export const cancelRequestApplication = asyncErrorHandler(_cancelRequestApplication);
+export const completeRequestApplication = asyncErrorHandler(_completeRequestApplication);
+// Admin tasks of Request applications (below 2 lines)
+export const approveRequestApplication = asyncErrorHandler(_approveRequestApplication);
+export const rejectRequestApplication = asyncErrorHandler(_rejectRequestApplication);
+
+export const finishRequestApplication = asyncErrorHandler(_finishBloodRequests);
+export const deleteRequestApplication = asyncErrorHandler(_deleteBloodRequest);
 export const test = asyncErrorHandler(_test);
 
 async function _profile() {
@@ -59,6 +69,90 @@ async function _bloodRequests($query = {}) {
     const data: {
         status: string,
         data: BloodRequest[]
+    } = await response.data;
+    return data;
+}
+
+async function _allBloodRequests($query = {}) {
+    const response = await api.get('/blood/requests/all', { params: $query });
+    const data: {
+        status: string,
+        data: BloodRequest[]
+    } = await response.data;
+    return data;
+}
+
+async function _yourBloodRequest(){
+    const response = await api.get('/blood/requests/yours');
+    const data: {
+        status: string,
+        data: BloodRequest[]
+    } = await response.data;
+    return data;
+}
+
+async function _deleteRequestApplication(id: string) {
+    const response = await api.delete(`/blood/requests/${id}`);
+    const data : { 
+        status: string,
+        data: BloodDonor
+    } = await response.data;
+    return data;
+}
+
+async function _editRequestApplication(id: string) {
+    const response = await api.get(`/blood/requests/${id}/edit`);
+    const data: {
+        status: string,
+        data: BloodDonor
+    } | {
+        status: string,
+        message: string
+    } = await response.data;
+    return data;
+}
+
+async function _updateRequestApplication(formData: BloodRequest) {
+    const response = await api.put(`/blood/requests/${formData.id}`, formData);
+    const data: {
+        status: string,
+        data: BloodRequest
+    } = await response.data;
+    return data;
+}
+
+async function _approveRequestApplication(formData: BloodRequest){
+    const response = await api.patch(`/blood/requests/${formData.id}/approve`);
+    const data: {
+        status: string,
+        data: BloodRequest
+    } = await response.data;
+    return data;
+}
+
+async function _rejectRequestApplication(formData: BloodRequest){
+    const response = await api.patch(`/blood/requests/${formData.id}/reject`);
+    const data: {
+        status: string,
+        data: BloodRequest
+    } = await response.data;
+    return data;
+}
+
+async function _cancelRequestApplication(formData: BloodRequest){
+    const response = await api.patch(`/blood/requests/${formData.id}/cancel`);
+    const data: {
+        status: string,
+        data: BloodRequest
+    } = await response.data;
+    return data;
+}
+
+async function _completeRequestApplication(formData: BloodRequest){
+        const response = await api.patch(`/blood/requests/${formData.id}/complete`);
+    const data: {
+        status: string,
+        data: BloodRequest
     } = await response.data;
     return data;
 }

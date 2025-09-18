@@ -95,10 +95,10 @@ export default function Requests() {
                             key={index}
                             className="p-6 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm"
                         >
-                            <h2 className="text-lg font-semibold mb-2">Requested By: {elem.user.name}</h2>
+                            <h2 className="text-lg font-semibold mb-2">Requested By: {elem && elem.user?.name}</h2>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Blood Type: {elem.blood_type}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Quantity: {elem.quantity}</p>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">Date: {new Date(elem.date_time).toLocaleString()}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Date: {elem.date_time && new Date(elem.date_time).toLocaleString()}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Exact Location: {elem.exact_location}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Contact Number: {elem.contact_number}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">City: {elem.city}</p>
@@ -129,7 +129,7 @@ export default function Requests() {
                                     </svg>
                                 </a>
 
-                                <ActionDropdown id={elem.id.toString()} error={error} success={success} />
+                                <ActionDropdown id={elem.id ? elem.id.toString(): ""} error={error} success={success} />
                             </div>
                         </div>
                     ))}

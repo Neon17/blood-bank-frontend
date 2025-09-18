@@ -1,4 +1,4 @@
-import { finishBloodRequests } from "@/app/lib/actions";
+import { finishRequestApplication } from "@/app/lib/actions";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,6 +14,6 @@ export async function POST(request: NextRequest) {
             message: 'Missing id'
         });
     }
-    const data = await finishBloodRequests(id);
+    const data = await finishRequestApplication(id);
     return redirect('/requests');
 }

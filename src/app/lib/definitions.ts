@@ -98,23 +98,25 @@ export type BloodDonor = {
 }
 
 export type BloodRequest = {
-    id: Number,
-    blood_type: string,
-    quantity: string,
-    date_time: Date,
-    exact_location: string,
-    contact_number: string,
-    latitude: number,
-    longitude: number,
-    city: string,
-    state: string,
-    country: string,
-    user_id: number,
-    status: string,
-    donated_by: string,
-    verification_photo: string,
-    user: User,
-    blood_bank: string,
-    created_at: Date,
-    updated_at: Date
+    id?: Number | undefined;
+    blood_type?: string | undefined;
+    quantity?: string | undefined;
+    date_time?: Date | undefined;
+    exact_location?: string | undefined;
+    contact_number?: string | undefined;
+    state?: string | undefined;
+    user_id?: number | undefined;
+    donated_by?: string | undefined;
+    verification_status?: string | undefined;
+    verification_photo?: string | undefined;
+    user?: User | undefined;
+    blood_bank?: string | undefined;
+    created_at?: Date | undefined;
+    updated_at?: Date | undefined;
+
+    status: string;
+    latitude: number;
+    longitude: number;
+    city: string;
+    country: string;
 }
