@@ -168,9 +168,9 @@ export default function Page() {
                                     <td className="px-4 py-2">{Request.country}</td>
                                     <td className="px-4 py-2">
                                         <span
-                                            className={`px-2 py-1 rounded text-xs font-medium ${statusValue === "approved"
+                                            className={`px-2 py-1 rounded text-xs font-medium ${statusValue.toLowerCase() === "approved"
                                                 ? "bg-green-200 text-green-800 dark:bg-green-700 dark:text-green-100"
-                                                : statusValue === "failed"
+                                                : statusValue.toLowerCase() === "rejected"
                                                     ? "bg-red-200 text-red-800 dark:bg-red-700 dark:text-red-100"
                                                     : "bg-yellow-200 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-100"
                                                 }`}
