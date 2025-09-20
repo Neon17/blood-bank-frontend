@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic';
 import { useAuth } from '../../context/authInfo';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { updateProfilePhoto } from '@/app/lib/actions';
 const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { ssr: false });
 
 export default function ProfilePage() {
@@ -23,16 +25,57 @@ export default function ProfilePage() {
                 city: user.city ?? 'Kathmandu',
                 country: user.country ?? 'Nepal',
             });
+            console.log(user);
         }
     }, [user]);
+
+    const updateUserPhoto = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const response = await updateProfilePhoto(formData);
+
+        console.log(response);
+    }
 
     if (!user) return <div className="flex justify-center items-center h-screen text-gray-600">Loading...</div>;
 
     return (
-        <div className="flex min-h-screen dark:bg-gray-900">
+        <div className="flex min-h-screen">
 
             {/* Main Content */}
             <main className="flex-1 sm:p-6 pt-5">
+
+                <div className="profile-photo mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-8 border shadow-md mb-4">
+                    <form onSubmit={updateUserPhoto} method="post" encType='multipart/form-data'>
+
+                        { user.profilePhoto?.url && <img width={300} height={300} src={(`http://localhost:8000${user.profilePhoto?.url?? '#'}`) } alt='' /> }
+
+                        <div className="mb-4">
+                            <label className="block text-sm text-gray-600 dark:text-gray-300">Profile Photo</label>
+                            <input name='profile_photo' className="w-full p-2 rounded border bg-gray-100 dark:bg-gray-700 dark:text-white" type='file' accept='jpeg/jpg/webp/png' />
+                        </div>
+
+                        <button type='submit' className="inline-block mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+                            Update Profile Photo
+                        </button>
+
+                    </form>
+                </div>
+
+                <div className="contact-information mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-8 border shadow-md mb-4">
+                    {/* Element of Donor Registration Form that doesn't need admin verification */}
+                    {/* Like Current Location, City */}
+
+                    <div className="mb-4">
+                        <label className="block text-sm text-gray-600 dark:text-gray-300">Current City</label>
+                        <input className="w-full p-2 rounded border bg-gray-100 dark:bg-gray-700 dark:text-white" value={user.city ?? ""} readOnly />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm text-gray-600 dark:text-gray-300">Current Location</label>
+                        <input className="w-full p-2 rounded border bg-gray-100 dark:bg-gray-700 dark:text-white" value={user.country ?? ""} readOnly />
+                    </div>
+
+                </div>
                 <div className="mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-8 border shadow-md">
                     <h1 className="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Profile Overview</h1>
 

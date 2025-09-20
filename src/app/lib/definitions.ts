@@ -20,10 +20,20 @@ export type User = {
     password: string;
     remember_token: string;
     verification_photo: string;
+    profile_photo_id: string;
+    profilePhoto?: Upload;
     profile_photo: string;
     created_at: Date;
     updated_at: Date;
 }
+
+export type Upload = {
+    name: string,
+    extension: string,
+    path: string,
+    url: string
+    storage_in_kb: string
+};
 
 export type ExactLocation = {
     lat: number;
@@ -93,7 +103,9 @@ export type BloodDonor = {
     country: string
 
     verification_status?: verification_status,
-    admin_message?: string
+    verificationPhoto?: Upload,
+    verification_photo_id?: string,
+    admin_message?: string,
     user? : User
 }
 

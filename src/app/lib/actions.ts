@@ -8,6 +8,7 @@ export const getAllUsers = asyncErrorHandler(_getAllUsers);
 export const profile = asyncErrorHandler(_profile);
 export const createBloodRequest = asyncErrorHandler(_createBloodRequest);
 export const updateProfile = asyncErrorHandler(_updateProfile);
+export const updateProfilePhoto = asyncErrorHandler(_updateProfilePhoto);
 export const bloodRequests = asyncErrorHandler(_bloodRequests);
 export const allBloodRequests = asyncErrorHandler(_allBloodRequests);
 export const bloodRequest = asyncErrorHandler(_bloodRequest);
@@ -58,6 +59,15 @@ async function _updateProfile(formData: FormData) {
     formData.append('_method', 'PUT');
     const response = await api.post('/updateMe', formData);
     const data: {
+        status: string,
+        data: User
+    } = await response.data;
+    return data;
+}
+
+async function _updateProfilePhoto( formData: FormData ) {
+    const response = await api.patch('/profile/photo/update', formData);
+    const data : {
         status: string,
         data: User
     } = await response.data;
