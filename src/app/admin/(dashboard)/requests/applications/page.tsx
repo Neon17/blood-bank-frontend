@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { allBloodRequests, approveRequestApplication, deleteRequestApplication, updateRequestApplication } from "@/app/lib/actions";
 import { BloodRequest, ExactLocation } from "@/app/lib/definitions";
@@ -178,10 +178,10 @@ export default function Page() {
                                             {statusLabel}
                                         </span>
                                     </td>
-                                    <td className="px-4 py-2">
-                                        <button onClick={() => setOpenDropdown(index)} className="text-white px-2 py-1 rounded bg-gray-700 hover:bg-gray-600">⋮</button>
+                                    <td id={`dropdown-${index}`} className="px-4 py-2">
+                                        <button onClick={() => { if (openDropdown === index) setOpenDropdown(null); else setOpenDropdown(index); }} className="text-white px-2 py-1 rounded bg-gray-700 hover:bg-gray-600">⋮</button>
                                         {openDropdown === index && (
-                                            <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow z-20">
+                                            <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow z-[1002]">
                                                 <button onClick={() => { setViewRequest(Request); setOpenDropdown(null); }} className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">View</button>
                                                 <button onClick={() => { setEditRequest(Request); setOpenDropdown(null); }} className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Edit</button>
                                                 <button onClick={() => { setDeleteRequest(Request); setOpenDropdown(null); }} className="w-full px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">Delete</button>
@@ -202,6 +202,9 @@ export default function Page() {
                 <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center md:ps-50 items-center">
                     <div className="bg-white dark:bg-gray-900 p-6 rounded max-w-3xl w-full">
                         <h3 className="text-lg font-bold mb-4">Request Details</h3>
+                        {viewRequest.verification_photo?.path && (
+                            <img src={'http://localhost:8000/storage/' + viewRequest.verification_photo.path} alt="Verification Photo" className="mb-4" />
+                        )}
                         <p><strong>Contact:</strong> {viewRequest.contact_number}</p>
                         <p><strong>Blood Type:</strong> {viewRequest.blood_type}</p>
                         <p><strong>Address:</strong> {viewRequest.exact_location}, {viewRequest.city}, {viewRequest.country}</p>

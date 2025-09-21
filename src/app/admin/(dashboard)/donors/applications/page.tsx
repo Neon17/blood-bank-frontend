@@ -174,7 +174,7 @@ export default function Page() {
                     </span>
                   </td>
                   <td className="px-4 py-2">
-                    <button onClick={() => setOpenDropdown(index)} className="text-white px-2 py-1 rounded bg-gray-700 hover:bg-gray-600">⋮</button>
+                    <button onClick={() => { if (openDropdown === index) setOpenDropdown(null); else setOpenDropdown(index); }} className="text-white px-2 py-1 rounded bg-gray-700 hover:bg-gray-600">⋮</button>
                     {openDropdown === index && (
                       <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded shadow z-20">
                         <button onClick={() => { setViewDonor(donor); setOpenDropdown(null); }} className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">View</button>

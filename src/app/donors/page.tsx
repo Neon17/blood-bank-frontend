@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { bloodDonors, donorApplications } from "../lib/actions";
+import { useEffect, useState } from "react";
+import {donorApplications } from "../lib/actions";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import SearchRadiusSlider from "../_components/SearchRadiusSlider";
