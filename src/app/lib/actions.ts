@@ -123,7 +123,7 @@ async function _editRequestApplication(id: string) {
 }
 
 async function _updateRequestApplication(formData: BloodRequest) {
-    const response = await api.put(`/blood/requests/${formData.id}`, formData);
+    const response = await api.patch(`/blood/requests/${formData.id}`, formData);
     const data: {
         status: string,
         data: BloodRequest
