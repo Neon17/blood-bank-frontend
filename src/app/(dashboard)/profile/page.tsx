@@ -25,7 +25,6 @@ export default function ProfilePage() {
                 city: user.city ?? 'Kathmandu',
                 country: user.country ?? 'Nepal',
             });
-            console.log(user);
         }
     }, [user]);
 
@@ -33,8 +32,6 @@ export default function ProfilePage() {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const response = await updateProfilePhoto(formData);
-
-        console.log(response);
     }
 
     if (!user) return <div className="flex justify-center items-center h-screen text-gray-600">Loading...</div>;

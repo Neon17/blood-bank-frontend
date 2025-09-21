@@ -106,7 +106,8 @@ export default function CreateRequest() {
             data.append("country", location.country);
             data.append("latitude", location.lat.toString());
             data.append("longitude", location.lng.toString());
-
+            data.append('Content-Type', 'multipart/form-data');
+            
             const res = await createBloodRequest(data);
 
             if ("message" in res && res.status === "error") {

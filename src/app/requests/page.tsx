@@ -52,7 +52,7 @@ export default function Requests() {
     }, [])
 
     return (
-        <main className="grid grid-cols-1 lg:grid-cols-2 min-h-screen w-full">
+        <main className="grid grid-cols-1 lg:grid-cols-2  w-full min-h-screen">
 
             {/* Map Section */}
             <div className="h-full w-full overflow-hidden border-r">
@@ -60,7 +60,7 @@ export default function Requests() {
             </div>
 
             {/* Request Content Section */}
-            <div className="h-full w-full overflow-y-auto bg-white dark:bg-gray-900 p-6">
+            <div className="w-full overflow-y-auto bg-white dark:bg-gray-900 p-6">
                 <h1 className="text-3xl font-bold text-center mb-6">Blood Requests</h1>
 
                 <div className="mb-6">
@@ -89,7 +89,7 @@ export default function Requests() {
                     </div>
                 )}
 
-                <div className="space-y-4 overflow-y-auto">
+                <div className="space-y-4 overflow-y-auto h-[calc(100vh-350px)]">
                     {data && data?.map((elem: BloodRequest, index: number) => (
                         <div
                             key={index}
@@ -104,7 +104,10 @@ export default function Requests() {
                             <p className="text-sm text-gray-700 dark:text-gray-300">City: {elem.city}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Country: {elem.country}</p>
                             {/* <p className="text-sm text-gray-700 dark:text-gray-300">Verified By: {elem.verified_by || 'N/A'}</p> */}
-                            <p className="text-sm text-gray-700 dark:text-gray-300">Verification Photo: {elem.verification_photo}</p>
+                            
+                            {elem.verification_photo?.path && (
+                                <img src={elem.verification_photo?.path ? "http://localhost:3000/backend/storage/" + elem.verification_photo.path : "/"} alt="Request Image" width={200} height={200} />
+                            )}
 
                             <div className="flex gap-2 mt-4">
                                 <a

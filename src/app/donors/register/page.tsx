@@ -170,7 +170,7 @@ export default function BecomeDonor() {
                     name="blood_type"
                     value={formData.blood_type}
                     onChange={handleChange}
-                    className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
                   >
                     <option value="">Select Blood Type</option>
                     {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(type => (
@@ -235,7 +235,7 @@ export default function BecomeDonor() {
             {/* Step 4 */}
             {activeStep === 3 && (
               <>
-                <div className="text-sm text-gray-700">
+                <div className="text-sm text-gray-700 dark:text-gray-300">
                   <p className="mb-2">By agreeing to become a donor, you confirm that:</p>
                   <ul className="list-disc list-inside mb-2">
                     <li>You are at least 18 years old</li>

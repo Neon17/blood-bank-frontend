@@ -257,7 +257,7 @@ async function _createBloodRequest(formData: FormData) {
     for (const[key,value] of formData.entries()){
         object[key] = value;
     }
-    const response = await api.post('/blood/requests', object);
+    const response = await api.post('/blood/requests', formData);
     const data: [{
         status: string,
         data: BloodRequest[]

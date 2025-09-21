@@ -75,7 +75,7 @@ export default function Donors() {
     }
 
     return (
-        <main className="grid grid-cols-1 lg:grid-cols-2 min-h-screen w-full">
+        <main className="grid grid-cols-1 lg:grid-cols-2 w-full">
 
             {/* Left: Map */}
             <div className="h-full w-full overflow-hidden border-r">

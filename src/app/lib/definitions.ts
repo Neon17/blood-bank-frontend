@@ -120,7 +120,7 @@ export type BloodRequest = {
     user_id?: number | undefined;
     donated_by?: string | undefined;
     verification_status?: string | undefined;
-    verification_photo?: string | undefined;
+    verification_photo?: Upload | undefined;
     user?: User | undefined;
     blood_bank?: string | undefined;
     created_at?: Date | undefined;
