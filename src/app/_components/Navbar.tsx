@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "../context/authInfo";
 import { ModeToggle } from "./ModeToggle";
-import { ChevronDown } from "lucide-react";
+import { Bell, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
     const [IsOpen, SetIsOpen] = useState(false);
@@ -64,6 +65,12 @@ export default function Navbar() {
                                 <li className="w-full text-center">
                                     <Link href="/requests" className={`block py-2 px-3rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 dark:hover:text-red-300 md:p-0 ${(currentPath === '/requests') ? 'text-red-700 dark:text-red-300' : ''}`}>Requests</Link>
                                 </li>
+                                <li className="w-full text-center">
+                                    <Link href="/blogs" className={`block py-2 px-3 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 dark:hover:text-red-300 md:p-0 ${(currentPath === '/blogs') ? 'text-red-700 dark:text-red-300' : ''}`}>Blogs</Link>
+                                </li>
+                                <li className="w-full text-center">
+                                    <Link href="/donation-programs" className={`block py-2 px-3 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 dark:hover:text-red-300 md:p-0 ${(currentPath === '/donation-programs') ? 'text-red-700 dark:text-red-300' : ''}`}>Programs</Link>
+                                </li>
                                 <li className="w-full flex justify-center py-3">
 
                                     {!user &&
@@ -76,9 +83,9 @@ export default function Navbar() {
                                             </Link>
                                         </div>
                                     }
-                                    {user &&
+                                    {user && <>
                                         <div ref={dropdownRef} className="relative inline-block text-left">
-                                            <button id="dropdownButton" onClick={() => { SetIsOpen(!IsOpen);}} className="flex items-center px-4 text-red-600 dark:text-red-300 rounded-lg hover:text-red-800 dark:hover:text-red-400 hover:cursor-pointer">
+                                            <button id="dropdownButton" onClick={() => { SetIsOpen(!IsOpen); }} className="flex items-center px-4 text-red-600 dark:text-red-300 rounded-lg hover:text-red-800 dark:hover:text-red-400 hover:cursor-pointer">
                                                 {user.name.split(' ')[0].charAt(0).toUpperCase() + user.name.split(' ')[0].slice(1)}
                                                 <ChevronDown className="w-4 h-4 ml-1 inline text-gray-600 dark:text-gray-300" />
                                             </button>
@@ -90,13 +97,26 @@ export default function Navbar() {
                                             </div>}
 
                                         </div>
-                                    }
+                                    </>}
                                 </li>
                             </ul>
                         </div>
                     </div>
 
                     <div className="hidden md:flex">
+                        <div className="relative inline-block">
+                            <Button variant="ghost" size="icon" className="hover:cursor-pointer">
+                                <Bell className="h-6 w-6" />
+                            </Button>
+                            {/* {notificationCount > 0 && (
+                                <Badge
+                                    variant="destructive" // Or any other suitable variant
+                                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center rounded-full p-0 text-xs"
+                                >
+                                    {notificationCount}
+                                </Badge>
+                            )} */}
+                        </div>
                         <ModeToggle />
                     </div>
                 </nav>

@@ -86,7 +86,7 @@ export type BloodDonor = {
     id?: number | string,
     user_id?: number,
     contact_number?: number,
-    blood_type?: string,
+    blood_group?: string,
     address?: string,
     date_of_birth?: string,
 

@@ -39,7 +39,7 @@ export default function Donors() {
                     label: {
                         name: donor.user?.name,
                         contact_number: donor.contact_number,
-                        blood_type: donor.blood_type,
+                        blood_group: donor.blood_group,
                     }
                 }))
             );
@@ -126,10 +126,9 @@ export default function Donors() {
                     {data.map((elem, idx) => (
                         <div key={idx} className="p-4 border rounded shadow hover:shadow-md transition bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm">
                             <h3 className="text-lg font-semibold">{elem.user?.name}</h3>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">Blood Type: {elem.blood_type}</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">Blood Type: {elem.blood_group}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Verified: {elem.user?.verified_as_donor ? 'Yes' : 'No'}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">City: {elem.city}</p>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">Email: {elem.user?.email}</p>
                             <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {elem.contact_number}</p>
                         </div>
                     ))}

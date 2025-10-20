@@ -69,7 +69,7 @@ export default function Sidebar(props: { type: string }) {
             >
                 <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Smart Blood Bank</h2>
                 <nav className="space-y-4">
-                    {((props.type == "admin")?adminNavLinks:userNavLinks).map(({ href, label, activeOn }) => (
+                    {((props.type == "admin") ? adminNavLinks : userNavLinks).map(({ href, label, activeOn }) => (
                         <Link
                             key={href}
                             href={href}
@@ -83,6 +83,9 @@ export default function Sidebar(props: { type: string }) {
                         </Link>
                     ))}
                 </nav>
+                <div className="button-holder my-5">
+                    <button className="p-3 m-3 bg-red-600 hover:bg-red-400 text-white rounded-md cursor-pointer">Chat</button>
+                </div>
             </aside>
         </div>
     );
