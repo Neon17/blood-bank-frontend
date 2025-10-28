@@ -44,7 +44,7 @@ export default async function Page() {
 
 
     return (
-        ("data" in data && data.data) &&
+        ("data" in data && data.data)?
         <div className="w-full h-full">
             {/* <div className="text-message py-10 px-5">
                 <p className="title">
@@ -99,7 +99,7 @@ export default async function Page() {
                                 <input readOnly id='contact_phone' name="contact_phone" value={data.data.contact_number} className="w-full p-2 border" required />
 
                                 <label htmlFor="blood_type">Blood Type</label>
-                                <input readOnly id="blood_type" name="blood_type" value={data.data.blood_type} className="w-full p-2 border dark:bg-gray-800" required />
+                                <input readOnly id="blood_type" name="blood_type" value={data.data.blood_group} className="w-full p-2 border dark:bg-gray-800" required />
 
                                 <label htmlFor="address">
                                     Address
@@ -162,6 +162,8 @@ export default async function Page() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div>: ("data" in data && !data.data) ?
+        <div className="flex justify-center items-center h-screen text-gray-600 dark:text-gray-300">Please fill Donor Application to see Contact Details</div>:
+        <div className="flex justify-center items-center h-screen text-gray-600 dark:text-gray-300">Loading...</div>
     )
 }

@@ -158,7 +158,7 @@ export default function Page() {
               return (
                 <tr key={index} className="border-t border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-800 text-center">
                   <td className="px-4 py-2">{index + 1}</td>
-                  <td className="px-4 py-2">{donor.blood_type}</td>
+                  <td className="px-4 py-2">{donor.blood_group}</td>
                   <td className="px-4 py-2">{donor.city}</td>
                   <td className="px-4 py-2">{donor.country}</td>
                   <td className="px-4 py-2">
@@ -198,7 +198,7 @@ export default function Page() {
           <div className="bg-white dark:bg-gray-900 p-6 rounded max-w-3xl w-full">
             <h3 className="text-lg font-bold mb-4">Donor Details</h3>
             <p><strong>Contact:</strong> {viewDonor.contact_number}</p>
-            <p><strong>Blood Type:</strong> {viewDonor.blood_type}</p>
+            <p><strong>Blood Type:</strong> {viewDonor.blood_group}</p>
             <p><strong>Address:</strong> {viewDonor.address}, {viewDonor.city}, {viewDonor.country}</p>
             <p><strong>Date of Birth:</strong> {viewDonor.date_of_birth}</p>
             <p><strong>Last Donated Date:</strong> {viewDonor.last_donated_date}</p>
@@ -237,7 +237,7 @@ export default function Page() {
                 <input value={editDonor.address ?? ''} name="address" onChange={handleEditChange} className="w-full px-3 py-2 border rounded dark:bg-gray-800 dark:text-white" />
               </div>
               <div className="formelement w-1/2 p-2">
-                <input value={editDonor.blood_type ?? ''} name="blood_type" onChange={handleEditChange} className="w-full px-3 py-2 border rounded dark:bg-gray-800 dark:text-white" />
+                <input value={editDonor.blood_group ?? ''} name="blood_group" onChange={handleEditChange} className="w-full px-3 py-2 border rounded dark:bg-gray-800 dark:text-white" />
               </div>
               <div className="formelement w-1/2 p-2">
                 <input value={editDonor.date_of_birth ?? ''} type="date" onChange={handleEditChange} name="date_of_birth" className="w-full px-3 py-2 border rounded dark:bg-gray-800 dark:text-white" />

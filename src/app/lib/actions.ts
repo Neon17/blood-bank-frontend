@@ -2,7 +2,7 @@
 
 import { asyncErrorHandler } from "./asyncErrorHandler";
 import api from "./axios";
-import { BloodRequest, User, BloodDonor } from "./definitions";
+import { BloodRequest, User, BloodDonor, ApiResponse, PaginatedResponse, ErrorResponse } from "./definitions";
 
 export const getAllUsers = asyncErrorHandler(_getAllUsers);
 export const profile = asyncErrorHandler(_profile);
@@ -44,10 +44,7 @@ async function _profile() {
 
 async function _getAllUsers ($query = {}) {
     const response = await api.get('/users', { params: $query });
-    const data : {
-        status: string,
-        data: User[]
-    } = await response.data;
+    const data: ApiResponse<PaginatedResponse<User>> | ErrorResponse = response.data;
     return data;
 }
 

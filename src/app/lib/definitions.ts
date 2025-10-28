@@ -1,3 +1,55 @@
+export interface PaginatedResponse<T> {
+    current_page: number;
+    data: T[];
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    links: PaginationLink[];
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number;
+    total: number;
+}
+
+export interface PaginationLink {
+    url: string,
+    label: string,
+    active: boolean
+}
+
+export interface ApiResponse<T> {
+    status: string;
+    total: number;
+    data: T;
+    message?: string;
+}
+
+export type UsersPaginatedResponse = ApiResponse<PaginatedResponse<User>>;
+export type BloodDonorsPaginatedResponse = ApiResponse<PaginatedResponse<BloodDonor>>;
+export type BloodRequestPaginatedResponse = ApiResponse<PaginatedResponse<BloodRequest>>;
+
+export type AuthResponse = {
+    status?: string,
+    token?: string,
+    user?: User,
+    message?: string
+}
+
+export type ErrorResponse = {
+    status: string,
+    message: string,
+    errors?: []
+}
+
+export enum verification_status {
+    pending = "pending",
+    failed = "failed",
+    approved = "approved"
+}
+
 export type User = {
     id: Number;
     name: string;
@@ -42,25 +94,6 @@ export type ExactLocation = {
     country: string;
     label?: object
 };
-
-export type AuthResponse = {
-    status?: string,
-    token?: string,
-    user?: User,
-    message?: string
-}
-
-export type ErrorResponse = {
-    status: string,
-    message: string,
-    errors?: []
-}
-
-export enum verification_status {
-    pending = "pending",
-    failed = "failed",
-    approved = "approved"
-}
 
 export type DonorRegistrationForm = {
     id?: number | string,
