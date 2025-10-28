@@ -3,19 +3,14 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { approveBloodDonorApplication, deleteDonorApplication, donorApplications, updateDonorApplication } from "@/app/lib/actions";
-import { BloodDonor, ExactLocation, verification_status } from "@/app/lib/definitions";
+import { BloodDonor, ExactLocation, PaginatedResponse, verification_status } from "@/app/lib/definitions";
 import dynamic from "next/dynamic";
 const MapPicker = dynamic(import('@/app/_components/MapPicker'), { ssr: false });
 // import MapPicker from "@/app/_components/MapPicker";
 
-type DonorApplicationResponse = {
-  status: string;
-  total?: number;
-  data: BloodDonor[];
-};
 
 export default function Page() {
-  const [data, setData] = useState<DonorApplicationResponse>();
+  const [data, setData] = useState<PaginatedResponse<BloodDonor>|null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -38,8 +33,10 @@ export default function Page() {
 
   const fetchData = async () => {
     const res = await donorApplications();
-    if ("message" in res) setError(res.message);
-    else setData(res);
+    if ( "message" in res) {
+      if (res.message) setError(res.message);
+    }
+    else setData(res.data);
   };
 
   useEffect(() => {
@@ -151,7 +148,7 @@ export default function Page() {
             </tr>
           </thead>
           <tbody>
-            {data?.data.map((donor, index) => {
+            {data?.data?.map((donor, index) => {
               const statusValue = donor.verification_status?.toString() ?? "pending";
               const statusLabel = statusValue;
 

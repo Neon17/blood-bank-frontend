@@ -3,7 +3,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { allBloodRequests, approveRequestApplication, deleteRequestApplication, updateRequestApplication } from "@/app/lib/actions";
-import { BloodRequest, ExactLocation } from "@/app/lib/definitions";
+import { BloodRequest, ExactLocation, PaginatedResponse } from "@/app/lib/definitions";
 import dynamic from "next/dynamic";
 const MapPicker = dynamic(import('@/app/_components/MapPicker'), { ssr: false });
 // import MapPicker from "@/app/_components/MapPicker";
@@ -16,7 +16,7 @@ type RequestApplicationResponse = {
 
 
 export default function Page() {
-    const [data, setData] = useState<BloodRequest[]>();
+    const [data, setData] = useState<PaginatedResponse<BloodRequest> | null>(null);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -39,7 +39,9 @@ export default function Page() {
 
     const fetchData = async () => {
         const res = await allBloodRequests();
-        if ("message" in res) setError(res.message);
+        if ("message" in res) {
+            if (res.message) setError(res.message);
+        }
         else setData(res.data);
     };
 
@@ -156,7 +158,7 @@ export default function Page() {
                         </tr>
                     </thead>
                     <tbody>
-                        {data?.map((Request, index) => {
+                        {data?.data?.map((Request, index) => {
                             const statusValue = Request.verification_status?.toString() ?? "pending";
                             const statusLabel = statusValue;
 

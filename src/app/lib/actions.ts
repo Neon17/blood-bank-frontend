@@ -2,7 +2,7 @@
 
 import { asyncErrorHandler } from "./asyncErrorHandler";
 import api from "./axios";
-import { BloodRequest, User, BloodDonor, ApiResponse, PaginatedResponse, ErrorResponse } from "./definitions";
+import { BloodRequest, User, BloodDonor, ApiResponse, PaginatedResponse, ErrorResponse, BloodDonorsPaginatedResponse, UsersPaginatedResponse, BloodRequestPaginatedResponse } from "./definitions";
 
 export const getAllUsers = asyncErrorHandler(_getAllUsers);
 export const profile = asyncErrorHandler(_profile);
@@ -44,7 +44,7 @@ async function _profile() {
 
 async function _getAllUsers ($query = {}) {
     const response = await api.get('/users', { params: $query });
-    const data: ApiResponse<PaginatedResponse<User>> | ErrorResponse = response.data;
+    const data: UsersPaginatedResponse | ErrorResponse = response.data;
     return data;
 }
 
@@ -82,10 +82,7 @@ async function _bloodRequests($query = {}) {
 
 async function _allBloodRequests($query = {}) {
     const response = await api.get('/blood/requests/all', { params: $query });
-    const data: {
-        status: string,
-        data: BloodRequest[]
-    } = await response.data;
+    const data: BloodRequestPaginatedResponse | ErrorResponse = await response.data;
     return data;
 }
 
@@ -175,10 +172,7 @@ async function _bloodDonors() {
 
 async function _donorApplications($query = {}) {
     const response = await api.get('/blood/donors', { params: $query });
-    const data : {
-        status: string,
-        data: BloodDonor[]
-    } = await response.data;
+    const data: BloodDonorsPaginatedResponse | ErrorResponse = await response.data;
     return data;
 }
 
