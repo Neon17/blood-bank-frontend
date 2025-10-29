@@ -73,10 +73,7 @@ async function _updateProfilePhoto( formData: FormData ) {
 
 async function _bloodRequests($query = {}) {
     const response = await api.get('/blood/requests', { params: $query });
-    const data: {
-        status: string,
-        data: BloodRequest[]
-    } = await response.data;
+    const data: BloodRequestPaginatedResponse  = await response.data;
     return data;
 }
 
