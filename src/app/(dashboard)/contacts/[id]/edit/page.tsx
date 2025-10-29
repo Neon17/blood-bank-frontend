@@ -12,7 +12,7 @@ type DonorApplicationError = {
     contact_number?: string[];
     address?: string[];
     date_of_birth?: string[];
-    blood_type?: string[];
+    blood_group?: string[];
     weight?: string[];
     height?: string[];
     last_donated_date?: string[];
@@ -153,10 +153,10 @@ export default function Page({ params }: { params: Promise<{ id: string; }> }) {
                             </div>
 
                             <div className="formfield pb-2">
-                                <label htmlFor="blood_type">Blood Type</label>
-                                <input id="blood_type" name="blood_type" value={data.blood_type}
-                                    onChange={(e) => setData({ ...data, blood_type: e.target.value })} className="w-full p-2 border dark:bg-gray-800" required />
-                                {errors && errors.blood_type && <p className="text-red-500">{errors.blood_type}</p>}
+                                <label htmlFor="blood_group">Blood Type</label>
+                                <input id="blood_group" name="blood_group" value={data.blood_group}
+                                    onChange={(e) => setData({ ...data, blood_group: e.target.value })} className="w-full p-2 border dark:bg-gray-800" required />
+                                {errors && errors.blood_group && <p className="text-red-500">{errors.blood_group}</p>}
                             </div>
 
                             <div className="formfield pb-2">
