@@ -4,6 +4,16 @@ import { useEffect, useState } from "react";
 import { User, PaginatedResponse } from "@/app/lib/definitions";
 import { getAllUsers } from "@/app/lib/actions";
 
+// Filter interface
+interface FilterParams {
+  search: string;
+  will_donate: string;
+  verified_as_donor: string;
+  has_donated: string;
+  last_donated: string;
+  page: number;
+}
+
 export default function Page() {
     const [data, setData] = useState<PaginatedResponse<User> | null>(null);
     const [error, setError] = useState("");
@@ -12,10 +22,45 @@ export default function Page() {
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
 
-    const fetchData = async (page = 1) => {
+    // Filter states
+    const [filters, setFilters] = useState<FilterParams>({
+        search: '',
+        will_donate: '',
+        verified_as_donor: '',
+        has_donated: '',
+        last_donated: '',
+        page: 1
+    });
+
+    // Update individual filter
+    const updateFilter = (key: keyof FilterParams, value: string | number) => {
+        setFilters(prev => ({
+            ...prev,
+            [key]: value
+        }));
+    };
+
+    const fetchData = async (filterParams: FilterParams = filters) => {
         setLoading(true);
         try {
-            const response = await getAllUsers({ page });
+            // Prepare API parameters
+            const apiParams = {
+                search: filterParams.search,
+                will_donate: filterParams.will_donate,
+                verified_as_donor: filterParams.verified_as_donor,
+                has_donated: filterParams.has_donated,
+                last_donated: filterParams.last_donated,
+                page: filterParams.page
+            };
+
+            // Remove empty parameters
+            const cleanParams = Object.fromEntries(
+                Object.entries(apiParams).filter(([_, value]) => 
+                    value !== '' && value !== null && value !== undefined
+                )
+            );
+
+            const response = await getAllUsers(cleanParams);
             if ("message" in response) {
                 if (response.message) setError(response.message);
             } else {
@@ -33,20 +78,48 @@ export default function Page() {
         fetchData();
     }, []);
 
+    // Handle filter submission
+    const handleFilterSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        setCurrentPage(1); // Reset to first page when filtering
+        fetchData({ ...filters, page: 1 });
+    };
+
+    // Clear all filters
+    const handleClearFilters = () => {
+        const clearedFilters: FilterParams = {
+            search: '',
+            will_donate: '',
+            verified_as_donor: '',
+            has_donated: '',
+            last_donated: '',
+            page: 1
+        };
+        setFilters(clearedFilters);
+        setCurrentPage(1);
+        fetchData(clearedFilters);
+    };
+
+    // Handle page change
     const handleNextPage = () => {
         if (data?.next_page_url) {
-            fetchData(currentPage + 1);
+            const newPage = currentPage + 1;
+            setCurrentPage(newPage);
+            fetchData({ ...filters, page: newPage });
         }
     };
 
     const handlePrevPage = () => {
         if (data?.prev_page_url) {
-            fetchData(currentPage - 1);
+            const newPage = currentPage - 1;
+            setCurrentPage(newPage);
+            fetchData({ ...filters, page: newPage });
         }
     };
 
     const handlePageClick = (page: number) => {
-        fetchData(page);
+        setCurrentPage(page);
+        fetchData({ ...filters, page });
     };
 
     // Generate page numbers for pagination
@@ -74,6 +147,191 @@ export default function Page() {
         }, 3000);
         return () => clearTimeout(timer);
     }, [error, success]);
+
+    // Filter Component
+    const FilterSection = () => (
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    Filter Users
+                </h3>
+                <button
+                    onClick={handleClearFilters}
+                    className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium transition-colors"
+                >
+                    Clear All
+                </button>
+            </div>
+
+            <form onSubmit={handleFilterSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    {/* Search Input */}
+                    <div className="lg:col-span-2">
+                        <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Search Users
+                        </label>
+                        <input
+                            id="search"
+                            type="text"
+                            value={filters.search}
+                            onChange={(e) => updateFilter('search', e.target.value)}
+                            placeholder="Search by name, email, phone..."
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-500 dark:placeholder-gray-400"
+                        />
+                    </div>
+
+                    {/* Willing to Donate */}
+                    <div>
+                        <label htmlFor="will_donate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Donation Willingness
+                        </label>
+                        <select
+                            id="will_donate"
+                            value={filters.will_donate}
+                            onChange={(e) => updateFilter('will_donate', e.target.value)}
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        >
+                            <option value="">All</option>
+                            <option value="true">Willing to Donate</option>
+                            <option value="false">Not Willing</option>
+                        </select>
+                    </div>
+
+                    {/* Verified Donor */}
+                    <div>
+                        <label htmlFor="verified_as_donor" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Verification Status
+                        </label>
+                        <select
+                            id="verified_as_donor"
+                            value={filters.verified_as_donor}
+                            onChange={(e) => updateFilter('verified_as_donor', e.target.value)}
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        >
+                            <option value="">All</option>
+                            <option value="true">Verified</option>
+                            <option value="false">Not Verified</option>
+                        </select>
+                    </div>
+
+                    {/* Has Donated */}
+                    <div>
+                        <label htmlFor="has_donated" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Donation History
+                        </label>
+                        <select
+                            id="has_donated"
+                            value={filters.has_donated}
+                            onChange={(e) => updateFilter('has_donated', e.target.value)}
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        >
+                            <option value="">All</option>
+                            <option value="true">Has Donated</option>
+                            <option value="false">Never Donated</option>
+                        </select>
+                    </div>
+                </div>
+
+                {/* Last Donated Filter */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div>
+                        <label htmlFor="last_donated" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Last Donated
+                        </label>
+                        <select
+                            id="last_donated"
+                            value={filters.last_donated}
+                            onChange={(e) => updateFilter('last_donated', e.target.value)}
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        >
+                            <option value="">Any Time</option>
+                            <option value="last_week">Last Week</option>
+                            <option value="last_month">Last Month</option>
+                            <option value="last_3_months">Last 3 Months</option>
+                            <option value="last_6_months">Last 6 Months</option>
+                            <option value="last_year">Last Year</option>
+                        </select>
+                    </div>
+
+                    <div className="flex items-end justify-end space-x-3">
+                        <button
+                            type="button"
+                            onClick={handleClearFilters}
+                            className="px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        >
+                            Clear
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
+                        >
+                            {loading ? "Applying..." : "Apply Filters"}
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            {/* Active Filters Badges */}
+            <div className="flex flex-wrap gap-2 mt-4">
+                {filters.search && (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        Search: {filters.search}
+                        <button
+                            onClick={() => updateFilter('search', '')}
+                            className="ml-2 hover:text-blue-600 dark:hover:text-blue-300"
+                        >
+                            ×
+                        </button>
+                    </span>
+                )}
+                {filters.will_donate && (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        Willing: {filters.will_donate === 'true' ? 'Yes' : 'No'}
+                        <button
+                            onClick={() => updateFilter('will_donate', '')}
+                            className="ml-2 hover:text-green-600 dark:hover:text-green-300"
+                        >
+                            ×
+                        </button>
+                    </span>
+                )}
+                {filters.verified_as_donor && (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                        Verified: {filters.verified_as_donor === 'true' ? 'Yes' : 'No'}
+                        <button
+                            onClick={() => updateFilter('verified_as_donor', '')}
+                            className="ml-2 hover:text-purple-600 dark:hover:text-purple-300"
+                        >
+                            ×
+                        </button>
+                    </span>
+                )}
+                {filters.has_donated && (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                        Donated: {filters.has_donated === 'true' ? 'Yes' : 'No'}
+                        <button
+                            onClick={() => updateFilter('has_donated', '')}
+                            className="ml-2 hover:text-orange-600 dark:hover:text-orange-300"
+                        >
+                            ×
+                        </button>
+                    </span>
+                )}
+                {filters.last_donated && (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                        Last Donated: {filters.last_donated.replace(/_/g, ' ')}
+                        <button
+                            onClick={() => updateFilter('last_donated', '')}
+                            className="ml-2 hover:text-indigo-600 dark:hover:text-indigo-300"
+                        >
+                            ×
+                        </button>
+                    </span>
+                )}
+            </div>
+        </div>
+    );
 
     return (
         <div className="p-6 h-full w-full bg-gray-50 dark:bg-gray-900 min-h-screen">
@@ -109,6 +367,9 @@ export default function Page() {
                     </div>
                 </div>
             )}
+
+            {/* Filter Section */}
+            <FilterSection />
 
             {/* Table Container */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -184,13 +445,20 @@ export default function Page() {
                                             {user?.last_donated ? new Date(user.last_donated).toLocaleDateString() : 'Never'}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                                                user.will_donate 
-                                                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                                                    : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                                            }`}>
-                                                {user.will_donate ? 'Willing to Donate' : 'Not Willing'}
-                                            </span>
+                                            <div className="flex flex-col gap-1">
+                                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                                    user.will_donate 
+                                                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                                        : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                                }`}>
+                                                    {user.will_donate ? 'Willing' : 'Not Willing'}
+                                                </span>
+                                                {user.verified_as_donor && (
+                                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                                                        Verified
+                                                    </span>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium relative">
                                             <div className="flex items-center space-x-2">
@@ -220,15 +488,6 @@ export default function Page() {
                                                 >
                                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                </button>
-                                                <button
-                                                    onClick={() => {}}
-                                                    className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors"
-                                                    title="Approve User"
-                                                >
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
                                                 </button>
                                             </div>
@@ -302,7 +561,12 @@ export default function Page() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No users found</h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by creating a new user.</p>
+                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            {Object.values(filters).some(filter => filter !== '' && filter !== 1) 
+                                ? "Try adjusting your filters to see more results." 
+                                : "No users have been registered yet."
+                            }
+                        </p>
                     </div>
                 )}
             </div>

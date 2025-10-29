@@ -34,14 +34,14 @@ export default function Sidebar(props: { type: string }) {
     const userNavLinks = [
         { href: "/dashboard", label: "Home" },
         { href: "/profile", label: "Profile", activeOn: ["/profile", "/profile/edit"] },
-        { href: "/contacts", label: "Contacts" },
+        { href: "/contacts", label: "Donor Profile" },
         { href: "/donations", label: "Donations" },
         { href: "/settings", label: "Settings" },
     ]
     const adminNavLinks = [
         { href: "/dashboard", label: "Home" },
         { href: "/profile", label: "Profile", activeOn: ["/profile", "/profile/edit"] },
-        { href: "/contacts", label: "Contacts" },
+        { href: "/contacts", label: "Donor Profile" },
         { href: "/donations", label: "Donations" },
         { href: "/admin/donors/applications", label: "Donor Application" },
         { href: "/admin/requests/applications", label: "Request Application", activeOn: ["/admin/requests/applications", "/admin/requests"] },

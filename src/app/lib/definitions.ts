@@ -50,6 +50,17 @@ export enum verification_status {
     approved = "approved"
 }
 
+export interface FilterParams {
+    search: string;
+    blood_type: string;
+    verification_status: string;
+    admin_message: string;
+    radius: number;
+    page: number;
+    latitude?: number;
+    longitude?: number;
+}
+
 export type User = {
     id: Number;
     name: string;

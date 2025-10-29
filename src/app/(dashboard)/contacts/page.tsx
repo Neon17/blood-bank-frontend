@@ -163,7 +163,7 @@ export default async function Page() {
                 </div>
             </div>
         </div>: ("data" in data && !data.data) ?
-        <div className="flex justify-center items-center h-screen text-gray-600 dark:text-gray-300">Please fill Donor Application to see Contact Details</div>:
+        <div className="flex justify-center items-center h-screen text-gray-600 dark:text-gray-300">Please fill Donor Application to create Donor Profile</div>:
         <div className="flex justify-center items-center h-screen text-gray-600 dark:text-gray-300">Loading...</div>
     )
 }
