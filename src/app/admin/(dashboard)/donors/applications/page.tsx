@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { approveBloodDonorApplication, deleteDonorApplication, donorApplications, updateDonorApplication } from "@/app/lib/actions";
 import { BloodDonor, ExactLocation, PaginatedResponse, verification_status } from "@/app/lib/definitions";
@@ -52,12 +52,12 @@ export default function Page() {
   const router = useRouter();
 
   // Update individual filter
-  const updateFilter = (key: keyof FilterParams, value: string | number) => {
+  const updateFilter = useCallback((key: keyof FilterParams, value: string | number) => {
     setFilters(prev => ({
       ...prev,
       [key]: value
     }));
-  };
+  }, []);
 
   const fetchData = async (filterParams: FilterParams = filters) => {
     setLoading(true);
@@ -330,35 +330,6 @@ export default function Page() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* City */}
-          <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              City
-            </label>
-            <input
-              id="city"
-              type="text"
-              value={filters.city}
-              onChange={(e) => updateFilter('city', e.target.value)}
-              placeholder="Filter by city"
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-500 dark:placeholder-gray-400"
-            />
-          </div>
-
-          {/* Country */}
-          <div>
-            <label htmlFor="country" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Country
-            </label>
-            <input
-              id="country"
-              type="text"
-              value={filters.country}
-              onChange={(e) => updateFilter('country', e.target.value)}
-              placeholder="Filter by country"
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-500 dark:placeholder-gray-400"
-            />
-          </div>
 
           {/* Has Donated */}
           <div>
