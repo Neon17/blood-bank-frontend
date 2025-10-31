@@ -181,8 +181,8 @@ export default function Requests() {
                                     key={page}
                                     onClick={() => handlePageChange(page)}
                                     className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors ${currentPage === page
-                                            ? "z-10 bg-red-50 dark:bg-red-900 border-red-500 text-red-600 dark:text-red-300"
-                                            : "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600"
+                                        ? "z-10 bg-red-50 dark:bg-red-900 border-red-500 text-red-600 dark:text-red-300"
+                                        : "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600"
                                         }`}
                                 >
                                     {page}
@@ -330,8 +330,17 @@ export default function Requests() {
                                     {data.map((request, index) => (
                                         <div
                                             key={`${request.id}-${index}`}
-                                            className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
+                                            className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 relative"
                                         >
+                                            {/* Distance Badge - Top Right */}
+                                            {request.distance_in_km && (
+                                                <div className="absolute top-4 right-4">
+                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                                        {request.distance_in_km} km away
+                                                    </span>
+                                                </div>
+                                            )}
+
                                             <div className="flex items-start justify-between mb-4">
                                                 <div className="flex-1">
                                                     <div className="flex items-center gap-3 mb-3">

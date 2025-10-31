@@ -144,7 +144,8 @@ export type BloodDonor = {
     latitude: number,
     longitude: number,
     city: string,
-    country: string
+    country: string,
+    distance_in_km?: number | undefined,
 
     verification_status?: verification_status,
     verificationPhoto?: Upload,
@@ -159,6 +160,7 @@ export type BloodRequest = {
     quantity?: string | undefined;
     date_time?: Date | undefined;
     exact_location?: string | undefined;
+    distance_in_km?: number | undefined;
     contact_number?: string | undefined;
     state?: string | undefined;
     user_id?: number | undefined;

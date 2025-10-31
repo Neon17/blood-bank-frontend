@@ -66,10 +66,10 @@ export default function Navbar() {
                                     <Link href="/requests" className={`block py-2 px-3rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 dark:hover:text-red-300 md:p-0 ${(currentPath === '/requests') ? 'text-red-700 dark:text-red-300' : ''}`}>Requests</Link>
                                 </li>
                                 <li className="w-full text-center">
-                                    <Link href="/blogs" className={`block py-2 px-3 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 dark:hover:text-red-300 md:p-0 ${(currentPath === '/blogs') ? 'text-red-700 dark:text-red-300' : ''}`}>Blogs</Link>
+                                    <Link href="#" className={`block py-2 px-3 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 dark:hover:text-red-300 md:p-0 ${(currentPath === '/blogs') ? 'text-red-700 dark:text-red-300' : ''}`}>Blogs</Link>
                                 </li>
                                 <li className="w-full text-center">
-                                    <Link href="/donation-programs" className={`block py-2 px-3 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 dark:hover:text-red-300 md:p-0 ${(currentPath === '/donation-programs') ? 'text-red-700 dark:text-red-300' : ''}`}>Programs</Link>
+                                    <Link href="#" className={`block py-2 px-3 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 dark:hover:text-red-300 md:p-0 ${(currentPath === '/donation-programs') ? 'text-red-700 dark:text-red-300' : ''}`}>Programs</Link>
                                 </li>
                                 <li className="w-full flex justify-center py-3">
 
