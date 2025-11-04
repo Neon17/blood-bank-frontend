@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Footer = () => {
     return (
-        <footer className="bg-red-300 dark:bg-red-700 z-[1001]">
+        <footer className="bg-red-300 dark:bg-red-700 z-[1002]">
             <div className="max-w-7xl mx-auto w-full p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0">
@@ -16,7 +16,7 @@ const Footer = () => {
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-6">
                             <div>
                                 <h2 className="mb-6 text-sm font-semibold uppercase">Resources</h2>
-                                <ul className="text-gray-500 dark:text-gray-400 font-medium">
+                                <ul className="text-gray-500 dark:text-gray-300 font-medium">
                                     <li className="mb-4">
                                         <Link href="#" className="hover:underline">Blood Bank</Link>
                                     </li>
@@ -27,7 +27,7 @@ const Footer = () => {
                             </div>
                             <div>
                                 <h2 className="mb-6 text-sm font-semibold uppercase">Follow us</h2>
-                                <ul className="text-gray-500 dark:text-gray-400 font-medium">
+                                <ul className="text-gray-500 dark:text-gray-300 font-medium">
                                     <li className="mb-4">
                                         <Link href="#" className="hover:underline">Github</Link>
                                     </li>
@@ -38,7 +38,7 @@ const Footer = () => {
                             </div>
                             <div>
                                 <h2 className="mb-6 text-sm font-semibold uppercase">Legal</h2>
-                                <ul className="text-gray-500 dark:text-gray-400 font-medium">
+                                <ul className="text-gray-500 dark:text-gray-300 font-medium">
                                     <li className="mb-4">
                                         <Link href="#" className="hover:underline">Privacy Policy</Link>
                                     </li>
@@ -53,7 +53,7 @@ const Footer = () => {
                 </div>
                 <hr className="my-6 border-gray-200 sm:mx-auto lg:my-8" />
                 <div className="sm:flex sm:items-center sm:justify-between">
-                    <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <Link href="/" className="hover:underline">Blood Bank</Link>. All Rights Reserved.
+                    <span className="text-sm text-gray-500 sm:text-center dark:text-gray-300">© 2023 <Link href="/" className="hover:underline">Blood Bank</Link>. All Rights Reserved.
                     </span>
                     <div className="flex mt-4 sm:justify-center sm:mt-0">
                         <Link href="#" className="text-gray-500 hover:dark:hover:text-white">
