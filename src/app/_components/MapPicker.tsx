@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from "react";
-import * as L from "leaflet";   // <-- Import namespace as L
+import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-control-geocoder/dist/Control.Geocoder.css";
-import "leaflet-control-geocoder"; // this will attach geocoder to L
+import "leaflet-control-geocoder";
 import { ExactLocation as Location } from "../lib/definitions";
 
 type MapPickerProps = {
@@ -16,6 +16,12 @@ type MapPickerProps = {
   width?: string;
 };
 
+type SearchResult = {
+  display_name: string;
+  lat: number;
+  lon: number;
+  boundingbox: [string, string, string, string];
+};
 
 export default function MapPicker({
   location,
@@ -26,10 +32,14 @@ export default function MapPicker({
   width = "100%",
 }: MapPickerProps) {
   const mapRef = useRef<any | null>(null);
-  const markerRef = useRef<any | null>(null); // red focus marker
+  const markerRef = useRef<any | null>(null);
   const circleRef = useRef<any | null>(null);
   const donorMarkersRef = useRef<any[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const mapContainerId = "map-leaflet";
 
   const KATHMANDU = { lat: 27.7172, lng: 85.3240 };
@@ -44,6 +54,70 @@ export default function MapPicker({
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
     return { lat, lng };
   }
+
+  // Search places using Nominatim (OpenStreetMap)
+  const searchPlaces = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      setShowDropdown(false);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1`
+      );
+      const data = await response.json();
+      setSearchResults(data);
+      setShowDropdown(true);
+    } catch (error) {
+      console.error("Search failed:", error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Handle search input key press
+  const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      searchPlaces(searchQuery);
+    }
+  };
+
+  // Handle place selection from dropdown
+  const handlePlaceSelect = (place: SearchResult) => {
+    const lat = parseFloat(place.lat.toString());
+    const lng = parseFloat(place.lon.toString());
+    
+    // Move map to selected place
+    if (mapRef.current) {
+      mapRef.current.setView([lat, lng], 15);
+    }
+    
+    // Place focus marker
+    placeFocusMarker(lat, lng);
+    
+    // Extract city and country from display_name
+    const addressParts = place.display_name.split(',');
+    const city = addressParts[0]?.trim() || "";
+    const country = addressParts[addressParts.length - 1]?.trim() || "";
+    
+    // Call onChange with selected location
+    onChange?.({
+      lat,
+      lng,
+      city,
+      country,
+      // label: place.display_name,
+    } as Location);
+    
+    // Clear search and close dropdown
+    setSearchQuery("");
+    setSearchResults([]);
+    setShowDropdown(false);
+  };
 
   // small div-icon generator for colored markers
   function markerSvg(color: string, count?: number) {
@@ -136,7 +210,11 @@ export default function MapPicker({
         } else {
           tooltipHtml = String(labelObj);
         }
-        m.bindTooltip(tooltipHtml, { direction: "top", offset: [0, -10], className: "donor-tooltip" });
+        m.bindTooltip(tooltipHtml, { 
+          direction: "top", 
+          offset: [0, -10], 
+          className: "donor-tooltip dark:bg-gray-800 dark:text-white dark:border-gray-600" 
+        });
       }
 
       // clicking blue marker sets focus marker + emits onChange
@@ -205,6 +283,24 @@ export default function MapPicker({
     mapRef.current = map;
 
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
+
+    // Add custom zoom control with dark mode support
+    const zoomControl = L.control.zoom({
+      position: 'topright'
+    });
+    zoomControl.addTo(map);
+
+    // Style the zoom control for dark mode
+    setTimeout(() => {
+      const zoomIn = document.querySelector('.leaflet-control-zoom-in');
+      const zoomOut = document.querySelector('.leaflet-control-zoom-out');
+      if (zoomIn) {
+        zoomIn.classList.add('dark:bg-gray-800', 'dark:text-white', 'dark:border-gray-600', 'dark:hover:bg-gray-700');
+      }
+      if (zoomOut) {
+        zoomOut.classList.add('dark:bg-gray-800', 'dark:text-white', 'dark:border-gray-600', 'dark:hover:bg-gray-700');
+      }
+    }, 100);
 
     // clicking on map places focus marker and emits onChange
     map.on("click", (e: any) => {
@@ -287,5 +383,48 @@ export default function MapPicker({
   }, [radius]);
 
   if (!mounted) return null;
-  return <div id={mapContainerId} style={{ height, width }} />;
+  
+  return (
+    <div className="relative" style={{ width, height }}>
+      {/* Search Box */}
+      <div className="absolute top-3 left-50 z-[1000] w-72 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyPress={handleSearchKeyPress}
+          placeholder="Search for a place..."
+          className="w-full px-3 py-2 border-0 rounded-lg bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-0 text-sm"
+        />
+        
+        {/* Search Results Dropdown */}
+        {showDropdown && (
+          <div className="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-b-lg shadow-lg max-h-48 overflow-y-auto z-[1001]">
+            {isSearching ? (
+              <div className="px-3 py-2 text-center text-gray-500 dark:text-gray-400 text-sm">
+                Searching...
+              </div>
+            ) : searchResults.length > 0 ? (
+              searchResults.map((result, index) => (
+                <div
+                  key={index}
+                  onClick={() => handlePlaceSelect(result)}
+                  className="px-3 py-2 border-b border-gray-100 dark:border-gray-700 cursor-pointer text-xs leading-relaxed text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  {result.display_name}
+                </div>
+              ))
+            ) : (
+              <div className="px-3 py-2 text-center text-gray-500 dark:text-gray-400 text-sm">
+                No results found
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      
+      {/* Map Container */}
+      <div id={mapContainerId} className="w-full h-full" />
+    </div>
+  );
 }
