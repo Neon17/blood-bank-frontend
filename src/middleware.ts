@@ -1,135 +1,180 @@
-import axios from "axios";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { User } from "./app/lib/definitions";
+import { cookies } from "next/headers";
+
+const rateLimit = new Map<string, { count: number; resetTime: number }>();
 
 // Define your protected and auth routes
 const protectedRoutes = ['/dashboard', '/profile', '/admin'];
 const authRoutes = ['/login', '/signup'];
 
-// Just to redirect from login/register to dashboard if logged in
-async function authRedirect(request: NextRequest) {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('auth_token')?.value;
-    if (token != null) {
-        if (await isAuthenticated(token)) {
-            return NextResponse.redirect(new URL('/dashboard', request.url));
-        }
-        cookieStore.delete('auth_token');
-        return NextResponse.redirect(new URL('/login', request.url));
-    }
-    return NextResponse.next();
-}
+// Cache for authenticated tokens (short-lived)
+const authCache = new Map<string, { valid: boolean; timestamp: number }>();
+const CACHE_TTL = 60000; // 1 minute
 
-// Check authenticated token validity (is it expired?)
-async function isAuthenticated(token: string | undefined) {
-    // Verify token
-    if (token) {
-        try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/backend/api';
-            const response = await axios.get(`${apiUrl}/user`, { headers: { Authorization: `Bearer ${token}` } });
-            const data = await response.data;
-            if (data.status) {
-                return false;
-            }
-            if (response.status === 200) {
-                const cookieStore = await cookies();
-                const user = <User>response.data;
-                cookieStore.set('user', JSON.stringify(user));
-                return true;
-            }
-        }
-        catch (error) {
+// Optimized: Check authenticated token validity
+async function isAuthenticated(token: string): Promise<boolean> {
+    // Check cache first
+    const cached = authCache.get(token);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return cached.valid;
+    }
+
+    try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/backend/api';
+
+        // Use fetch instead of axios for better performance in Edge Runtime
+        const response = await fetch(`${apiUrl}/user`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            // Add timeout
+            signal: AbortSignal.timeout(5000)
+        });
+
+        if (!response.ok) {
+            authCache.set(token, { valid: false, timestamp: Date.now() });
             return false;
         }
+
+        const user = await response.json();
+
+        // Cache successful authentication
+        authCache.set(token, { valid: true, timestamp: Date.now() });
+
+        // Store user in cookies if needed
+        const cookieStore = await cookies();
+        cookieStore.set('user', JSON.stringify(user));
+
+        return true;
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        authCache.set(token, { valid: false, timestamp: Date.now() });
+        return false;
     }
-    return false;
 }
 
-async function authMiddleware(request: NextRequest) {
+function getClientIP(request: NextRequest): string {
+    // Common headers for IP detection
+    const headers = [
+        'x-forwarded-for',
+        'x-real-ip',
+        'cf-connecting-ip',
+        'x-vercel-forwarded-for',
+        'x-client-ip',
+        'x-cluster-client-ip'
+    ];
+
+    for (const header of headers) {
+        const value = request.headers.get(header);
+        if (value) {
+            // Take the first IP if multiple are present (common in x-forwarded-for)
+            const ip = value.split(',')[0]?.trim();
+            if (ip && ip !== 'unknown') {
+                return ip;
+            }
+        }
+    }
+
+    // Fallback to a generic identifier
+    return 'unknown';
+}
+
+function checkRateLimit(ip: string): boolean {
+    const now = Date.now();
+    const limit = rateLimit.get(ip);
+
+    if (!limit || now > limit.resetTime) {
+        rateLimit.set(ip, { count: 1, resetTime: now + 60000 }); // 1 minute
+        return true;
+    }
+
+    if (limit.count >= 100) { // 100 requests per minute
+        return false;
+    }
+
+    limit.count++;
+    return true;
+}
+
+// Optimized: Single middleware function with early returns
+export async function middleware(request: NextRequest) {
+    const clientIP = getClientIP(request);
+
+    if (!checkRateLimit(clientIP)) {
+        return new Response('Too many requests', { status: 429 });
+    }
+
+    const { pathname } = request.nextUrl;
     const token = request.cookies.get('auth_token')?.value;
 
-    // Protected routes
-    const protectedRoutes = ['/profile', '/dashboard', '/admin'];
-    const isProtectedRoute = protectedRoutes.some((route) => {
-        return request.nextUrl.pathname.startsWith(route);
-    })
+    // Early return for non-protected routes
+    const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
+    const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
 
-    if (isProtectedRoute && !token) {
-        return NextResponse.redirect(new URL('/login', request.url));
+    if (!isAuthRoute && !isProtectedRoute) {
+        return NextResponse.next();
     }
-
-    if (isProtectedRoute && !await isAuthenticated(token)) {
-        return NextResponse.redirect(new URL('/login', request.url));
-    }
-
-    return NextResponse.next();
-}
-
-async function roleMiddleware(request: NextRequest) {
-    const cookieStore = await cookies();
-    const rawUser = cookieStore.get('user')?.value;
-
-    const user = rawUser ? JSON.parse(rawUser) as User : null;
-    const userRole = user?.role;
-
-    // Admin only routes
-    if (request.nextUrl.pathname.startsWith('/admin') && userRole !== 'admin') {
-        return NextResponse.redirect(new URL('/login', request.url));
-    }
-    // // Redirecting to admin dashboard if user role is admin
-    // if (request.nextUrl.pathname.startsWith('/dashboard') && userRole === '/admin' )
-
-    return NextResponse.next();
-}
-
-async function rateLimitMiddleware(request: NextRequest) {
-    // Simple rate limiting (in production, use Redis or external service)
-    const ip = request.headers.get('x-forwarded-for') || 'anonymous';
-    const now = Date.now();
-
-    // This is a simplified example - in production, use proper storage
-    if (request.nextUrl.pathname.startsWith('/api/')) {
-        // Add rate limiting headers
-        const response = NextResponse.next();
-        response.headers.set('X-RateLimit-Limit', '100');
-        response.headers.set('X-RateLimit-Remaining', '99');
-        return response;
-    }
-
-    return NextResponse.next();
-}
-
-export async function middleware(request: NextRequest) {
-    const pathname = request.nextUrl.pathname;
-    const cookieStore = await cookies();
-    const token = cookieStore.get('auth_token')?.value;
 
     // Handle auth routes (login, register)
-    if (authRoutes.some((route) => pathname.startsWith(route))) {
-        return authRedirect(request);
+    if (isAuthRoute) {
+        if (token) {
+            // Only check authentication if we have a token
+            try {
+                const authenticated = await isAuthenticated(token);
+                if (authenticated) {
+                    return NextResponse.redirect(new URL('/dashboard', request.url));
+                }
+                // Token is invalid, clear it
+                const response = NextResponse.redirect(new URL('/login', request.url));
+                response.cookies.delete('auth_token');
+                return response;
+            } catch (error) {
+                // If auth check fails, proceed to login page
+                console.error('Auth check error:', error);
+            }
+        }
+        return NextResponse.next();
     }
 
-    // Handle protected routes (dashboard, profile, admin)
-    let response = await authMiddleware(request);
-    if (response.status != 200) return response;
+    // Handle protected routes
+    if (isProtectedRoute) {
+        if (!token) {
+            return NextResponse.redirect(new URL('/login', request.url));
+        }
 
-    response = await roleMiddleware(request);
-    if (response.status != 200) return response;
+        try {
+            const authenticated = await isAuthenticated(token);
+            if (!authenticated) {
+                const response = NextResponse.redirect(new URL('/login', request.url));
+                response.cookies.delete('auth_token');
+                response.cookies.delete('user');
+                return response;
+            }
 
-    response = await rateLimitMiddleware(request);
-    return response;
+            // Role-based access control only for admin routes
+            if (pathname.startsWith('/admin')) {
+                const cookieStore = await cookies();
+                const rawUser = cookieStore.get('user')?.value;
+                const user = rawUser ? JSON.parse(rawUser) : null;
+
+                if (user?.role !== 'admin') {
+                    return NextResponse.redirect(new URL('/dashboard', request.url));
+                }
+            }
+
+            return NextResponse.next();
+        } catch (error) {
+            console.error('Protected route auth check failed:', error);
+            return NextResponse.redirect(new URL('/login', request.url));
+        }
+    }
+
+    return NextResponse.next();
 }
 
-
-// by running this, middleware runs on every route like /login, /signup, except these (performance overload)
-// export const config = {
-//     matcher: [
-//         '/((?!_next/static|_next/image|favicon.ico).*)',
-//     ]
-// }
-
+// Optimized matcher - only run on specific routes
 export const config = {
     matcher: [
         '/dashboard/:path*',
@@ -138,4 +183,4 @@ export const config = {
         '/login',
         '/signup'
     ]
-}
+};

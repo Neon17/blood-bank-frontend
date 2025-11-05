@@ -3,16 +3,23 @@ import { useAuth } from "@/app/context/authInfo";
 import { authenticate } from "@/app/lib/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function Login() {
     const router = useRouter();
     const { setUser, setIsLoggedIn } = useAuth();
     const [error, setError] = useState('');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string | string[] }>({
         email: '',
         password: '',
     });
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/dashboard');
+        }
+    }, [isAuthenticated]);
 
     const handleFormData = async (formData: FormData) => {
         // Reset errors
@@ -31,7 +38,7 @@ export default function Login() {
                 if ("user" in data && data?.user) {
                     setUser(data?.user);
                     setIsLoggedIn(true);
-                    router.push('/dashboard');
+                    setIsAuthenticated(true);
                 }
             }
         } catch (error: unknown) {
