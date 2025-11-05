@@ -42,7 +42,7 @@ export default function Navbar() {
                 <nav className="w-full max-w-7xl justify-self-center flex items-center justify-center px-2">
                     <div className="flex flex-wrap items-center justify-between mx-auto p-3 w-full">
                         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                            <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="BloodBank Logo" />
+                            <img src="/logo.png" className="h-8" alt="BloodBank Logo" />
                             <span className="self-center text-2xl font-semibold whitespace-nowrap">Blood Bank</span>
                         </Link>
                         <div className="md:hidden">

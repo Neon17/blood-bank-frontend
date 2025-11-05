@@ -8,7 +8,7 @@ const Footer = () => {
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0">
                         <Link href="/" className="flex items-center">
-                            <Image width={50} height={50} src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" />
+                            <Image width={50} height={50} src="/logo.png" className="h-8 me-3" alt="FlowBite Logo" />
                             <span className="self-center text-2xl font-semibold whitespace-nowrae">Blood Bank</span>
                         </Link>
                     </div>
@@ -21,7 +21,7 @@ const Footer = () => {
                                         <Link href="#" className="hover:underline">Blood Bank</Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:underline">Tailwind CSS</Link>
+                                        <Link href="#" className="hover:underline">Hospital</Link>
                                     </li>
                                 </ul>
                             </div>
