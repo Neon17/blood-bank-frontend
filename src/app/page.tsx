@@ -3,29 +3,35 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="w-full bg-gray-50">
+    <div className="w-full bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center justify-between pt-5 sm:px-8 md:py-16 dark:bg-gray-900  mx-auto min:h-[600px]">
-        <div className="section-container max-w-7xl pt-10 flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 mx-auto min:h-[600px]">
+      <section className="flex flex-col md:flex-row items-center justify-between pt-5 sm:px-8 md:py-16 mx-auto min-h-[600px]">
+        <div className="section-container max-w-7xl pt-10 flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 mx-auto min-h-[600px]">
           {/* Left Text */}
           <div className="md:w-1/2 space-y-6">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-red-700 dark:text-red-300">
               Every Drop Counts
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-lg">
-              Join our community of life-savers. Your donation can make a
-              difference.
+              Connect with blood donors and recipients in your community. Your
+              registration can save lives.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-4 flex-wrap">
               <Link
-                href={`/signup`}
-                className="bg-red-600 text-white px-3 py-2 md:px-6 md:py-3 rounded shadow hover:bg-red-700 transition"
+                href="/donors/register"
+                className="bg-red-600 text-white px-6 py-3 rounded-lg shadow hover:bg-red-700 transition duration-200"
               >
-                Become a Donor
+                Register as Donor
               </Link>
               <Link
-                href={`/donors`}
-                className="border border-red-500 text-red-600 dark:text-red-400 px-3 py-2 md:px-6 md:py-3 rounded hover:bg-red-100 hover:dark:bg-gray-700 hover:cursor-pointer transition"
+                href="/requests/create"
+                className="border border-red-500 text-red-600 dark:text-red-400 px-6 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-gray-800 transition duration-200"
+              >
+                Create Request
+              </Link>
+              <Link
+                href="/donors"
+                className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-200"
               >
                 Find Donors
               </Link>
@@ -36,7 +42,7 @@ export default function Home() {
           <div className="md:w-1/2 h-full flex p-3 justify-center mb-10 md:mb-0">
             <img
               src="/blood.png"
-              alt="blood cells"
+              alt="blood donation"
               className="rounded-xl shadow-lg h-full w-full object-cover"
             />
           </div>
@@ -44,73 +50,115 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-10 sm:px-6 dark:bg-gray-900">
-        <div className="section-container max-w-7xl flex flex-col md:flex-row items-center justify-between  mx-auto min:h-[600px]">
-          <div className="flex w-full px-4 flex-col md:flex-row justify-center items-center max-w-6xl mx-auto gap-8 text-center">
-            <div className="bg-white w-full md:w-auto p-12 rounded shadow-md dark:bg-gray-800">
-              <p className="text-3xl font-bold text-red-700 dark:text-gray-200">
-                1000+
+      <section className="py-16 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="bg-red-50 dark:bg-gray-700 p-8 rounded-lg shadow-md">
+              <p className="text-4xl font-bold text-red-700 dark:text-red-300 mb-2">
+                50+
               </p>
-              <p className="text-gray-600 dark:text-gray-300">Lives Saved</p>
-            </div>
-            <div className="bg-white w-full md:w-auto p-12 rounded shadow-md dark:bg-gray-800">
-              <p className="text-3xl font-bold text-red-700 dark:text-gray-200">
-                500+
+              <p className="text-gray-600 dark:text-gray-300 font-semibold">
+                Registered Donors
               </p>
-              <p className="text-gray-600 dark:text-gray-300">Active Donors</p>
             </div>
-            <div className="bg-white w-full md:w-auto p-12 rounded shadow-md dark:bg-gray-800">
-              <p className="text-3xl font-bold text-red-700 dark:text-gray-200">
+            <div className="bg-red-50 dark:bg-gray-700 p-8 rounded-lg shadow-md">
+              <p className="text-4xl font-bold text-red-700 dark:text-red-300 mb-2">
+                25+
+              </p>
+              <p className="text-gray-600 dark:text-gray-300 font-semibold">
+                Blood Requests
+              </p>
+            </div>
+            <div className="bg-red-50 dark:bg-gray-700 p-8 rounded-lg shadow-md">
+              <p className="text-4xl font-bold text-red-700 dark:text-red-300 mb-2">
                 24/7
               </p>
-              <p className="text-gray-600 dark:text-gray-300">Support</p>
+              <p className="text-gray-600 dark:text-gray-300 font-semibold">
+                Admin Support
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Mission Section */}
-      <section className="bg-pink-50 dark:bg-gray-800 py-16 sm:px-6 text-center">
-        <div className="section-container max-w-7xl py-16 px-4 sm:px-6 mx-auto text-center">
-          <h2 className="text-red-600 dark:text-red-400 font-bold uppercase text-sm mb-2">
-            Our Mission
-          </h2>
-          <h3 className="text-3xl md:text-4xl font-bold text-red-700 dark:text-red-300 mb-4">
-            Connecting Lives Through Blood Donation
-          </h3>
-          <p className="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12">
-            We're building a community where finding blood donors is quick,
-            easy, and reliable. Our platform ensures that help is always within
-            reach.
-          </p>
+      {/* Features Section */}
+      <section className="bg-gray-50 dark:bg-gray-900 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-red-600 dark:text-red-400 font-bold uppercase text-sm mb-2">
+              What We Offer
+            </h2>
+            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Simple & Effective Blood Donation Platform
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Our platform connects blood donors with those in need through a
+              straightforward process with admin verification.
+            </p>
+          </div>
 
-          <div className="flex flex-col md:flex-row justify-center gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                title: 'Quick Find',
-                desc: 'Instant matching of blood donors by blood type and location.',
+                title: 'Donor Registration',
+                desc: 'Register as a blood donor with your details and availability. Admin approval ensures authenticity.',
+                icon: '👤',
+                link: '/donors/register',
+                linkText: 'Register Now',
+              },
+              {
+                title: 'Blood Requests',
+                desc: 'Create blood requests when in need. Your request will be visible to potential donors in your area.',
+                icon: '🩸',
+                link: '/requests/create',
+                linkText: 'Create Request',
+              },
+              {
+                title: 'Donor Search',
+                desc: 'Find registered blood donors by location and blood type. Connect directly with potential donors.',
                 icon: '🔍',
+                link: '/donors',
+                linkText: 'Search Donors',
               },
               {
-                title: 'Real-time Availability',
-                desc: 'Donors can update their availability for emergency situations.',
-                icon: '⏱️',
+                title: 'Admin Verification',
+                desc: 'All donor registrations and requests are verified by admins to ensure safety and reliability.',
+                icon: '✅',
+                link: '/about',
+                linkText: 'Learn More',
               },
               {
-                title: 'Emergency Notification',
-                desc: 'Immediate alerts to matching donors via text, email, or mobile apps.',
-                icon: '🚨',
+                title: 'Request Management',
+                desc: 'View and manage all blood requests in one place. Track the status of your requests.',
+                icon: '📋',
+                link: '/requests',
+                linkText: 'View Requests',
+              },
+              {
+                title: 'Community Driven',
+                desc: 'Join a community of verified donors and recipients working together to save lives.',
+                icon: '🤝',
+                link: '/signup',
+                linkText: 'Join Community',
               },
             ].map((feature, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded shadow-md text-left flex-1"
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
               >
-                <div className="text-4xl mb-3">{feature.icon}</div>
-                <h4 className="text-lg font-semibold mb-2 text-black">
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h4 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
                   {feature.title}
                 </h4>
-                <p className="text-gray-600">{feature.desc}</p>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  {feature.desc}
+                </p>
+                <Link
+                  href={feature.link}
+                  className="text-red-600 dark:text-red-400 font-semibold hover:text-red-700 dark:hover:text-red-300 transition-colors duration-200"
+                >
+                  {feature.linkText} →
+                </Link>
               </div>
             ))}
           </div>
@@ -118,60 +166,91 @@ export default function Home() {
       </section>
 
       {/* How it Works Section */}
-      <section className="bg-gray-100 dark:bg-slate-900 py-16 sm:px-6 text-center">
-        <div className="section-container py-16 px-4 sm:px-6 text-center">
-          <h2 className="text-red-600 font-bold uppercase text-sm mb-2">
-            How it Works
-          </h2>
-          <h3 className="text-3xl md:text-4xl font-bold text-red-700 dark:text-red-200 mb-4">
-            Start Saving Lives in 4 Easy Steps
-          </h3>
-          <p className="text-gray-600 dark:text-gray-200 max-w-3xl mx-auto mb-12">
-            Our streamlined process makes it easy to become a donor and start
-            making a difference in your community.
-          </p>
+      <section className="bg-white dark:bg-gray-800 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-red-600 dark:text-red-400 font-bold uppercase text-sm mb-2">
+              Simple Process
+            </h2>
+            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              How Our Platform Works
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              A straightforward process to connect blood donors with those in
+              need through admin-verified matches.
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl mx-auto text-left">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {[
               {
-                step: '01',
-                title: 'Registration',
-                desc: 'Fill out a form to register as a donor. Your data is securely stored and used only when necessary.',
+                step: '1',
+                title: 'Register',
+                desc: 'Sign up and register as a donor or create a blood request',
                 icon: '📝',
               },
               {
-                step: '02',
-                title: 'Verification',
-                desc: 'After registration, verify your information to ensure accuracy.',
+                step: '2',
+                title: 'Admin Approval',
+                desc: 'Our team verifies all registrations and requests for safety',
                 icon: '✅',
               },
               {
-                step: '03',
-                title: 'Participation in Donation',
-                desc: 'Become a donor by registering as a donor.',
-                icon: '❤️',
+                step: '3',
+                title: 'Connect',
+                desc: 'Find donors or requests based on your needs and location',
+                icon: '🔗',
               },
               {
-                step: '04',
-                title: 'Emergency Request',
-                desc: 'Submit urgent blood needs and receive immediate notifications from available donors in your area.',
-                icon: '🚑',
+                step: '4',
+                title: 'Save Lives',
+                desc: 'Make connections that lead to life-saving blood donations',
+                icon: '❤️',
               },
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded shadow-md relative"
+                className="bg-red-50 dark:bg-gray-700 p-6 rounded-lg text-center relative"
               >
-                <div className="absolute top-4 right-4 text-2xl font-bold text-gray-300">
+                <div className="absolute -top-4 -left-4 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">
                   {item.step}
                 </div>
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <h4 className="text-lg font-semibold mb-2 text-gray-600">
+                <div className="text-4xl mb-4">{item.icon}</div>
+                <h4 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
                   {item.title}
                 </h4>
-                <p className="text-gray-600">{item.desc}</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  {item.desc}
+                </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-red-600 py-16">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready to Make a Difference?
+          </h2>
+          <p className="text-red-100 text-lg mb-8 max-w-2xl mx-auto">
+            Join our community today and be part of the life-saving network.
+            Register as a donor or create your first blood request.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/donors/register"
+              className="bg-white text-red-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-200"
+            >
+              Become a Donor
+            </Link>
+            <Link
+              href="/requests/create"
+              className="border border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition duration-200"
+            >
+              Create Request
+            </Link>
           </div>
         </div>
       </section>

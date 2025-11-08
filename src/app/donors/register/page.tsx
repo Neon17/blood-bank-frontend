@@ -166,6 +166,7 @@ export default function BecomeDonor() {
     const response = await registerBloodDonor(actual_sending_object);
     if ('errors' in response && response.status === 'error') {
       alert(`Submission Failed: ${response.message}`);
+      console.log(response);
     } else {
       alert('Submitted successfully!');
       router.push('/profile');

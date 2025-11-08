@@ -15,6 +15,7 @@ import {
   verification_status,
 } from '@/app/lib/definitions';
 import dynamic from 'next/dynamic';
+
 const MapPicker = dynamic(import('@/app/_components/MapPicker'), {
   ssr: false,
 });
@@ -158,7 +159,7 @@ export default function Page() {
       const res = await deleteDonorApplication(user_id.toString());
       if ('message' in res) setError(res.message);
       else {
-        setSuccess('Successfully deleted the donor application');
+        setSuccess('Donor application deleted successfully');
         closeModals();
         fetchData();
       }
@@ -169,7 +170,7 @@ export default function Page() {
     const timer = setTimeout(() => {
       setError('');
       setSuccess('');
-    }, 3000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, [error, success]);
 
@@ -191,7 +192,7 @@ export default function Page() {
     if ('message' in res) setError(res.message);
     else {
       setEditDonor(null);
-      setSuccess('Successfully updated donor application!');
+      setSuccess('Donor application updated successfully');
       fetchData();
     }
   };
@@ -213,7 +214,7 @@ export default function Page() {
       setError(res.message);
     } else {
       setApproveDonor(null);
-      setSuccess('Successfully approved donor application!');
+      setSuccess('Donor application approved successfully');
       fetchData();
     }
   };
@@ -274,23 +275,115 @@ export default function Page() {
     return pages;
   };
 
+  // Status badge component
+  const StatusBadge = ({ status }: { status: string }) => {
+    const statusConfig = {
+      approved: {
+        bg: 'bg-green-50 dark:bg-green-900/20',
+        text: 'text-green-700 dark:text-green-300',
+        border: 'border-green-200 dark:border-green-800',
+        dot: 'bg-green-500',
+      },
+      rejected: {
+        bg: 'bg-red-50 dark:bg-red-900/20',
+        text: 'text-red-700 dark:text-red-300',
+        border: 'border-red-200 dark:border-red-800',
+        dot: 'bg-red-500',
+      },
+      wrong: {
+        bg: 'bg-red-50 dark:bg-red-900/20',
+        text: 'text-red-700 dark:text-red-300',
+        border: 'border-red-200 dark:border-red-800',
+        dot: 'bg-red-500',
+      },
+      pending: {
+        bg: 'bg-yellow-50 dark:bg-yellow-900/20',
+        text: 'text-yellow-700 dark:text-yellow-300',
+        border: 'border-yellow-200 dark:border-yellow-800',
+        dot: 'bg-yellow-500',
+      },
+    };
+
+    const config =
+      statusConfig[status.toLowerCase() as keyof typeof statusConfig] ||
+      statusConfig.pending;
+
+    return (
+      <span
+        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${config.bg} ${config.text} ${config.border}`}
+      >
+        <span className={`w-2 h-2 rounded-full mr-2 ${config.dot}`}></span>
+        {status.charAt(0).toUpperCase() + status.slice(1)}
+      </span>
+    );
+  };
+
+  // Action button component
+  const ActionButton = ({
+    onClick,
+    icon,
+    title,
+    color = 'gray',
+  }: {
+    onClick: () => void;
+    icon: React.ReactNode;
+    title: string;
+    color?: 'blue' | 'green' | 'red' | 'gray';
+  }) => {
+    const colorClasses = {
+      blue: 'text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300',
+      green:
+        'text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300',
+      red: 'text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300',
+      gray: 'text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300',
+    };
+
+    return (
+      <button
+        onClick={onClick}
+        className={`p-2 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 ${colorClasses[color]}`}
+        title={title}
+      >
+        {icon}
+      </button>
+    );
+  };
+
   // Filter Component
   const FilterSection = () => (
     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Filter Donors
-        </h3>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Filter Donors
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Refine your search using the filters below
+          </p>
+        </div>
         <button
           onClick={handleClearFilters}
-          className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium transition-colors"
+          className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium transition-colors flex items-center gap-2"
         >
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
           Clear All
         </button>
       </div>
 
-      <form onSubmit={handleFilterSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <form onSubmit={handleFilterSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Search Input */}
           <div className="lg:col-span-2">
             <label
@@ -299,14 +392,29 @@ export default function Page() {
             >
               Search Donors
             </label>
-            <input
-              id="search"
-              type="text"
-              value={filters.search}
-              onChange={(e) => updateFilter('search', e.target.value)}
-              placeholder="Search by name, contact, address..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-500 dark:placeholder-gray-400"
-            />
+            <div className="relative">
+              <svg
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                id="search"
+                type="text"
+                value={filters.search}
+                onChange={(e) => updateFilter('search', e.target.value)}
+                placeholder="Search by name, contact, address..."
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-500 dark:placeholder-gray-400"
+              />
+            </div>
           </div>
 
           {/* Blood Group */}
@@ -360,7 +468,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Has Donated */}
           <div>
             <label
@@ -383,92 +491,87 @@ export default function Page() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <button
-            type="button"
-            onClick={handleClearFilters}
-            className="px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
-          >
-            Clear
-          </button>
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
-          >
-            {loading ? 'Applying...' : 'Apply Filters'}
-          </button>
+        <div className="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            {data && `Found ${data.total} donors`}
+          </div>
+          <div className="flex items-center space-x-3">
+            <button
+              type="button"
+              onClick={handleClearFilters}
+              className="px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
+            >
+              Clear
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none flex items-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Applying...
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                    />
+                  </svg>
+                  Apply Filters
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </form>
 
       {/* Active Filters Badges */}
       <div className="flex flex-wrap gap-2 mt-4">
-        {filters.search && (
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-            Search: {filters.search}
-            <button
-              onClick={() => updateFilter('search', '')}
-              className="ml-2 hover:text-blue-600 dark:hover:text-blue-300"
+        {Object.entries(filters).map(([key, value]) => {
+          if (!value || key === 'page') return null;
+
+          const filterLabels: { [key: string]: string } = {
+            search: 'Search',
+            blood_group: 'Blood Group',
+            verification_status: 'Status',
+            city: 'City',
+            country: 'Country',
+            has_donated: 'Donation History',
+          };
+
+          const displayValue =
+            key === 'has_donated'
+              ? value === 'true'
+                ? 'Has Donated'
+                : 'Never Donated'
+              : value;
+
+          return (
+            <span
+              key={key}
+              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
             >
-              ×
-            </button>
-          </span>
-        )}
-        {filters.blood_group && (
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-            Blood: {filters.blood_group}
-            <button
-              onClick={() => updateFilter('blood_group', '')}
-              className="ml-2 hover:text-red-600 dark:hover:text-red-300"
-            >
-              ×
-            </button>
-          </span>
-        )}
-        {filters.verification_status && (
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-            Status: {filters.verification_status}
-            <button
-              onClick={() => updateFilter('verification_status', '')}
-              className="ml-2 hover:text-yellow-600 dark:hover:text-yellow-300"
-            >
-              ×
-            </button>
-          </span>
-        )}
-        {filters.city && (
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-            City: {filters.city}
-            <button
-              onClick={() => updateFilter('city', '')}
-              className="ml-2 hover:text-green-600 dark:hover:text-green-300"
-            >
-              ×
-            </button>
-          </span>
-        )}
-        {filters.country && (
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-            Country: {filters.country}
-            <button
-              onClick={() => updateFilter('country', '')}
-              className="ml-2 hover:text-purple-600 dark:hover:text-purple-300"
-            >
-              ×
-            </button>
-          </span>
-        )}
-        {filters.has_donated && (
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
-            Donated: {filters.has_donated === 'true' ? 'Yes' : 'No'}
-            <button
-              onClick={() => updateFilter('has_donated', '')}
-              className="ml-2 hover:text-indigo-600 dark:hover:text-indigo-300"
-            >
-              ×
-            </button>
-          </span>
-        )}
+              {filterLabels[key]}: {displayValue}
+              <button
+                onClick={() => updateFilter(key as keyof FilterParams, '')}
+                className="ml-2 hover:text-blue-600 dark:hover:text-blue-300 text-sm"
+              >
+                ×
+              </button>
+            </span>
+          );
+        })}
       </div>
     </div>
   );
@@ -476,18 +579,25 @@ export default function Page() {
   return (
     <div className="p-6 h-full w-full bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Donor Applications
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Manage and review blood donor applications
-        </p>
+      <div className="mb-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Donor Applications
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Manage and review blood donor registration applications
+            </p>
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {data && `Total: ${data.total} applications`}
+          </div>
+        </div>
       </div>
 
       {/* Alerts */}
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center animate-fade-in">
           <div className="flex-shrink-0">
             <svg
               className="w-5 h-5 text-red-400"
@@ -508,7 +618,7 @@ export default function Page() {
       )}
 
       {success && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center">
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center animate-fade-in">
           <div className="flex-shrink-0">
             <svg
               className="w-5 h-5 text-green-400"
@@ -531,29 +641,28 @@ export default function Page() {
       {/* Filter Section */}
       <FilterSection />
 
-      {/* Rest of your existing table and modals remain the same */}
       {/* Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  #
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Donor
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Blood Group
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  City
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Location
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Country
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Contact
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -561,9 +670,39 @@ export default function Page() {
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center">
-                    <div className="flex justify-center items-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  <td colSpan={6} className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-2"></div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Loading donor applications...
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              ) : data?.data?.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+                      <svg
+                        className="w-16 h-16 mb-4 opacity-50"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+                        />
+                      </svg>
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                        No donor applications found
+                      </h3>
+                      <p className="text-sm">
+                        Try adjusting your search filters or check back later
+                        for new applications.
+                      </p>
                     </div>
                   </td>
                 </tr>
@@ -577,121 +716,125 @@ export default function Page() {
                   return (
                     <tr
                       key={donor.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                        {globalIndex}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          #{globalIndex.toString().padStart(3, '0')}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {donor.user?.name || 'N/A'}
+                        </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border border-red-200 dark:border-red-800">
                           {donor.blood_group}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                        {donor.city}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                        {donor.country}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {donor.city}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {donor.country}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                            statusValue.toLowerCase() === 'approved'
-                              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                              : statusValue.toLowerCase() === 'wrong' ||
-                                  statusValue.toLowerCase() === 'rejected'
-                                ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                          }`}
-                        >
-                          {statusValue.charAt(0).toUpperCase() +
-                            statusValue.slice(1)}
-                        </span>
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {donor.contact_number}
+                        </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex items-center space-x-2">
-                          <button
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={statusValue} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center space-x-1">
+                          <ActionButton
                             onClick={() => setViewDonor(donor)}
-                            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                            icon={
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                />
+                              </svg>
+                            }
                             title="View Details"
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                              />
-                            </svg>
-                          </button>
-                          <button
+                            color="blue"
+                          />
+                          <ActionButton
                             onClick={() => setEditDonor(donor)}
-                            className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
-                            title="Edit"
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={() => setDeleteDonor(donor)}
-                            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors"
-                            title="Delete"
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </button>
-                          <button
+                            icon={
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            }
+                            title="Edit Application"
+                            color="gray"
+                          />
+                          <ActionButton
                             onClick={() => setApproveDonor(donor)}
-                            className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors"
-                            title="Approve"
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          </button>
+                            icon={
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            }
+                            title="Approve Application"
+                            color="green"
+                          />
+                          <ActionButton
+                            onClick={() => setDeleteDonor(donor)}
+                            icon={
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                              </svg>
+                            }
+                            title="Delete Application"
+                            color="red"
+                          />
                         </div>
                       </td>
                     </tr>
@@ -707,16 +850,16 @@ export default function Page() {
           <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-sm text-gray-700 dark:text-gray-300">
-                Showing <span className="font-medium">{data.from}</span> to{' '}
-                <span className="font-medium">{data.to}</span> of{' '}
-                <span className="font-medium">{data.total}</span> results
+                Showing <span className="font-semibold">{data.from}</span> to{' '}
+                <span className="font-semibold">{data.to}</span> of{' '}
+                <span className="font-semibold">{data.total}</span> results
               </div>
 
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-2">
                 <button
                   onClick={handlePrevPage}
                   disabled={!data.prev_page_url}
-                  className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                  className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                     !data.prev_page_url
                       ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600'
                       : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
@@ -725,24 +868,26 @@ export default function Page() {
                   Previous
                 </button>
 
-                {renderPageNumbers().map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => handlePageClick(page)}
-                    className={`px-3 py-2 text-sm font-medium rounded-md border ${
-                      currentPage === page
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
+                <div className="flex items-center space-x-1">
+                  {renderPageNumbers().map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageClick(page)}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg border min-w-[40px] ${
+                        currentPage === page
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
 
                 <button
                   onClick={handleNextPage}
                   disabled={!data.next_page_url}
-                  className={`px-3 py-2 text-sm font-medium rounded-md border ${
+                  className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                     !data.next_page_url
                       ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600'
                       : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
@@ -754,116 +899,113 @@ export default function Page() {
             </div>
           </div>
         )}
-
-        {!loading && data?.data?.length === 0 && (
-          <div className="text-center py-12">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
-              No donor applications found
-            </h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              No donor applications have been submitted yet.
-            </p>
-          </div>
-        )}
       </div>
 
       {/* View Modal */}
       {viewDonor && (
-        <div className="fixed inset-0 z-50 overflow-y-auto mt-[76px]">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div
               className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
               onClick={closeModals}
             ></div>
 
-            <div className="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-2xl">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Donor Details
-                </h3>
+            <div className="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-2xl rounded-2xl">
+              {/* Header */}
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    Donor Details
+                  </h3>
+                  <button
+                    onClick={closeModals}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
-              <div className="px-6 py-4 space-y-6 max-h-96 overflow-y-auto">
+              {/* Content */}
+              <div className="px-6 py-6 space-y-6 max-h-[70vh] overflow-y-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
                         Contact Number
                       </label>
-                      <p className="mt-1 text-sm text-gray-900 dark:text-white">
+                      <p className="text-sm text-gray-900 dark:text-white font-medium">
                         {viewDonor.contact_number}
                       </p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Blood Type
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                        Blood Group
                       </label>
-                      <p className="mt-1 text-sm text-gray-900 dark:text-white">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300">
                         {viewDonor.blood_group}
-                      </p>
+                      </span>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
                         Date of Birth
                       </label>
-                      <p className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {viewDonor.date_of_birth}
+                      <p className="text-sm text-gray-900 dark:text-white font-medium">
+                        {viewDonor.date_of_birth || 'Not specified'}
                       </p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
                         Last Donated Date
                       </label>
-                      <p className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {viewDonor.last_donated_date || 'Never'}
+                      <p className="text-sm text-gray-900 dark:text-white font-medium">
+                        {viewDonor.last_donated_date || 'Never donated'}
                       </p>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Address
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                        Verification Status
                       </label>
-                      <p className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {viewDonor.address}, {viewDonor.city},{' '}
-                        {viewDonor.country}
-                      </p>
+                      <StatusBadge
+                        status={viewDonor.verification_status || 'pending'}
+                      />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
                         Current Health Status
                       </label>
-                      <p className="mt-1 text-sm text-gray-900 dark:text-white">
+                      <p className="text-sm text-gray-900 dark:text-white font-medium">
                         {viewDonor.current_health_status || 'Not specified'}
                       </p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
                         Current Medications
                       </label>
-                      <p className="mt-1 text-sm text-gray-900 dark:text-white">
+                      <p className="text-sm text-gray-900 dark:text-white font-medium">
                         {viewDonor.current_medication || 'None'}
                       </p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
                         Medical Conditions
                       </label>
-                      <p className="mt-1 text-sm text-gray-900 dark:text-white">
+                      <p className="text-sm text-gray-900 dark:text-white font-medium">
                         {viewDonor.medical_conditions || 'None'}
                       </p>
                     </div>
@@ -872,58 +1014,49 @@ export default function Page() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Verification Status
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                      Address
                     </label>
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${
-                        viewDonor.verification_status?.toLowerCase() ===
-                        'approved'
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                          : viewDonor.verification_status?.toLowerCase() ===
-                                'wrong' ||
-                              viewDonor.verification_status?.toLowerCase() ===
-                                'rejected'
-                            ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                      }`}
-                    >
-                      {viewDonor.verification_status}
-                    </span>
+                    <p className="text-sm text-gray-900 dark:text-white font-medium">
+                      {viewDonor.address}, {viewDonor.city}, {viewDonor.country}
+                    </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
                       Admin Message
                     </label>
-                    <p className="mt-1 text-sm text-gray-900 dark:text-white">
+                    <p className="text-sm text-gray-900 dark:text-white font-medium">
                       {viewDonor.admin_message || 'No message'}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Location
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    Location Map
                   </label>
-                  <MapPicker
-                    location={{
-                      lat: viewDonor.latitude,
-                      lng: viewDonor.longitude,
-                      city: viewDonor.city,
-                      country: viewDonor.country,
-                    }}
-                    onChange={() => {}}
-                    radius={null}
-                    height="300px"
-                    width="100%"
-                  />
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+                    <MapPicker
+                      location={{
+                        lat: viewDonor.latitude,
+                        lng: viewDonor.longitude,
+                        city: viewDonor.city,
+                        country: viewDonor.country,
+                      }}
+                      onChange={() => {}}
+                      radius={null}
+                      height="300px"
+                      width="100%"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 flex justify-end">
+              {/* Footer */}
+              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 flex justify-end">
                 <button
                   onClick={closeModals}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-500"
+                  className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-500 transition-colors"
                 >
                   Close
                 </button>
@@ -935,48 +1068,80 @@ export default function Page() {
 
       {/* Edit Modal */}
       {editDonor && (
-        <div className="fixed inset-0 z-50 overflow-y-auto mt-[76px]">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div
               className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
               onClick={closeModals}
             ></div>
 
-            <div className="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-2xl">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Edit Donor Application
-                </h3>
+            <div className="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-2xl rounded-2xl">
+              {/* Header */}
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    Edit Donor Application
+                  </h3>
+                  <button
+                    onClick={closeModals}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
-              <div className="px-6 py-4 space-y-6 max-h-96 overflow-y-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Content */}
+              <div className="px-6 py-6 space-y-6 max-h-[70vh] overflow-y-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Contact Number
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Contact Number *
                     </label>
                     <input
                       type="number"
                       name="contact_number"
                       value={editDonor.contact_number || ''}
                       onChange={handleEditChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
+                      placeholder="Enter contact number"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Blood Group
                     </label>
-                    <input
-                      type="text"
+                    <select
                       name="blood_group"
                       value={editDonor.blood_group || ''}
                       onChange={handleEditChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    />
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
+                    >
+                      <option value="">Select Blood Group</option>
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                    </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Address
                     </label>
                     <input
@@ -984,11 +1149,12 @@ export default function Page() {
                       name="address"
                       value={editDonor.address || ''}
                       onChange={handleEditChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
+                      placeholder="Enter address"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Date of Birth
                     </label>
                     <input
@@ -996,11 +1162,11 @@ export default function Page() {
                       name="date_of_birth"
                       value={editDonor.date_of_birth || ''}
                       onChange={handleEditChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Current Health Status
                     </label>
                     <input
@@ -1008,11 +1174,12 @@ export default function Page() {
                       name="current_health_status"
                       value={editDonor.current_health_status || ''}
                       onChange={handleEditChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
+                      placeholder="Enter health status"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Current Medication
                     </label>
                     <input
@@ -1020,11 +1187,12 @@ export default function Page() {
                       name="current_medication"
                       value={editDonor.current_medication || ''}
                       onChange={handleEditChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
+                      placeholder="Enter current medications"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Medical Conditions
                     </label>
                     <input
@@ -1032,26 +1200,28 @@ export default function Page() {
                       name="medical_conditions"
                       value={editDonor.medical_conditions || ''}
                       onChange={handleEditChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
+                      placeholder="Enter medical conditions"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Verification Status
                     </label>
                     <select
                       name="verification_status"
                       value={editDonor.verification_status || 'pending'}
                       onChange={handleEditChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
                     >
                       <option value="pending">Pending</option>
                       <option value="approved">Approved</option>
                       <option value="rejected">Rejected</option>
+                      <option value="wrong">Wrong</option>
                     </select>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Admin Message
                     </label>
                     <textarea
@@ -1059,36 +1229,53 @@ export default function Page() {
                       value={editDonor.admin_message || ''}
                       onChange={handleEditChange}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
+                      placeholder="Enter admin message (optional)"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                     Location Map
                   </label>
-                  <MapPicker
-                    location={location}
-                    onChange={setLocation}
-                    radius={null}
-                    height="300px"
-                    width="100%"
-                  />
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+                    <MapPicker
+                      location={location}
+                      onChange={setLocation}
+                      radius={null}
+                      height="300px"
+                      width="100%"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 flex justify-end space-x-3">
+              {/* Footer */}
+              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 flex justify-end space-x-3">
                 <button
                   onClick={closeModals}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-500"
+                  className="px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-500 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleUpdate}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="px-6 py-3 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors flex items-center gap-2"
                 >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
                   Save Changes
                 </button>
               </div>
@@ -1099,40 +1286,65 @@ export default function Page() {
 
       {/* Approve Modal */}
       {approveDonor && (
-        <div className="fixed inset-0 z-50 overflow-y-auto mt-[76px]">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div
               className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
               onClick={closeModals}
             ></div>
 
-            <div className="relative inline-block w-full max-w-md my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-2xl">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="relative inline-block w-full max-w-md my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-2xl rounded-2xl">
+              <div className="p-6 text-center">
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 dark:bg-green-900/20 mb-4">
+                  <svg
+                    className="h-6 w-6 text-green-600 dark:text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   Approve Donor
                 </h3>
-              </div>
-
-              <div className="px-6 py-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                   Are you sure you want to approve the donor application from{' '}
                   <strong>{approveDonor.user?.name}</strong>?
                 </p>
-              </div>
 
-              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 flex justify-end space-x-3">
-                <button
-                  onClick={closeModals}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-500"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleApprove(approveDonor.user_id)}
-                  className="px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                >
-                  Approve
-                </button>
+                <div className="flex justify-center space-x-3">
+                  <button
+                    onClick={closeModals}
+                    className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-500 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleApprove(approveDonor.user_id)}
+                    className="px-6 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors flex items-center gap-2"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    Approve
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1141,41 +1353,66 @@ export default function Page() {
 
       {/* Delete Modal */}
       {deleteDonor && (
-        <div className="fixed inset-0 z-50 overflow-y-auto mt-[76px]">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div
               className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
               onClick={closeModals}
             ></div>
 
-            <div className="relative inline-block w-full max-w-md my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-2xl">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="relative inline-block w-full max-w-md my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-2xl rounded-2xl">
+              <div className="p-6 text-center">
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/20 mb-4">
+                  <svg
+                    className="h-6 w-6 text-red-600 dark:text-red-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   Confirm Deletion
                 </h3>
-              </div>
-
-              <div className="px-6 py-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                   Are you sure you want to delete the donor application from{' '}
                   <strong>{deleteDonor.contact_number}</strong>? This action
                   cannot be undone.
                 </p>
-              </div>
 
-              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 flex justify-end space-x-3">
-                <button
-                  onClick={closeModals}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-500"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleDelete(deleteDonor.user_id)}
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                >
-                  Delete
-                </button>
+                <div className="flex justify-center space-x-3">
+                  <button
+                    onClick={closeModals}
+                    className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-500 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleDelete(deleteDonor.user_id)}
+                    className="px-6 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors flex items-center gap-2"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           </div>
