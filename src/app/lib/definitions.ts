@@ -88,7 +88,7 @@ export type User = {
   remember_token: string;
   verification_photo: string;
   profile_photo_id: string;
-  profilePhoto?: Upload;
+  profilePhoto?: Upload; // i need this in navbar
   profile_photo: string;
   created_at: Date;
   updated_at: Date;

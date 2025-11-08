@@ -142,7 +142,14 @@ export default function Navbar() {
                           }}
                           className="flex items-center px-4 text-red-600 dark:text-red-300 rounded-lg hover:text-red-800 dark:hover:text-red-400 hover:cursor-pointer"
                         >
-                          {username}
+                          {user?.profilePhoto ? (
+                            <img
+                              src={`http://localhost:8000${user.profilePhoto.url}`}
+                              alt="Profile Photo"
+                              className="w-8 h-8 rounded-full"
+                            />
+                          ) : <>{username}</>
+                          }
                           <ChevronDown className="w-4 h-4 ml-1 inline text-gray-600 dark:text-gray-300" />
                         </button>
 
