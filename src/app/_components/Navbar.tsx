@@ -6,12 +6,14 @@ import { useAuth } from '../context/authInfo';
 import { ModeToggle } from './ModeToggle';
 import { Bell, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useFormattedUsername } from '@/hooks/useFormattedUsername';
 
 export default function Navbar() {
   const [IsOpen, SetIsOpen] = useState(false);
   const [navbarOpen, setNavbarOpen] = useState(false);
   const { user } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const username = useFormattedUsername(user?.name);
 
   const pathname = usePathname();
   const [currentPath, setCurrentPath] = useState(pathname);
@@ -140,8 +142,7 @@ export default function Navbar() {
                           }}
                           className="flex items-center px-4 text-red-600 dark:text-red-300 rounded-lg hover:text-red-800 dark:hover:text-red-400 hover:cursor-pointer"
                         >
-                          {user.name.split(' ')[0].charAt(0).toUpperCase() +
-                            user.name.split(' ')[0].slice(1).trim()}
+                          {username}
                           <ChevronDown className="w-4 h-4 ml-1 inline text-gray-600 dark:text-gray-300" />
                         </button>
 
@@ -180,13 +181,13 @@ export default function Navbar() {
 
           <div className="hidden md:flex">
             <div className="relative inline-block">
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="icon"
                 className="hover:cursor-pointer"
               >
                 <Bell className="h-6 w-6" />
-              </Button>
+              </Button> */}
               {/* {notificationCount > 0 && (
                                 <Badge
                                     variant="destructive" // Or any other suitable variant
