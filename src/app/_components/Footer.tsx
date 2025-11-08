@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Logo from './Logo';
 
 const Footer = () => {
   return (
@@ -9,18 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center mb-4">
-              <Image
-                width={50}
-                height={50}
-                src="/logo.png"
-                className="h-10 w-10 me-3"
-                alt="Blood Bank Logo"
-              />
-              <span className="self-center text-2xl font-bold whitespace-nowrap">
-                Blood Bank
-              </span>
-            </Link>
+            <Logo />
             <p className="text-red-100 text-sm mb-4 max-w-xs">
               Connecting blood donors with those in need. Your contribution can
               save lives.

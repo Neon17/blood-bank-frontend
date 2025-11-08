@@ -10,13 +10,13 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'Smart Blood Bank',
-    template: '%s | Smart Blood Bank',
+    default: 'Blood Bank',
+    template: '%s | Blood Bank',
   },
   description:
-    'Smart Blood Bank is a location-aware web application to find nearby blood donors, search blood requests, and notify top potential donors within a chosen radius.',
+    'Blood Bank is a location-aware web application to find nearby blood donors, search blood requests, and notify top potential donors within a chosen radius.',
   keywords: [
-    'smart blood bank',
+    'blood bank',
     'blood donation',
     'nextjs',
     'react',
@@ -28,18 +28,37 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Neon Neupane', url: 'https://yourportfolio.com' }],
   creator: 'Neon Neupane',
+  icons: {
+    icon: [
+      {
+        url: '/favicon.svg',
+        type: 'image/svg+xml',
+      },
+      {
+        url: '/favicon.ico',
+        sizes: 'any',
+      },
+    ],
+    apple: [
+      {
+        url: '/apple-touch-icon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
+    ],
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://smartbloodbank.com',
-    title: 'Smart Blood Bank',
+    title: 'Blood Bank',
     description:
       'Find nearby blood donors, search requests, and stay notified about urgent needs based on your location.',
-    siteName: 'Smart Blood Bank',
+    siteName: 'Blood Bank',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Smart Blood Bank',
+    title: 'Blood Bank',
     description:
       'Find nearby blood donors, search blood requests, and notify top donors in your area.',
     creator: '@neondev',
@@ -55,7 +74,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  metadataBase: new URL('https://smartbloodbank.com'),
+  metadataBase: new URL('https://blood-bank-frontend-sigma.vercel.app'),
 };
 
 export default function RootLayout({
