@@ -139,7 +139,7 @@ export default function DonorProfilePage() {
             profile and start saving lives.
           </p>
           <Link
-            href="/donor/application"
+            href="/donors/register"
             className="inline-flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg transition-colors font-medium"
           >
             <Edit3 className="w-4 h-4" />

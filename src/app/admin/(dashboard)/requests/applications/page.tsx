@@ -131,6 +131,10 @@ export default function Page() {
   const handleFilterSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     setCurrentPage(1); // Reset to first page when filtering
+    let search_text = document.getElementById(
+      'search_text_box123'
+    ) as HTMLInputElement;
+    updateFilter('search', search_text.value);
     fetchData({ ...filters, page: 1 });
   };
 
@@ -405,10 +409,9 @@ export default function Page() {
                 />
               </svg>
               <input
-                id="search"
+                id="search_text_box123"
                 type="text"
-                value={filters.search}
-                onChange={(e) => updateFilter('search', e.target.value)}
+                defaultValue={filters.search}
                 placeholder="Search by contact, location, name..."
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-500 dark:placeholder-gray-400"
               />

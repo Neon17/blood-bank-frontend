@@ -101,7 +101,7 @@ export default function Navbar() {
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       className="flex items-center space-x-2 p-2 rounded-lg hover:bg-red-500 dark:hover:bg-red-600 transition-colors"
                     >
-                      {user?.profilePhoto ? (
+                      {user?.profilePhoto?.url ? (
                         <img
                           src={`http://localhost:8000${user.profilePhoto.url}`}
                           alt="Profile"
