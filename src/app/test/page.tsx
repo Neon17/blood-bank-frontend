@@ -1,6 +1,6 @@
-"use client";
-import { useCallback, useEffect, useState } from "react";
-import { test } from "../lib/actions";
+'use client';
+import { useCallback, useEffect, useState } from 'react';
+import { test } from '../lib/actions';
 
 interface Data {
   status: string;
@@ -37,6 +37,6 @@ const Test = () => {
       </div>
     </>
   );
-}
+};
 
 export default Test;

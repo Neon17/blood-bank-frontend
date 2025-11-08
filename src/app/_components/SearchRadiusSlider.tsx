@@ -1,17 +1,18 @@
-"use client";
+'use client';
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from 'react';
 
 export default function SearchRadiusSlider(props: {
-  radius: number,
-  setRadius: Dispatch<SetStateAction<number>>
+  radius: number;
+  setRadius: Dispatch<SetStateAction<number>>;
 }) {
   const [radius, setRadius] = useState(props.radius || 1);
 
   return (
     <div className="w-full p-4">
       <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-        Search Radius: <span className="font-semibold">{radius.toString()}</span>km
+        Search Radius:{' '}
+        <span className="font-semibold">{radius.toString()}</span>km
       </label>
       <div className="flex items-center space-x-2">
         <span className="text-gray-600 dark:text-gray-400 text-sm">1km</span>

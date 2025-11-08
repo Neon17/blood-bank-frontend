@@ -1,15 +1,17 @@
-'use client'
+'use client';
 
 export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center text-black error-page">
-      <h1 className="text-4xl font-bold  dark:text-white">Something went wrong!</h1>
+      <h1 className="text-4xl font-bold  dark:text-white">
+        Something went wrong!
+      </h1>
       <p className="mt-4 text-lg  dark:text-white">{error.message}</p>
       <button
         onClick={() => reset()}
@@ -18,5 +20,5 @@ export default function Error({
         Try again
       </button>
     </main>
-  )
+  );
 }

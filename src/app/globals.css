@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -13,7 +13,7 @@
 }
 
 .not-found-page {
-  backdrop-filter: blur(10px);;
+  backdrop-filter: blur(10px);
 }
 
 .error-page {

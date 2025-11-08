@@ -1,9 +1,8 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
-
   eslint: {
     // Disable ESLint during builds (Vercel or local)
     ignoreDuringBuilds: true,
@@ -36,9 +35,9 @@ const nextConfig: NextConfig = {
             key: 'Access-Control-Allow-Headers',
             value: 'Content-Type, Authorization',
           },
-          { 
-            key: 'Access-Control-Allow-Credentials', 
-            value: 'true' 
+          {
+            key: 'Access-Control-Allow-Credentials',
+            value: 'true',
           },
         ],
       },

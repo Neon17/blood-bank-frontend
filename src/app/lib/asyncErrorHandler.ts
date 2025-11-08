@@ -1,9 +1,16 @@
-export function asyncErrorHandler<T extends (...args: any[]) => Promise<any>>(fn: T) {
-  return async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>> | {
-    status: 'error';
-    message: string;
-    errors?: any;
-  }> => {
+export function asyncErrorHandler<T extends (...args: any[]) => Promise<any>>(
+  fn: T
+) {
+  return async (
+    ...args: Parameters<T>
+  ): Promise<
+    | Awaited<ReturnType<T>>
+    | {
+        status: 'error';
+        message: string;
+        errors?: any;
+      }
+  > => {
     try {
       return await fn(...args);
     } catch (error: any) {
@@ -20,7 +27,7 @@ export function asyncErrorHandler<T extends (...args: any[]) => Promise<any>>(fn
         return {
           status: 'error',
           message: error.response.data.message || 'An error occurred',
-          errors: error.response.data.errors || null
+          errors: error.response.data.errors || null,
         };
       }
 

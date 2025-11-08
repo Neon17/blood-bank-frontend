@@ -1,22 +1,27 @@
-"use client";
-import dynamic from "next/dynamic";
-import { useAuth } from "../../context/authInfo";
+'use client';
+import dynamic from 'next/dynamic';
+import { useAuth } from '../../context/authInfo';
 
-const Sidebar = dynamic(() => import('../../_components/Sidebar'), { ssr: false });
+const Sidebar = dynamic(() => import('../../_components/Sidebar'), {
+  ssr: false,
+});
 
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { user } = useAuth();
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-    const { user } = useAuth();
-
-    return (
-        <div className="h-full w-full">
-            {user?.role && <Sidebar type={user.role} />}
-            {!user?.role && <Sidebar type="user" />}
-            <main className="min-h-screen w-full flex sm:justify-end justify-center pt-3">
-                <div className="md:[width:calc(100vw-256px)] w-full h-full p-3">
-                    {children}
-                </div>
-            </main>
+  return (
+    <div className="h-full w-full">
+      {user?.role && <Sidebar type={user.role} />}
+      {!user?.role && <Sidebar type="user" />}
+      <main className="min-h-screen w-full flex sm:justify-end justify-center pt-3">
+        <div className="md:[width:calc(100vw-256px)] w-full h-full p-3">
+          {children}
         </div>
-    );
+      </main>
+    </div>
+  );
 }

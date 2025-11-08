@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from "react";
-import * as L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import "leaflet-control-geocoder/dist/Control.Geocoder.css";
-import "leaflet-control-geocoder";
-import { ExactLocation as Location } from "../lib/definitions";
+import { useEffect, useRef, useState } from 'react';
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
+import 'leaflet-control-geocoder';
+import { ExactLocation as Location } from '../lib/definitions';
 
 type MapPickerProps = {
   location?: Location | null;
@@ -28,21 +28,21 @@ export default function MapPicker({
   locations = null,
   onChange,
   radius = 1,
-  height = "600px",
-  width = "100%",
+  height = '600px',
+  width = '100%',
 }: MapPickerProps) {
   const mapRef = useRef<any | null>(null);
   const markerRef = useRef<any | null>(null);
   const circleRef = useRef<any | null>(null);
   const donorMarkersRef = useRef<any[]>([]);
   const [mounted, setMounted] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const mapContainerId = "map-leaflet";
+  const mapContainerId = 'map-leaflet';
 
-  const KATHMANDU = { lat: 27.7172, lng: 85.3240 };
+  const KATHMANDU = { lat: 27.7172, lng: 85.324 };
 
   // Safely extract lat/lng from various shapes
   function toNumberLatLng(d: any): { lat: number; lng: number } | null {
@@ -72,7 +72,7 @@ export default function MapPicker({
       setSearchResults(data);
       setShowDropdown(true);
     } catch (error) {
-      console.error("Search failed:", error);
+      console.error('Search failed:', error);
       setSearchResults([]);
     } finally {
       setIsSearching(false);
@@ -90,20 +90,20 @@ export default function MapPicker({
   const handlePlaceSelect = (place: SearchResult) => {
     const lat = parseFloat(place.lat.toString());
     const lng = parseFloat(place.lon.toString());
-    
+
     // Move map to selected place
     if (mapRef.current) {
       mapRef.current.setView([lat, lng], 15);
     }
-    
+
     // Place focus marker
     placeFocusMarker(lat, lng);
-    
+
     // Extract city and country from display_name
     const addressParts = place.display_name.split(',');
-    const city = addressParts[0]?.trim() || "";
-    const country = addressParts[addressParts.length - 1]?.trim() || "";
-    
+    const city = addressParts[0]?.trim() || '';
+    const country = addressParts[addressParts.length - 1]?.trim() || '';
+
     // Call onChange with selected location
     onChange?.({
       lat,
@@ -112,9 +112,9 @@ export default function MapPicker({
       country,
       // label: place.display_name,
     } as Location);
-    
+
     // Clear search and close dropdown
-    setSearchQuery("");
+    setSearchQuery('');
     setSearchResults([]);
     setShowDropdown(false);
   };
@@ -129,8 +129,9 @@ export default function MapPicker({
              M15 10 A5 5 0 1 0 15 10.0001 Z"/>
       </svg>
     `;
-    const countDiv = (count && count > 1)
-      ? `<div style="
+    const countDiv =
+      count && count > 1
+        ? `<div style="
            position:absolute;
            top:-6px;
            right:-6px;
@@ -145,15 +146,15 @@ export default function MapPicker({
            justify-content:center;
            box-shadow:0 0 0 1px rgba(0,0,0,0.1);
          ">${count}</div>`
-      : "";
+        : '';
 
     return `<div style="position:relative; width:30px; height:40px; display:inline-block;">${svg}${countDiv}</div>`;
   }
 
   const redIcon = (count?: number) =>
     L.divIcon({
-      className: "custom-div-icon",
-      html: markerSvg("#ef4444", count),
+      className: 'custom-div-icon',
+      html: markerSvg('#ef4444', count),
       iconSize: [30, 40],
       iconAnchor: [15, 40],
       popupAnchor: [0, -40],
@@ -161,8 +162,8 @@ export default function MapPicker({
 
   const blueIcon = (count?: number) =>
     L.divIcon({
-      className: "custom-div-icon",
-      html: markerSvg("#2563eb", count),
+      className: 'custom-div-icon',
+      html: markerSvg('#2563eb', count),
       iconSize: [30, 40],
       iconAnchor: [15, 40],
       popupAnchor: [0, -40],
@@ -180,7 +181,10 @@ export default function MapPicker({
     clearDonorMarkers();
     if (!donors || donors.length === 0) return;
 
-    const grouped = new Map<string, { original: Location; lat: number; lng: number }[]>();
+    const grouped = new Map<
+      string,
+      { original: Location; lat: number; lng: number }[]
+    >();
     donors.forEach((d) => {
       const coords = toNumberLatLng(d as any);
       if (!coords) return;
@@ -195,37 +199,43 @@ export default function MapPicker({
       const lat = first.lat;
       const lng = first.lng;
 
-      const m = L.marker([lat, lng], { icon: blueIcon(count) }).addTo(mapRef.current);
+      const m = L.marker([lat, lng], { icon: blueIcon(count) }).addTo(
+        mapRef.current
+      );
 
       // tooltip when label exists
       const labelObj = (first.original as any).label;
       if (labelObj !== undefined && labelObj !== null) {
-        let tooltipHtml = "";
-        if (typeof labelObj === "string" || typeof labelObj === "number") {
+        let tooltipHtml = '';
+        if (typeof labelObj === 'string' || typeof labelObj === 'number') {
           tooltipHtml = String(labelObj);
-        } else if (typeof labelObj === "object") {
+        } else if (typeof labelObj === 'object') {
           tooltipHtml = Object.entries(labelObj)
-            .map(([k, v]) => `<div style="white-space:nowrap;">${k}: ${String(v)}</div>`)
-            .join("");
+            .map(
+              ([k, v]) =>
+                `<div style="white-space:nowrap;">${k}: ${String(v)}</div>`
+            )
+            .join('');
         } else {
           tooltipHtml = String(labelObj);
         }
-        m.bindTooltip(tooltipHtml, { 
-          direction: "top", 
-          offset: [0, -10], 
-          className: "donor-tooltip dark:bg-gray-800 dark:text-white dark:border-gray-600" 
+        m.bindTooltip(tooltipHtml, {
+          direction: 'top',
+          offset: [0, -10],
+          className:
+            'donor-tooltip dark:bg-gray-800 dark:text-white dark:border-gray-600',
         });
       }
 
       // clicking blue marker sets focus marker + emits onChange
-      m.on("click", () => {
+      m.on('click', () => {
         // set red focus marker at this location
         placeFocusMarker(lat, lng);
         onChange?.({
           lat,
           lng,
-          city: (first.original as any).city ?? "",
-          country: (first.original as any).country ?? "",
+          city: (first.original as any).city ?? '',
+          country: (first.original as any).country ?? '',
           label: (first.original as any).label,
         } as Location);
       });
@@ -243,7 +253,9 @@ export default function MapPicker({
       markerRef.current.setLatLng([lat, lng]);
       if (markerRef.current.setIcon) markerRef.current.setIcon(redIcon());
     } else {
-      markerRef.current = L.marker([lat, lng], { icon: redIcon() }).addTo(mapRef.current);
+      markerRef.current = L.marker([lat, lng], { icon: redIcon() }).addTo(
+        mapRef.current
+      );
     }
 
     // circle: create or move + set radius
@@ -254,8 +266,8 @@ export default function MapPicker({
     } else {
       circleRef.current = L.circle([lat, lng], {
         radius: rMeters,
-        color: "red",
-        fillColor: "#f03",
+        color: 'red',
+        fillColor: '#f03',
         fillOpacity: 0.25,
       }).addTo(mapRef.current);
     }
@@ -263,14 +275,14 @@ export default function MapPicker({
 
   // init (client only)
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     setMounted(true);
 
     // set leaflet default icon paths (if you serve these assets)
     L.Icon.Default.mergeOptions({
-      iconUrl: "/leaflet/marker-icon.png",
-      shadowUrl: "/leaflet/marker-shadow.png",
-      iconRetinaUrl: "/leaflet/marker-icon-2x.png",
+      iconUrl: '/leaflet/marker-icon.png',
+      shadowUrl: '/leaflet/marker-shadow.png',
+      iconRetinaUrl: '/leaflet/marker-icon-2x.png',
     });
   }, []);
 
@@ -278,15 +290,22 @@ export default function MapPicker({
   useEffect(() => {
     if (!mounted || mapRef.current) return;
 
-    const initialCenter = location ? (toNumberLatLng(location) ?? KATHMANDU) : KATHMANDU;
-    const map = L.map(mapContainerId, { zoomControl: true }).setView([initialCenter.lat, initialCenter.lng], 13);
+    const initialCenter = location
+      ? (toNumberLatLng(location) ?? KATHMANDU)
+      : KATHMANDU;
+    const map = L.map(mapContainerId, { zoomControl: true }).setView(
+      [initialCenter.lat, initialCenter.lng],
+      13
+    );
     mapRef.current = map;
 
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(map);
 
     // Add custom zoom control with dark mode support
     const zoomControl = L.control.zoom({
-      position: 'topright'
+      position: 'topright',
     });
     zoomControl.addTo(map);
 
@@ -295,22 +314,32 @@ export default function MapPicker({
       const zoomIn = document.querySelector('.leaflet-control-zoom-in');
       const zoomOut = document.querySelector('.leaflet-control-zoom-out');
       if (zoomIn) {
-        zoomIn.classList.add('dark:bg-gray-800', 'dark:text-white', 'dark:border-gray-600', 'dark:hover:bg-gray-700');
+        zoomIn.classList.add(
+          'dark:bg-gray-800',
+          'dark:text-white',
+          'dark:border-gray-600',
+          'dark:hover:bg-gray-700'
+        );
       }
       if (zoomOut) {
-        zoomOut.classList.add('dark:bg-gray-800', 'dark:text-white', 'dark:border-gray-600', 'dark:hover:bg-gray-700');
+        zoomOut.classList.add(
+          'dark:bg-gray-800',
+          'dark:text-white',
+          'dark:border-gray-600',
+          'dark:hover:bg-gray-700'
+        );
       }
     }, 100);
 
     // clicking on map places focus marker and emits onChange
-    map.on("click", (e: any) => {
+    map.on('click', (e: any) => {
       const { lat, lng } = e.latlng;
       placeFocusMarker(lat, lng);
       onChange?.({
         lat,
         lng,
-        city: "",
-        country: "",
+        city: '',
+        country: '',
       } as Location);
     });
 
@@ -383,7 +412,7 @@ export default function MapPicker({
   }, [radius]);
 
   if (!mounted) return null;
-  
+
   return (
     <div className="relative" style={{ width, height }}>
       {/* Search Box */}
@@ -396,7 +425,7 @@ export default function MapPicker({
           placeholder="Search for a place..."
           className="w-full px-3 py-2 border-0 rounded-lg bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-0 text-sm"
         />
-        
+
         {/* Search Results Dropdown */}
         {showDropdown && (
           <div className="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-b-lg shadow-lg max-h-48 overflow-y-auto z-[1001]">
@@ -422,7 +451,7 @@ export default function MapPicker({
           </div>
         )}
       </div>
-      
+
       {/* Map Container */}
       <div id={mapContainerId} className="w-full h-full" />
     </div>

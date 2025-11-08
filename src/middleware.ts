@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 // Simple route definitions
 const protectedRoutes = ['/dashboard', '/profile', '/admin'];
@@ -9,8 +9,10 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('auth_token')?.value;
 
-  const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
-  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
 
   if (isAuthRoute && token) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
@@ -30,6 +32,6 @@ export const config = {
     '/profile/:path*',
     '/admin/:path*',
     '/login',
-    '/signup'
-  ]
+    '/signup',
+  ],
 };

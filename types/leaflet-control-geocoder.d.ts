@@ -1,7 +1,7 @@
 // types/leaflet-control-geocoder.d.ts
-import * as L from "leaflet";
+import * as L from 'leaflet';
 
-declare module "leaflet" {
+declare module 'leaflet' {
   namespace Control {
     function geocoder(options?: GeocoderOptions): Geocoder;
 
@@ -10,7 +10,7 @@ declare module "leaflet" {
     }
 
     interface Geocoder extends L.Control {
-      on(type: "markgeocode", fn: (event: GeocoderEvent) => void): this;
+      on(type: 'markgeocode', fn: (event: GeocoderEvent) => void): this;
     }
 
     interface GeocoderEvent {

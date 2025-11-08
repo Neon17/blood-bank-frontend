@@ -6,13 +6,13 @@ import { useRouter } from 'next/navigation';
 import { updateProfile } from '@/app/lib/actions';
 import dynamic from 'next/dynamic';
 
-const MapPicker = dynamic(() => import("@/app/_components/MapPicker"), { 
+const MapPicker = dynamic(() => import('@/app/_components/MapPicker'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse flex items-center justify-center">
       <span className="text-gray-500">Loading map...</span>
     </div>
-  )
+  ),
 });
 
 type FormErrors = {
@@ -21,14 +21,14 @@ type FormErrors = {
   address?: string;
   dob?: string;
   blood_group?: string;
-}
+};
 
 export default function EditProfilePage() {
   const { user } = useAuth();
   const router = useRouter();
   const [location, setLocation] = useState({
     lat: 27.7172,
-    lng: 85.3240,
+    lng: 85.324,
     city: 'Kathmandu',
     country: 'Nepal',
   });
@@ -55,26 +55,26 @@ export default function EditProfilePage() {
     setErrors({});
 
     const formData = new FormData(e.currentTarget);
-    formData.append("city", location.city);
-    formData.append("country", location.country);
-    formData.append("lat", location.lat.toString());
-    formData.append("lng", location.lng.toString());
+    formData.append('city', location.city);
+    formData.append('country', location.country);
+    formData.append('lat', location.lat.toString());
+    formData.append('lng', location.lng.toString());
 
     try {
       const response = await updateProfile(formData);
 
-      if ("message" in response) {
-        if (response.status === "error") {
-            setError(response.message || "Failed to update profile");
-            setErrors(response.errors || {});
+      if ('message' in response) {
+        if (response.status === 'error') {
+          setError(response.message || 'Failed to update profile');
+          setErrors(response.errors || {});
         }
       } else {
         setSuccess(true);
         setTimeout(() => router.push('/profile'), 1500);
       }
     } catch (err) {
-      setError("An unexpected error occurred");
-      console.error("Profile update error:", err);
+      setError('An unexpected error occurred');
+      console.error('Profile update error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -85,7 +85,9 @@ export default function EditProfilePage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading profile...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
+            Loading profile...
+          </p>
         </div>
       </div>
     );
@@ -108,8 +110,16 @@ export default function EditProfilePage() {
         {error && (
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
             <div className="flex items-center">
-              <svg className="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              <svg
+                className="w-5 h-5 text-red-500 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
               </svg>
               <p className="text-red-800 dark:text-red-200">{error}</p>
             </div>
@@ -119,10 +129,20 @@ export default function EditProfilePage() {
         {success && (
           <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
             <div className="flex items-center">
-              <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              <svg
+                className="w-5 h-5 text-green-500 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
               </svg>
-              <p className="text-green-800 dark:text-green-200">Profile updated successfully! Redirecting...</p>
+              <p className="text-green-800 dark:text-green-200">
+                Profile updated successfully! Redirecting...
+              </p>
             </div>
           </div>
         )}
@@ -134,7 +154,10 @@ export default function EditProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Name */}
                 <div className="space-y-2">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -145,12 +168,17 @@ export default function EditProfilePage() {
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-colors"
                     required
                   />
-                  {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+                  {errors.name && (
+                    <p className="text-red-500 text-sm">{errors.name}</p>
+                  )}
                 </div>
 
                 {/* Email */}
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -161,12 +189,17 @@ export default function EditProfilePage() {
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-colors"
                     required
                   />
-                  {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">{errors.email}</p>
+                  )}
                 </div>
 
                 {/* Blood Group */}
                 <div className="space-y-2">
-                  <label htmlFor="blood_group" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    htmlFor="blood_group"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Blood Group <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -185,27 +218,37 @@ export default function EditProfilePage() {
                     <option value="O+">O+</option>
                     <option value="O-">O-</option>
                   </select>
-                  {errors.blood_group && <p className="text-red-500 text-sm">{errors.blood_group}</p>}
+                  {errors.blood_group && (
+                    <p className="text-red-500 text-sm">{errors.blood_group}</p>
+                  )}
                 </div>
 
                 {/* Date of Birth */}
                 <div className="space-y-2">
-                  <label htmlFor="dob" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    htmlFor="dob"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Date of Birth <span className="text-red-500">*</span>
                   </label>
                   <input
                     id="dob"
                     name="dob"
                     type="date"
-                    defaultValue={user.dob?.toString().split("T")[0]}
+                    defaultValue={user.dob?.toString().split('T')[0]}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-colors"
                   />
-                  {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
+                  {errors.dob && (
+                    <p className="text-red-500 text-sm">{errors.dob}</p>
+                  )}
                 </div>
 
                 {/* Address */}
                 <div className="md:col-span-2 space-y-2">
-                  <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    htmlFor="address"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Address
                   </label>
                   <input
@@ -216,13 +259,16 @@ export default function EditProfilePage() {
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-colors"
                     placeholder="Enter your complete address"
                   />
-                  {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
+                  {errors.address && (
+                    <p className="text-red-500 text-sm">{errors.address}</p>
+                  )}
                 </div>
 
                 {/* Will Donate */}
                 <div className="md:col-span-2 space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Willing to Donate Blood? <span className="text-red-500">*</span>
+                    Willing to Donate Blood?{' '}
+                    <span className="text-red-500">*</span>
                   </label>
                   <div className="flex gap-6 mt-2">
                     <label className="flex items-center space-x-2 cursor-pointer">
@@ -233,7 +279,9 @@ export default function EditProfilePage() {
                         defaultChecked={user.will_donate === true}
                         className="w-4 h-4 text-red-500 border-gray-300 focus:ring-red-500"
                       />
-                      <span className="text-gray-700 dark:text-gray-300">Yes, I'm willing to donate</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        Yes, I'm willing to donate
+                      </span>
                     </label>
                     <label className="flex items-center space-x-2 cursor-pointer">
                       <input
@@ -243,7 +291,9 @@ export default function EditProfilePage() {
                         defaultChecked={user.will_donate === false}
                         className="w-4 h-4 text-red-500 border-gray-300 focus:ring-red-500"
                       />
-                      <span className="text-gray-700 dark:text-gray-300">No, not at this time</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        No, not at this time
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -252,16 +302,20 @@ export default function EditProfilePage() {
               {/* Location Section */}
               <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Your Location <span className="text-red-500 text-sm font-normal">(within 1km range for blood requests)</span>
+                  Your Location{' '}
+                  <span className="text-red-500 text-sm font-normal">
+                    (within 1km range for blood requests)
+                  </span>
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                  Set your current location to receive blood requests in your area
+                  Set your current location to receive blood requests in your
+                  area
                 </p>
                 <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
-                  <MapPicker 
-                    width='100%' 
-                    location={location} 
-                    onChange={setLocation} 
+                  <MapPicker
+                    width="100%"
+                    location={location}
+                    onChange={setLocation}
                   />
                 </div>
               </div>
