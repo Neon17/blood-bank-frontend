@@ -91,8 +91,10 @@ async function _updateProfile(formData: FormData) {
   return data;
 }
 
+// post is used instead of put/patch because we need to send the image
 async function _updateProfilePhoto(formData: FormData) {
-  const response = await api.patch('/profile/photo/update', formData);
+  formData.append('_method', 'POST');
+  const response = await api.post('/profile/photo/update', formData);
   const data: {
     status: string;
     data: User;

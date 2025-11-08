@@ -148,9 +148,13 @@ export default function Navbar() {
                               alt="Profile Photo"
                               className="w-8 h-8 rounded-full"
                             />
-                          ) : <>{username}</>
-                          }
-                          <ChevronDown className="w-4 h-4 ml-1 inline text-gray-600 dark:text-gray-300" />
+                          ) : (
+                            <>{username}</>
+                          )}
+                          <ChevronDown
+                            className="w-4 h-4 ml-1 inline text-gray-600 dark:text-gray-300"
+                            size={20}
+                          />
                         </button>
 
                         {IsOpen && (
