@@ -48,6 +48,15 @@ export default function Sidebar(props: { type: string }) {
         { href: "/admin/users", label: "Users" },
         { href: "/settings", label: "Settings" },
     ]
+    const bloodBankNavLinks = [
+        { href: "/dashboard", label: "Home" },
+        { href: "/profile", label: "Profile", activeOn: ["/profile", "/profile/edit"] },
+        { href: "/contacts", label: "Donor Profile" },
+        { href: "/donations", label: "Donations" },
+        { href: "/admin/donors/applications", label: "Donor Application" },
+        { href: "/admin/requests/applications", label: "Request Application", activeOn: ["/admin/requests/applications", "/admin/requests"] },
+        { href: "/settings", label: "Settings" },
+    ]
 
 
     const isActive = (href: string, activeOn?: string[]) =>
@@ -69,7 +78,7 @@ export default function Sidebar(props: { type: string }) {
             >
                 <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Smart Blood Bank</h2>
                 <nav className="space-y-4">
-                    {((props.type == "admin") ? adminNavLinks : userNavLinks).map(({ href, label, activeOn }) => (
+                    {(props.type === "user" ? userNavLinks : props.type === "admin" ? adminNavLinks : bloodBankNavLinks).map(({ href, label, activeOn }) => (
                         <Link
                             key={href}
                             href={href}
@@ -83,9 +92,6 @@ export default function Sidebar(props: { type: string }) {
                         </Link>
                     ))}
                 </nav>
-                <div className="button-holder my-5">
-                    <button className="p-3 m-3 bg-red-600 hover:bg-red-400 text-white rounded-md cursor-pointer">Chat</button>
-                </div>
             </aside>
         </div>
     );

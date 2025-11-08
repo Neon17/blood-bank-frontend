@@ -32,6 +32,7 @@ export default function Requests() {
     const [data, setData] = useState<BloodRequest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchRadius, setSearchRadius] = useState<number>(1);
+    const [searchBloodType, setSearchBloodType] = useState<string>('');
     const [location, setLocation] = useState<ExactLocation>({
         lat: 27.7172,
         lng: 85.3240,
@@ -95,7 +96,8 @@ export default function Requests() {
             latitude: location.lat,
             longitude: location.lng,
             radius: searchRadius,
-            page: currentPage
+            page: currentPage,
+            blood_type: searchBloodType
         };
 
         try {
@@ -233,7 +235,7 @@ export default function Requests() {
                     </div>
 
                     {/* Header Section */}
-                    <div className="sticky top-0 bg-white dark:bg-gray-900 p-6 border-b border-gray-200 dark:border-gray-700 z-10 shadow-sm">
+                    <div className="bg-white dark:bg-gray-900 p-6 border-b border-gray-200 dark:border-gray-700 z-10 shadow-sm">
 
 
                         <Link
@@ -251,6 +253,28 @@ export default function Requests() {
 
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
+                                    <label htmlFor="bloodType" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Blood Group
+                                    </label>
+                                    <select
+                                        id="bloodType"
+                                        value={searchBloodType}
+                                        onChange={(e) => setSearchBloodType(e.target.value)}
+                                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
+                                    >
+                                        <option value="">Select Blood Group</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                </div>
+
+                                <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Search Radius: {searchRadius} km
                                     </label>
@@ -262,7 +286,7 @@ export default function Requests() {
                                     disabled={isLoading}
                                     className="w-full px-4 py-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
                                 >
-                                    {isLoading ? "Searching..." : "Search Requests"}
+                                    {isLoading ? "Searching..." : "Search Donors"}
                                 </button>
                             </form>
                         </div>

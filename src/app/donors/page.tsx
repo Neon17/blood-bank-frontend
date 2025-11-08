@@ -230,7 +230,7 @@ export default function Donors() {
                     </div>
 
                     {/* Search Header */}
-                    <div className="sticky top-0 bg-white dark:bg-gray-900 p-6 border-b border-gray-200 dark:border-gray-700 z-10 shadow-sm">
+                    <div className="bg-white dark:bg-gray-900 p-6 border-b border-gray-200 dark:border-gray-700 z-10 shadow-sm">
                         <Link
                             href="/donors/register"
                             className="inline-flex items-center justify-center px-4 py-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg transition-colors duration-200 focus:outline-none"

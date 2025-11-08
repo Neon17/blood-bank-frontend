@@ -10,7 +10,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     return (
         <div className="h-full w-full">
-            <Sidebar type="admin" />
+            {user?.role && <Sidebar type={user.role} />}
+            {!user?.role && <Sidebar type="user" />}
             <main className="min-h-screen w-full flex sm:justify-end justify-center pt-3">
                 <div className="md:[width:calc(100vw-256px)] w-full h-full p-3">
                     {children}
