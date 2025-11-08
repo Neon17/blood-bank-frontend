@@ -2,24 +2,17 @@
 
 import { useAuth } from '../../context/authInfo';
 import { useEffect, useState } from 'react';
-import {
-  Heart,
-  Users,
-  MapPin,
-  Droplets,
-  AlertCircle,
-  Calendar,
-} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Users, MapPin, AlertCircle, Search, UserPlus } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const [stats, setStats] = useState({
-    totalDonations: 0,
-    livesImpacted: 0,
     nearbyRequests: 0,
     nearbyDonors: 0,
-    upcomingAppointments: 0,
-    emergencyAlerts: 0,
+    myRequests: 0,
+    activeDonors: 0,
   });
 
   useEffect(() => {
@@ -27,59 +20,78 @@ export default function DashboardPage() {
     const fetchStats = async () => {
       // Replace with actual API calls
       setStats({
-        totalDonations: 8,
-        livesImpacted: 24,
         nearbyRequests: 2,
         nearbyDonors: 3,
-        upcomingAppointments: 1,
-        emergencyAlerts: 1,
+        myRequests: 1,
+        activeDonors: 15,
       });
     };
     fetchStats();
   }, []);
 
-  const statCards = [
+  const quickActions = [
     {
-      label: 'Total Donations',
-      value: stats.totalDonations,
-      color: 'red',
-      icon: Droplets,
-      description: 'Lifetime donations',
+      label: 'Find Donors',
+      icon: Search,
+      color: 'blue',
+      description: 'Search for available donors',
+      route: '/donors',
     },
     {
-      label: 'Lives Impacted',
-      value: stats.livesImpacted,
+      label: 'Register as Donor',
+      icon: UserPlus,
       color: 'green',
-      icon: Heart,
-      description: "People you've helped",
+      description: 'Become a blood donor',
+      route: '/donors/register',
     },
+    {
+      label: 'Find Requests',
+      icon: MapPin,
+      color: 'orange',
+      description: 'See blood requests nearby',
+      route: '/requests',
+    },
+    {
+      label: 'Create Request',
+      icon: AlertCircle,
+      color: 'red',
+      description: 'Post a blood requirement',
+      route: '/requests/create',
+    },
+  ];
+
+  const statCards = [
     {
       label: 'Nearby Requests',
       value: stats.nearbyRequests,
       color: 'orange',
       icon: AlertCircle,
-      description: 'Within 10km radius',
+      description: 'Blood requests in your area',
+      route: '/requests',
     },
     {
-      label: 'Nearby Donors',
+      label: 'Available Donors',
       value: stats.nearbyDonors,
       color: 'blue',
       icon: Users,
-      description: 'Available in your area',
+      description: 'Donors near you',
+      route: '/donors',
     },
     {
-      label: 'Upcoming Appointments',
-      value: stats.upcomingAppointments,
-      color: 'purple',
-      icon: Calendar,
-      description: 'Scheduled donations',
-    },
-    {
-      label: 'Emergency Alerts',
-      value: stats.emergencyAlerts,
-      color: 'yellow',
+      label: 'My Requests',
+      value: stats.myRequests,
+      color: 'red',
       icon: AlertCircle,
-      description: 'Urgent needs',
+      description: 'Your blood requests',
+      route: '/requests',
+    },
+    {
+      label: 'Active Donors',
+      value: stats.activeDonors,
+      color: 'green',
+      icon: Users,
+      description: 'Total registered donors',
+      route: '/donors',
     },
   ];
 
@@ -92,10 +104,12 @@ export default function DashboardPage() {
       blue: 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600',
       purple:
         'border-purple-500 bg-purple-50 dark:bg-purple-900/20 text-purple-600',
-      yellow:
-        'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600',
     };
     return colors[color as keyof typeof colors] || colors.blue;
+  };
+
+  const handleNavigation = (route: string) => {
+    router.push(route);
   };
 
   return (
@@ -103,71 +117,78 @@ export default function DashboardPage() {
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-red-500 to-red-600 rounded-2xl p-6 text-white">
         <h1 className="text-3xl font-bold mb-2">
-          Welcome back, {user?.name || 'Donor'}! 👋
+          Welcome back, {user?.name || 'User'}! 👋
         </h1>
         <p className="text-red-100 opacity-90">
-          Ready to save lives today? Check nearby blood requests or schedule
-          your next donation.
+          Ready to save lives today? Find donors, create requests, or register
+          as a donor.
         </p>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <button className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-          <div className="text-center">
-            <MapPin className="w-8 h-8 text-red-500 mx-auto mb-2" />
-            <span className="text-sm font-medium">Find Requests</span>
-          </div>
-        </button>
-        <button className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-          <div className="text-center">
-            <Calendar className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-            <span className="text-sm font-medium">Schedule</span>
-          </div>
-        </button>
-        <button className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-          <div className="text-center">
-            <Heart className="w-8 h-8 text-green-500 mx-auto mb-2" />
-            <span className="text-sm font-medium">My Impact</span>
-          </div>
-        </button>
-        <button className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-          <div className="text-center">
-            <Users className="w-8 h-8 text-purple-500 mx-auto mb-2" />
-            <span className="text-sm font-medium">Community</span>
-          </div>
-        </button>
+      <div>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+          Quick Actions
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {quickActions.map(
+            ({ label, icon: Icon, color, description, route }) => (
+              <button
+                key={label}
+                onClick={() => handleNavigation(route)}
+                className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer"
+              >
+                <div className="text-center">
+                  <div
+                    className={`p-3 rounded-full ${getColorClasses(color)} bg-opacity-20 inline-flex mb-3`}
+                  >
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <span className="text-sm font-medium block mb-1">
+                    {label}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {description}
+                  </span>
+                </div>
+              </button>
+            )
+          )}
+        </div>
       </div>
 
       {/* Statistics Grid */}
       <div>
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-          Your Impact Overview
+          Overview
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {statCards.map(({ label, value, color, icon: Icon, description }) => (
-            <div
-              key={label}
-              className={`rounded-2xl shadow-sm p-6 bg-white dark:bg-gray-800 border-l-4 ${getColorClasses(color)} transition-transform hover:scale-105 duration-200`}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
-                    {label}
-                  </p>
-                  <p className="text-3xl font-bold mb-2">{value}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {description}
-                  </p>
-                </div>
-                <div
-                  className={`p-3 rounded-full ${getColorClasses(color)} bg-opacity-20`}
-                >
-                  <Icon className="w-6 h-6" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {statCards.map(
+            ({ label, value, color, icon: Icon, description, route }) => (
+              <div
+                key={label}
+                onClick={() => handleNavigation(route)}
+                className={`rounded-2xl shadow-sm p-6 bg-white dark:bg-gray-800 border-l-4 ${getColorClasses(color)} transition-transform hover:scale-105 duration-200 cursor-pointer hover:shadow-md`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
+                      {label}
+                    </p>
+                    <p className="text-3xl font-bold mb-2">{value}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {description}
+                    </p>
+                  </div>
+                  <div
+                    className={`p-3 rounded-full ${getColorClasses(color)} bg-opacity-20`}
+                  >
+                    <Icon className="w-6 h-6" />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </div>
 
@@ -177,21 +198,39 @@ export default function DashboardPage() {
           Recent Activity
         </h3>
         <div className="space-y-3">
-          <div className="flex items-center space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-            <Heart className="w-5 h-5 text-green-500" />
+          <div
+            onClick={() => handleNavigation('/donors')}
+            className="flex items-center space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 cursor-pointer transition-colors"
+          >
+            <UserPlus className="w-5 h-5 text-green-500" />
             <div>
-              <p className="font-medium text-sm">Donation Completed</p>
+              <p className="font-medium text-sm">Donor Registered</p>
               <p className="text-xs text-gray-600 dark:text-gray-400">
-                2 days ago at City Blood Bank
+                New donor registered in your area 2 days ago
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+          <div
+            onClick={() => handleNavigation('/donors')}
+            className="flex items-center space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 cursor-pointer transition-colors"
+          >
             <Users className="w-5 h-5 text-blue-500" />
             <div>
-              <p className="font-medium text-sm">New Request Nearby</p>
+              <p className="font-medium text-sm">New Donor Available</p>
               <p className="text-xs text-gray-600 dark:text-gray-400">
-                Blood type O+ needed within 5km
+                Blood type O+ donor registered nearby
+              </p>
+            </div>
+          </div>
+          <div
+            onClick={() => handleNavigation('/requests')}
+            className="flex items-center space-x-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/30 cursor-pointer transition-colors"
+          >
+            <AlertCircle className="w-5 h-5 text-orange-500" />
+            <div>
+              <p className="font-medium text-sm">New Request Created</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                You posted a blood request yesterday
               </p>
             </div>
           </div>

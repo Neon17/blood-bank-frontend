@@ -131,12 +131,14 @@ export default function Navbar() {
                         </div>
                         <Link
                           href="/profile"
+                          onClick={() => setIsDropdownOpen(false)}
                           className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                         >
                           👤 Profile
                         </Link>
                         <Link
                           href="/dashboard"
+                          onClick={() => setIsDropdownOpen(false)}
                           className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                         >
                           📊 Dashboard
@@ -144,6 +146,7 @@ export default function Navbar() {
                         <div className="border-t border-red-100 dark:border-red-900 mt-1">
                           <a
                             href="/logout"
+                            onClick={() => setIsDropdownOpen(false)}
                             className="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                           >
                             🚪 Logout
