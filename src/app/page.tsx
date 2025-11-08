@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -18,12 +19,12 @@ export default function Home() {
               Join our community of life-savers. Your donation can make a difference.
             </p>
             <div className="flex gap-4">
-              <button className="bg-red-600 text-white px-3 py-2 md:px-6 md:py-3 rounded shadow hover:bg-red-700 transition">
+              <Link href={`/signup`} className="bg-red-600 text-white px-3 py-2 md:px-6 md:py-3 rounded shadow hover:bg-red-700 transition">
                 Become a Donor
-              </button>
-              <button className="border border-red-500 text-red-600 dark:text-red-400 px-3 py-2 md:px-6 md:py-3 rounded hover:bg-red-100 hover:dark:bg-gray-700 hover:cursor-pointer transition">
+              </Link>
+              <Link href={`/donors`} className="border border-red-500 text-red-600 dark:text-red-400 px-3 py-2 md:px-6 md:py-3 rounded hover:bg-red-100 hover:dark:bg-gray-700 hover:cursor-pointer transition">
                 Find Donors
-              </button>
+              </Link>
             </div>
           </div>
 
