@@ -3,16 +3,23 @@ import { useAuth } from '@/app/context/authInfo';
 import { signUp } from '@/app/lib/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 
 export default function Signup() {
     const { setUser, setIsLoggedIn } = useAuth();
     const router = useRouter();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string | string[] }>({});
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        if (isAuthenticated) router.push('/dashboard');
+    }, [isAuthenticated])
+
     const handleSubmit = async (formData: FormData) => {
+        setIsLoading(true);
         const password = formData.get('password') as string;
         const confirmPassword = formData.get('confirmPassword') as string;
 
@@ -46,13 +53,15 @@ export default function Signup() {
                 ) as { [key: string]: string[] };
 
                 setErrors(errorObject);
+                setIsLoading(false);
             }
         }
         else {
             if ("user" in data && data?.user) {
                 setUser(data?.user);
                 setIsLoggedIn(true);
-                router.push('/dashboard');
+                setIsAuthenticated(true);
+                setIsLoading(false);
             }
         }
     }
@@ -103,11 +112,22 @@ export default function Signup() {
                         {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
                     </div>
                     <button type="submit" className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 hover:cursor-pointer text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Submit</button>
-                    <div className="flex justify-center py-2">
+                    {!isLoading && <div className="flex justify-center py-2">
                         <p className="newtothiswebsite content-center ps-1">Already have an account?
                             <Link href='/login' className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200 ps-1">Login</Link>
                         </p>
-                    </div>
+                    </div> }
+                    {isLoading &&
+                        <div className="flex flex-col items-center justify-center space-y-3 py-4">
+                            <div className="relative">
+                                <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-100 border-t-red-600"></div>
+                                <div className="absolute inset-0 animate-ping rounded-full h-12 w-12 border-4 border-red-200 opacity-75"></div>
+                            </div>
+                            <p className="text-gray-600 dark:text-gray-400 text-sm font-medium animate-pulse">
+                                Signing up...
+                            </p>
+                        </div>
+                    }
                 </form>
 
             </div>
