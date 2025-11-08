@@ -39,7 +39,9 @@ export default function DonationsPage() {
 
   const [viewDonation, setViewDonation] = useState<Donation | null>(null);
   const [editDonation, setEditDonation] = useState<Donation | null>(null);
-  const [deleteDonationState, setDeleteDonation] = useState<Donation | null>(null);
+  const [deleteDonationState, setDeleteDonation] = useState<Donation | null>(
+    null
+  );
   const [approveDonation, setApproveDonation] = useState<Donation | null>(null);
 
   const [location, setLocation] = useState<ExactLocation>({
@@ -196,7 +198,7 @@ export default function DonationsPage() {
       });
       res = await updateDonation(updateData.id.toString(), formData);
     }
-    
+
     if (res && 'message' in res) setError(res.message);
     else {
       setEditDonation(null);
@@ -228,7 +230,9 @@ export default function DonationsPage() {
   };
 
   const handleEditChange = async (
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    event: ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value, type } = event.target;
 
@@ -940,7 +944,7 @@ export default function DonationsPage() {
                   </div>
                 </div>
 
-                {(viewDonation.latitude && viewDonation.longitude) && (
+                {viewDonation.latitude && viewDonation.longitude && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Location
@@ -1068,7 +1072,13 @@ export default function DonationsPage() {
                     <input
                       type="date"
                       name="date_time"
-                      value={editDonation.date_time ? new Date(editDonation.date_time).toISOString().split('T')[0] : ''}
+                      value={
+                        editDonation.date_time
+                          ? new Date(editDonation.date_time)
+                              .toISOString()
+                              .split('T')[0]
+                          : ''
+                      }
                       onChange={handleEditChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     />
@@ -1196,8 +1206,8 @@ export default function DonationsPage() {
               <div className="px-6 py-4">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Are you sure you want to delete the donation from{' '}
-                  <strong>{deleteDonationState.contact_name}</strong>? This action
-                  cannot be undone.
+                  <strong>{deleteDonationState.contact_name}</strong>? This
+                  action cannot be undone.
                 </p>
               </div>
 

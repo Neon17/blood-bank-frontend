@@ -32,10 +32,10 @@ export default function ProfilePage() {
   });
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState<{
-    profile_photo: string[]
+    profile_photo: string[];
   } | null>(null);
   const [photoVersion, setPhotoVersion] = useState(0);
-  
+
   // Ref for the file input to clear it safely
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -54,22 +54,22 @@ export default function ProfilePage() {
     e.preventDefault();
     setUploading(true);
     setErrors(null);
-    
+
     try {
       const formData = new FormData(e.currentTarget);
       const response = await updateProfilePhoto(formData);
-      
-      if ("message" in response) {
+
+      if ('message' in response) {
         setErrors(response.errors);
       } else {
         // Method 1A: Update auth context (best approach)
         if (updateUser) {
           await updateUser(); // Refresh user data in context
         }
-        
+
         // Method 1B: Cache busting with timestamp
-        setPhotoVersion(prev => prev + 1);
-        
+        setPhotoVersion((prev) => prev + 1);
+
         // Method 1C: Force image reload - SAFE VERSION
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
@@ -132,7 +132,10 @@ export default function ProfilePage() {
                       <img
                         width={144}
                         height={144}
-                        src={getProfilePhotoUrl() || `http://localhost:8000${user.profilePhoto.url}`}
+                        src={
+                          getProfilePhotoUrl() ||
+                          `http://localhost:8000${user.profilePhoto.url}`
+                        }
                         alt="Profile"
                         className="rounded-2xl w-36 h-36 object-cover border-4 border-white/80 dark:border-gray-800/80 shadow-2xl transition-all duration-300 group-hover:scale-105"
                         key={photoVersion}
@@ -179,7 +182,10 @@ export default function ProfilePage() {
                     <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                       <div className="text-sm text-red-600 dark:text-red-400 space-y-1">
                         {errors.profile_photo.map((error, index) => (
-                          <p key={index} className="flex items-center space-x-1">
+                          <p
+                            key={index}
+                            className="flex items-center space-x-1"
+                          >
                             <span>•</span>
                             <span>{error}</span>
                           </p>
@@ -206,16 +212,21 @@ export default function ProfilePage() {
               </div>
 
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-                <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 transform hover:scale-105 ${user.verified_as_donor
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg'
-                  : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg'
-                  }`}>
+                <div
+                  className={`inline-flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    user.verified_as_donor
+                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg'
+                      : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg'
+                  }`}
+                >
                   {user.verified_as_donor ? (
                     <CheckCircle className="w-4 h-4" />
                   ) : (
                     <XCircle className="w-4 h-4" />
                   )}
-                  <span>Donor {user.verified_as_donor ? 'Verified' : 'Not Verified'}</span>
+                  <span>
+                    Donor {user.verified_as_donor ? 'Verified' : 'Not Verified'}
+                  </span>
                 </div>
 
                 {user.blood_group && (
@@ -239,10 +250,26 @@ export default function ProfilePage() {
               </h2>
               <div className="space-y-4">
                 <InfoField icon={User} label="Full Name" value={user.name} />
-                <InfoField icon={Mail} label="Email Address" value={user.email} />
-                <InfoField icon={Calendar} label="Date of Birth" value={user.dob?.toString().split('T')[0] || ''} />
-                <InfoField icon={Home} label="Home Address" value={user.address || ''} />
-                <InfoField icon={Droplets} label="Blood Group" value={user.blood_group || ''} />
+                <InfoField
+                  icon={Mail}
+                  label="Email Address"
+                  value={user.email}
+                />
+                <InfoField
+                  icon={Calendar}
+                  label="Date of Birth"
+                  value={user.dob?.toString().split('T')[0] || ''}
+                />
+                <InfoField
+                  icon={Home}
+                  label="Home Address"
+                  value={user.address || ''}
+                />
+                <InfoField
+                  icon={Droplets}
+                  label="Blood Group"
+                  value={user.blood_group || ''}
+                />
               </div>
               <Link
                 href="/profile/edit"

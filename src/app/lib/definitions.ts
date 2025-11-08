@@ -207,8 +207,8 @@ export type Donation = {
 
   user?: User;
   blood_request?: BloodRequest;
-  blood_bank?: any; 
-  donation_program?: any; 
+  blood_bank?: any;
+  donation_program?: any;
   uploadable?: Upload;
 
   created_at?: string;

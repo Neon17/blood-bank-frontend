@@ -119,10 +119,11 @@ export default function Sidebar(props: { type: string }) {
             <Link
               key={href}
               href={href}
-              className={`block px-4 py-2 rounded-md transition ${isActive(href, activeOn)
-                ? 'bg-red-600 text-white'
-                : 'text-gray-700 dark:text-gray-300 hover:bg-red-500 hover:text-white'
-                }`}
+              className={`block px-4 py-2 rounded-md transition ${
+                isActive(href, activeOn)
+                  ? 'bg-red-600 text-white'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-red-500 hover:text-white'
+              }`}
               onClick={() => setSidebarOpen(false)} // auto-close on mobile
             >
               {label}

@@ -139,13 +139,13 @@ async function _editRequestApplication(id: string) {
   const response = await api.get(`/blood/requests/${id}/edit`);
   const data:
     | {
-      status: string;
-      data: BloodDonor;
-    }
+        status: string;
+        data: BloodDonor;
+      }
     | {
-      status: string;
-      message: string;
-    } = await response.data;
+        status: string;
+        message: string;
+      } = await response.data;
   return data;
 }
 
@@ -223,13 +223,13 @@ async function _editDonorApplication(id: string) {
   const response = await api.get(`/blood/donors/${id}/edit`);
   const data:
     | {
-      status: string;
-      data: BloodDonor;
-    }
+        status: string;
+        data: BloodDonor;
+      }
     | {
-      status: string;
-      message: string;
-    } = await response.data;
+        status: string;
+        message: string;
+      } = await response.data;
   return data;
 }
 
@@ -335,7 +335,6 @@ async function _test() {
   const data = await response.data;
   return data;
 }
-
 
 export async function allDonations(params?: {
   search?: string;
@@ -469,8 +468,3 @@ export async function approveDonationApplication(donation: Donation) {
     };
   }
 }
-
-
-
-
-

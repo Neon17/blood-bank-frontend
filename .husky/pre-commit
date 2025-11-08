@@ -6,6 +6,10 @@ echo "🚀 Running pre-commit checks..."
 echo "📝 Formatting code..."
 npm run format
 
+# Stage any changes made by the formatter
+echo "📦 Staging formatted files..."
+git add -u
+
 echo "🏗️ Building project..."
 npm run build
 

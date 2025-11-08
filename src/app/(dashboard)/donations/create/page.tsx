@@ -31,14 +31,14 @@ export default function CreateDonationPage() {
     country: '',
     user_id: '',
   });
-  
+
   const [location, setLocation] = useState<ExactLocation>({
     lat: 0,
     lng: 0,
     city: '',
     country: '',
   });
-  
+
   const [users, setUsers] = useState<User[]>([]);
   const [userSearch, setUserSearch] = useState('');
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -61,16 +61,18 @@ export default function CreateDonationPage() {
     return () => clearTimeout(delayDebounceFn);
   }, [userSearch]);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleUserSelect = (user: User) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       user_id: user.id.toString(),
       contact_name: user.name,
@@ -81,7 +83,7 @@ export default function CreateDonationPage() {
     }));
     setUserSearch(user.name);
     setShowUserDropdown(false);
-    
+
     // Set location if user has coordinates
     if (user.latitude && user.longitude) {
       setLocation({
@@ -114,7 +116,7 @@ export default function CreateDonationPage() {
       });
 
       const res = await createDonation(formDataObj);
-      
+
       if ('message' in res) {
         setError(res.message);
       } else {
@@ -165,7 +167,10 @@ export default function CreateDonationPage() {
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm"
+        >
           <div className="space-y-6">
             {/* User Selection */}
             <div className="relative">
@@ -183,7 +188,7 @@ export default function CreateDonationPage() {
                 placeholder="Search users by name or email..."
                 className="w-full p-3 border border-gray-300 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
-              
+
               {showUserDropdown && users.length > 0 && (
                 <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto">
                   {users.map((user) => (

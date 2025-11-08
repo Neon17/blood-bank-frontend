@@ -44,9 +44,9 @@ export const AuthInfoContextProvider = ({
     try {
       setLoading(true);
       setError(null);
-      
+
       const response: User | ErrorResponseType = await profile();
-      
+
       if (!response.hasOwnProperty('status')) {
         const userData = response as User;
         setUser(userData);
@@ -63,7 +63,9 @@ export const AuthInfoContextProvider = ({
       console.error('Failed to fetch user:', error);
       setUser(null);
       setIsLoggedIn(false);
-      setError(error instanceof Error ? error.message : 'An unexpected error occurred');
+      setError(
+        error instanceof Error ? error.message : 'An unexpected error occurred'
+      );
       return null;
     } finally {
       setLoading(false);
