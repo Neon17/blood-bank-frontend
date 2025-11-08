@@ -436,12 +436,23 @@ export default function Requests() {
                                   : 'ASAP'}
                               </span>
                             </div>
+
+                            {/* Beautiful WhatsApp Link */}
                             <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                               <span className="font-medium">Contact:</span>
-                              <span className="font-mono">
-                                {request.contact_number}
-                              </span>
+                              <a
+                                href={`https://wa.me/${request.contact_number}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 group"
+                              >
+                                <i className="fab fa-whatsapp text-white text-sm"></i>
+                                <span className="font-semibold text-sm">
+                                  Chat Now
+                                </span>
+                              </a>
                             </div>
+
                             <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                               <span className="font-medium">Location:</span>
                               <span>
@@ -454,6 +465,14 @@ export default function Requests() {
                                 {request.city}, {request.country}
                               </span>
                             </div>
+                          </div>
+
+                          {/* Phone Number Display */}
+                          <div className="mt-2 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                            <span>Phone: </span>
+                            <span className="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                              {request.contact_number}
+                            </span>
                           </div>
 
                           {/* Verification Photo */}
@@ -473,32 +492,32 @@ export default function Requests() {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-                          Respond to Request
-                          <svg
-                            className="w-3.5 h-3.5 ms-2"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 14 10"
-                          >
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M1 5h12m0 0L9 1m4 4L9 9"
-                            />
-                          </svg>
-                        </button>
+                      {/* <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                              Respond to Request
+                              <svg
+                                className="w-3.5 h-3.5 ms-2"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 14 10"
+                              >
+                                <path
+                                  stroke="currentColor"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                                />
+                              </svg>
+                            </button>
 
-                        <ActionDropdown
-                          id={request.id ? request.id.toString() : ''}
-                          error={errorMessage}
-                          success={successMessage}
-                        />
-                      </div>
+                            <ActionDropdown
+                              id={request.id ? request.id.toString() : ''}
+                              error={errorMessage}
+                              success={successMessage}
+                            />
+                          </div> */}
                     </div>
                   ))}
                 </div>

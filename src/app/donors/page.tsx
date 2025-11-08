@@ -356,39 +356,67 @@ export default function Donors() {
 
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-3">
+                          <div className="flex items-center gap-3 mb-4">
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                               {donor.user?.name || 'Anonymous Donor'}
                             </h3>
                             {donor.user?.verified_as_donor && (
                               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                Verified
+                                Verified Donor
                               </span>
                             )}
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mb-4">
                             <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                               <span className="font-medium">Blood Type:</span>
-                              <span className="font-bold text-red-600 dark:text-red-400">
+                              <span className="font-bold text-red-600 dark:text-red-400 text-lg">
                                 {donor.blood_group}
                               </span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                               <span className="font-medium">City:</span>
-                              <span>{donor.city || 'Not specified'}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                              <span className="font-medium">Phone:</span>
-                              <span className="font-mono">
-                                {donor.contact_number || 'Not available'}
+                              <span className="font-medium">
+                                {donor.city || 'Not specified'}
                               </span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                               <span className="font-medium">Country:</span>
                               <span>{donor.country || 'Not specified'}</span>
                             </div>
+                            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                              <span className="font-medium">Availability:</span>
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                Ready to Donate
+                              </span>
+                            </div>
                           </div>
+
+                          {/* Contact Section with Phone Call */}
+                          {donor.contact_number && (
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-blue-500 rounded-full">
+                                  <i className="fas fa-phone text-white text-sm"></i>
+                                </div>
+                                <div>
+                                  <span className="font-medium text-gray-700 dark:text-gray-300 block">
+                                    Direct Contact
+                                  </span>
+                                  <span className="text-sm text-gray-600 dark:text-gray-400 font-mono">
+                                    {donor.contact_number}
+                                  </span>
+                                </div>
+                              </div>
+                              <a
+                                href={`tel:${donor.contact_number}`}
+                                className="flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 font-semibold whitespace-nowrap"
+                              >
+                                <i className="fas fa-phone text-white"></i>
+                                <span>Call Now</span>
+                              </a>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

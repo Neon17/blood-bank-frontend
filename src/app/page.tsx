@@ -148,14 +148,14 @@ export default function Home() {
               {
                 step: '03',
                 title: 'Participation in Donation',
-                desc: 'Receive notifications for donation opportunities in your area.',
+                desc: 'Become a donor by registering as a donor.',
                 icon: '❤️',
               },
               {
                 step: '04',
-                title: 'Receive Notifications',
-                desc: 'Get promptly informed about urgent requests matching your blood type.',
-                icon: '📲',
+                title: 'Emergency Request',
+                desc: 'Submit urgent blood needs and receive immediate notifications from available donors in your area.',
+                icon: '🚑',
               },
             ].map((item, index) => (
               <div
