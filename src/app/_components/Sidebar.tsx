@@ -33,40 +33,37 @@ export default function Sidebar(props: { type: string }) {
 
   const userNavLinks = [
     { href: '/dashboard', label: 'Home' },
+    { href: '/contacts', label: 'Donor Profile' },
+    // { href: '/donations', label: 'Donations' },
     {
       href: '/profile',
-      label: 'Profile',
+      label: 'Profile Settings',
       activeOn: ['/profile', '/profile/edit'],
     },
-    { href: '/contacts', label: 'Donor Profile' },
-    { href: '/donations', label: 'Donations' },
-    { href: '/settings', label: 'Settings' },
   ];
   const adminNavLinks = [
     { href: '/dashboard', label: 'Home' },
-    {
-      href: '/profile',
-      label: 'Profile',
-      activeOn: ['/profile', '/profile/edit'],
-    },
     { href: '/contacts', label: 'Donor Profile' },
-    { href: '/donations', label: 'Donations' },
+    // { href: '/donations', label: 'Donations' },
     { href: '/admin/donors/applications', label: 'Donor Application' },
     {
       href: '/admin/requests/applications',
       label: 'Request Application',
       activeOn: ['/admin/requests/applications', '/admin/requests'],
     },
+    // {
+    //   href: '/admin/donations',
+    //   label: 'Donation Management'
+    // },
     { href: '/admin/users', label: 'Users' },
-    { href: '/settings', label: 'Settings' },
+    {
+      href: '/profile',
+      label: 'Profile Settings',
+      activeOn: ['/profile', '/profile/edit'],
+    },
   ];
   const bloodBankNavLinks = [
     { href: '/dashboard', label: 'Home' },
-    {
-      href: '/profile',
-      label: 'Profile',
-      activeOn: ['/profile', '/profile/edit'],
-    },
     { href: '/contacts', label: 'Donor Profile' },
     { href: '/donations', label: 'Donations' },
     { href: '/admin/donors/applications', label: 'Donor Application' },
@@ -75,7 +72,11 @@ export default function Sidebar(props: { type: string }) {
       label: 'Request Application',
       activeOn: ['/admin/requests/applications', '/admin/requests'],
     },
-    { href: '/settings', label: 'Settings' },
+    {
+      href: '/profile',
+      label: 'Profile Settings',
+      activeOn: ['/profile', '/profile/edit'],
+    },
   ];
 
   const isActive = (href: string, activeOn?: string[]) =>
@@ -118,11 +119,10 @@ export default function Sidebar(props: { type: string }) {
             <Link
               key={href}
               href={href}
-              className={`block px-4 py-2 rounded-md transition ${
-                isActive(href, activeOn)
-                  ? 'bg-red-600 text-white'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-red-500 hover:text-white'
-              }`}
+              className={`block px-4 py-2 rounded-md transition ${isActive(href, activeOn)
+                ? 'bg-red-600 text-white'
+                : 'text-gray-700 dark:text-gray-300 hover:bg-red-500 hover:text-white'
+                }`}
               onClick={() => setSidebarOpen(false)} // auto-close on mobile
             >
               {label}

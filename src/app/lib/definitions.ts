@@ -34,6 +34,7 @@ export type BloodDonorsPaginatedResponse = ApiResponse<
 export type BloodRequestPaginatedResponse = ApiResponse<
   PaginatedResponse<BloodRequest>
 >;
+export type PaginatedDonations = ApiResponse<PaginatedResponse<Donation>>;
 
 export type AuthResponse = {
   status?: string;
@@ -181,4 +182,35 @@ export type BloodRequest = {
   longitude: number;
   city: string;
   country: string;
+};
+
+export type Donation = {
+  id?: number;
+  quantity: number;
+  blood_group: string;
+  date_time: string;
+  exact_location: string;
+  contact_number: string;
+  contact_name: string;
+  contact_email?: string;
+  city: string;
+  state?: string;
+  country: string;
+  latitude?: number;
+  longitude?: number;
+  verification_status: 'pending' | 'approved' | 'cancelled';
+
+  blood_request_id?: number;
+  user_id?: number;
+  blood_bank_id?: number;
+  donation_program_id?: number;
+
+  user?: User;
+  blood_request?: BloodRequest;
+  blood_bank?: any; 
+  donation_program?: any; 
+  uploadable?: Upload;
+
+  created_at?: string;
+  updated_at?: string;
 };

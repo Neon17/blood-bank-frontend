@@ -12,6 +12,8 @@ import {
   BloodDonorsPaginatedResponse,
   UsersPaginatedResponse,
   BloodRequestPaginatedResponse,
+  Donation,
+  PaginatedDonations,
 } from './definitions';
 
 export const getAllUsers = asyncErrorHandler(_getAllUsers);
@@ -137,13 +139,13 @@ async function _editRequestApplication(id: string) {
   const response = await api.get(`/blood/requests/${id}/edit`);
   const data:
     | {
-        status: string;
-        data: BloodDonor;
-      }
+      status: string;
+      data: BloodDonor;
+    }
     | {
-        status: string;
-        message: string;
-      } = await response.data;
+      status: string;
+      message: string;
+    } = await response.data;
   return data;
 }
 
@@ -221,13 +223,13 @@ async function _editDonorApplication(id: string) {
   const response = await api.get(`/blood/donors/${id}/edit`);
   const data:
     | {
-        status: string;
-        data: BloodDonor;
-      }
+      status: string;
+      data: BloodDonor;
+    }
     | {
-        status: string;
-        message: string;
-      } = await response.data;
+      status: string;
+      message: string;
+    } = await response.data;
   return data;
 }
 
@@ -333,3 +335,142 @@ async function _test() {
   const data = await response.data;
   return data;
 }
+
+
+export async function allDonations(params?: {
+  search?: string;
+  blood_group?: string;
+  verification_status?: string;
+  city?: string;
+  country?: string;
+  date_range?: string;
+  page?: number;
+}) {
+  try {
+    const response = await api.get('/donations', { params });
+    const data: {
+      status: string;
+      data: PaginatedDonations;
+    } = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      status: 'error',
+      message: error.response?.data?.message || 'Failed to fetch donations',
+    };
+  }
+}
+
+export async function myDonations() {
+  try {
+    const response = await api.get('/donations/me');
+    const data: {
+      status: string;
+      data: Donation[];
+    } = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      status: 'error',
+      message: error.response?.data?.message || 'Failed to fetch my donations',
+    };
+  }
+}
+
+export async function getDonation(id: string) {
+  try {
+    const response = await api.get(`/donations/${id}`);
+    const data: {
+      status: string;
+      data: Donation;
+    } = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      status: 'error',
+      message: error.response?.data?.message || 'Failed to fetch donation',
+    };
+  }
+}
+
+export async function createDonation(formData: FormData) {
+  try {
+    const object: any = {};
+    formData.forEach((value, key) => {
+      object[key] = value;
+    });
+
+    const response = await api.post('/donations', object);
+    const data: {
+      status: string;
+      data: Donation;
+    } = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      status: 'error',
+      message: error.response?.data?.message || 'Failed to create donation',
+    };
+  }
+}
+
+export async function updateDonation(id: string, formData: FormData) {
+  try {
+    const object: any = {};
+    formData.forEach((value, key) => {
+      object[key] = value;
+    });
+
+    const response = await api.put(`/donations/${id}`, object);
+    const data: {
+      status: string;
+      data: Donation;
+    } = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      status: 'error',
+      message: error.response?.data?.message || 'Failed to update donation',
+    };
+  }
+}
+
+export async function deleteDonation(id: string) {
+  try {
+    const response = await api.delete(`/donations/${id}`);
+    const data: {
+      status: string;
+      message: string;
+    } = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      status: 'error',
+      message: error.response?.data?.message || 'Failed to delete donation',
+    };
+  }
+}
+
+export async function approveDonationApplication(donation: Donation) {
+  try {
+    const response = await api.put(`/donations/${donation.id}`, {
+      ...donation,
+      verification_status: 'approved',
+    });
+    const data: {
+      status: string;
+      data: Donation;
+    } = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      status: 'error',
+      message: error.response?.data?.message || 'Failed to approve donation',
+    };
+  }
+}
+
+
+
+
+
