@@ -162,8 +162,8 @@ export default function Page() {
   };
 
   const handleDelete = async (user_id: number | undefined) => {
-    if (user_id) {
-      const res = await deleteRequestApplication(user_id.toString());
+    if (deleteRequest?.id) {
+      const res = await deleteRequestApplication(deleteRequest.id?.toString());
       if ('message' in res) setError(res.message);
       else {
         setSuccess('Request application deleted successfully');
