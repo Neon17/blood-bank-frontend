@@ -23,6 +23,7 @@ export const updateProfile = asyncErrorHandler(_updateProfile);
 export const updateProfilePhoto = asyncErrorHandler(_updateProfilePhoto);
 export const bloodRequests = asyncErrorHandler(_bloodRequests);
 export const allBloodRequests = asyncErrorHandler(_allBloodRequests);
+export const myBloodRequests = asyncErrorHandler(_yourBloodRequest);
 export const bloodRequest = asyncErrorHandler(_bloodRequest);
 export const bloodDonors = asyncErrorHandler(_bloodDonors);
 export const registerBloodDonor = asyncErrorHandler(_registerBloodDonor);
@@ -117,11 +118,11 @@ async function _allBloodRequests($query = {}) {
   return data;
 }
 
-async function _yourBloodRequest() {
-  const response = await api.get('/blood/requests/yours');
+async function _yourBloodRequest($query = {}) {
+  const response = await api.get('/blood/requests/yours', { params: $query });
   const data: {
     status: string;
-    data: BloodRequest[];
+    data: PaginatedResponse<BloodRequest>;
   } = await response.data;
   return data;
 }
