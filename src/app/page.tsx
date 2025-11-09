@@ -18,16 +18,10 @@ export default function Home() {
             </p>
             <div className="flex gap-4 flex-wrap">
               <Link
-                href="/donors/register"
+                href="/signup"
                 className="bg-red-600 text-white px-6 py-3 rounded-lg shadow hover:bg-red-700 transition duration-200"
               >
                 Register as Donor
-              </Link>
-              <Link
-                href="/requests/create"
-                className="border border-red-500 text-red-600 dark:text-red-400 px-6 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-gray-800 transition duration-200"
-              >
-                Create Request
               </Link>
               <Link
                 href="/donors"

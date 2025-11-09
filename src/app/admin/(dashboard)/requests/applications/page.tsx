@@ -242,6 +242,8 @@ export default function Page() {
         [name]: type === 'number' ? +value : value,
       };
     });
+
+    fetchData();
   };
 
   // Pagination functions

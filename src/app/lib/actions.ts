@@ -235,6 +235,7 @@ async function _editDonorApplication(id: string) {
 }
 
 async function _updateDonorApplication(formData: BloodDonor) {
+  console.log(formData);
   const response = await api.put(`/blood/donors/${formData.id}`, formData);
   const data: {
     status: string;
@@ -244,6 +245,7 @@ async function _updateDonorApplication(formData: BloodDonor) {
 }
 
 async function _approveBloodDonorApplication(formData: BloodDonor) {
+  console.log(formData);
   const response = await api.patch(
     `/blood/donors/${formData.id}/status`,
     formData
