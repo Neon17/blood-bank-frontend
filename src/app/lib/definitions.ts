@@ -57,10 +57,11 @@ export enum verification_status {
 
 export interface FilterParams {
   search: string;
-  blood_type: string;
+  blood_group: string;
   verification_status: string;
-  admin_message: string;
-  radius: number;
+  city: string;
+  country: string;
+  has_donated: string;
   page: number;
   latitude?: number;
   longitude?: number;

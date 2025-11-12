@@ -12,25 +12,18 @@ import {
   BloodDonor,
   ExactLocation,
   PaginatedResponse,
+  FilterParams,
   verification_status,
 } from '@/app/lib/definitions';
 import dynamic from 'next/dynamic';
+import { ActionButton, StatusBadge } from './_components/ui';
+import { FilterSection } from './_components/FilterSection';
 
 const MapPicker = dynamic(import('@/app/_components/MapPicker'), {
   ssr: false,
 });
 
 // Filter interface
-interface FilterParams {
-  search: string;
-  blood_group: string;
-  verification_status: string;
-  city: string;
-  country: string;
-  has_donated: string;
-  page: number;
-}
-
 export default function Page() {
   const [data, setData] = useState<PaginatedResponse<BloodDonor> | null>(null);
   const [error, setError] = useState('');
@@ -65,15 +58,17 @@ export default function Page() {
   const router = useRouter();
 
   // Update individual filter
-  const updateFilter = useCallback(
-    (key: keyof FilterParams, value: string | number) => {
-      setFilters((prev) => ({
-        ...prev,
-        [key]: value,
-      }));
-    },
-    []
-  );
+  const updateFilter = useCallback((key: string, value: string | number) => {
+    setFilters((prev) => {
+      if (key in prev) {
+        return {
+          ...prev,
+          [key]: value,
+        };
+      }
+      return prev;
+    });
+  }, []);
 
   const fetchData = async (filterParams: FilterParams = filters) => {
     setLoading(true);
@@ -281,305 +276,9 @@ export default function Page() {
   };
 
   // Status badge component
-  const StatusBadge = ({ status }: { status: string }) => {
-    const statusConfig = {
-      approved: {
-        bg: 'bg-green-50 dark:bg-green-900/20',
-        text: 'text-green-700 dark:text-green-300',
-        border: 'border-green-200 dark:border-green-800',
-        dot: 'bg-green-500',
-      },
-      rejected: {
-        bg: 'bg-red-50 dark:bg-red-900/20',
-        text: 'text-red-700 dark:text-red-300',
-        border: 'border-red-200 dark:border-red-800',
-        dot: 'bg-red-500',
-      },
-      wrong: {
-        bg: 'bg-red-50 dark:bg-red-900/20',
-        text: 'text-red-700 dark:text-red-300',
-        border: 'border-red-200 dark:border-red-800',
-        dot: 'bg-red-500',
-      },
-      pending: {
-        bg: 'bg-yellow-50 dark:bg-yellow-900/20',
-        text: 'text-yellow-700 dark:text-yellow-300',
-        border: 'border-yellow-200 dark:border-yellow-800',
-        dot: 'bg-yellow-500',
-      },
-    };
-
-    const config =
-      statusConfig[status.toLowerCase() as keyof typeof statusConfig] ||
-      statusConfig.pending;
-
-    return (
-      <span
-        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${config.bg} ${config.text} ${config.border}`}
-      >
-        <span className={`w-2 h-2 rounded-full mr-2 ${config.dot}`}></span>
-        {status.charAt(0).toUpperCase() + status.slice(1)}
-      </span>
-    );
-  };
-
   // Action button component
-  const ActionButton = ({
-    onClick,
-    icon,
-    title,
-    color = 'gray',
-  }: {
-    onClick: () => void;
-    icon: React.ReactNode;
-    title: string;
-    color?: 'blue' | 'green' | 'red' | 'gray';
-  }) => {
-    const colorClasses = {
-      blue: 'text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300',
-      green:
-        'text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300',
-      red: 'text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300',
-      gray: 'text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300',
-    };
-
-    return (
-      <button
-        onClick={onClick}
-        className={`p-2 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 ${colorClasses[color]}`}
-        title={title}
-      >
-        {icon}
-      </button>
-    );
-  };
 
   // Filter Component
-  const FilterSection = () => (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Filter Donors
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Refine your search using the filters below
-          </p>
-        </div>
-        <button
-          onClick={handleClearFilters}
-          className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium transition-colors flex items-center gap-2"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-          Clear All
-        </button>
-      </div>
-
-      <form onSubmit={handleFilterSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Search Input */}
-          <div className="lg:col-span-2">
-            <label
-              htmlFor="search"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
-              Search Donors
-            </label>
-            <div className="relative">
-              <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-              <input
-                id="search_text_box123"
-                type="text"
-                defaultValue={filters.search}
-                // onChange={(e) => updateFilter('search', e.target.value)}
-                placeholder="Search by name, contact, address..."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-500 dark:placeholder-gray-400"
-              />
-            </div>
-          </div>
-
-          {/* Blood Group */}
-          <div>
-            <label
-              htmlFor="blood_group"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
-              Blood Group
-            </label>
-            <select
-              id="blood_group"
-              value={filters.blood_group}
-              onChange={(e) => updateFilter('blood_group', e.target.value)}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-            >
-              <option value="">All Blood Groups</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-            </select>
-          </div>
-
-          {/* Verification Status */}
-          <div>
-            <label
-              htmlFor="verification_status"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
-              Status
-            </label>
-            <select
-              id="verification_status"
-              value={filters.verification_status}
-              onChange={(e) =>
-                updateFilter('verification_status', e.target.value)
-              }
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-            >
-              <option value="">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="wrong">Wrong</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Has Donated */}
-          <div>
-            <label
-              htmlFor="has_donated"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
-              Donation History
-            </label>
-            <select
-              id="has_donated"
-              value={filters.has_donated}
-              onChange={(e) => updateFilter('has_donated', e.target.value)}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-            >
-              <option value="">All Donors</option>
-              <option value="true">Has Donated</option>
-              <option value="false">Never Donated</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {data && `Found ${data.total} donors`}
-          </div>
-          <div className="flex items-center space-x-3">
-            <button
-              type="button"
-              onClick={handleClearFilters}
-              className="px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
-            >
-              Clear
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none flex items-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Applying...
-                </>
-              ) : (
-                <>
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                    />
-                  </svg>
-                  Apply Filters
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      </form>
-
-      {/* Active Filters Badges */}
-      <div className="flex flex-wrap gap-2 mt-4">
-        {Object.entries(filters).map(([key, value]) => {
-          if (!value || key === 'page') return null;
-
-          const filterLabels: { [key: string]: string } = {
-            search: 'Search',
-            blood_group: 'Blood Group',
-            verification_status: 'Status',
-            city: 'City',
-            country: 'Country',
-            has_donated: 'Donation History',
-          };
-
-          const displayValue =
-            key === 'has_donated'
-              ? value === 'true'
-                ? 'Has Donated'
-                : 'Never Donated'
-              : value;
-
-          return (
-            <span
-              key={key}
-              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-            >
-              {filterLabels[key]}: {displayValue}
-              <button
-                onClick={() => updateFilter(key as keyof FilterParams, '')}
-                className="ml-2 hover:text-blue-600 dark:hover:text-blue-300 text-sm"
-              >
-                ×
-              </button>
-            </span>
-          );
-        })}
-      </div>
-    </div>
-  );
 
   return (
     <div className="p-6 h-full w-full bg-gray-50 dark:bg-gray-900 min-h-screen">
@@ -644,7 +343,14 @@ export default function Page() {
       )}
 
       {/* Filter Section */}
-      <FilterSection />
+      <FilterSection
+        filters={filters}
+        updateFilter={updateFilter}
+        handleFilterSubmit={handleFilterSubmit}
+        handleClearFilters={handleClearFilters}
+        loading={loading}
+        data={data}
+      />
 
       {/* Table */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
