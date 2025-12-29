@@ -201,8 +201,7 @@ export default function EditRequest() {
               <img
                 src={
                   data?.verification_photo
-                    ? 'http://localhost:8000/storage' +
-                      data?.verification_photo.path
+                    ? `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage${data?.verification_photo.path}`
                     : ''
                 }
                 alt="Verification Photo"

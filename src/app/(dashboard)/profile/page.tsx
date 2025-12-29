@@ -85,7 +85,8 @@ export default function ProfilePage() {
   // Method 2: Add cache busting to image URL
   const getProfilePhotoUrl = () => {
     if (!user?.profilePhoto?.url) return null;
-    return `http://localhost:8000${user.profilePhoto.url}?v=${photoVersion}`;
+    const base = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+    return `${base}${user.profilePhoto.url}?v=${photoVersion}`;
   };
 
   if (!user)
@@ -132,10 +133,7 @@ export default function ProfilePage() {
                       <img
                         width={144}
                         height={144}
-                        src={
-                          getProfilePhotoUrl() ||
-                          `http://localhost:8000${user.profilePhoto.url}`
-                        }
+                        src={getProfilePhotoUrl() || ''}
                         alt="Profile"
                         className="rounded-2xl w-36 h-36 object-cover border-4 border-white/80 dark:border-gray-800/80 shadow-2xl transition-all duration-300 group-hover:scale-105"
                         key={photoVersion}

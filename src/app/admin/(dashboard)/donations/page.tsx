@@ -855,10 +855,7 @@ export default function DonationsPage() {
                       Verification Photo
                     </label>
                     <img
-                      src={
-                        'http://localhost:8000/storage/' +
-                        viewDonation.uploadable.path
-                      }
+                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${viewDonation.uploadable.path}`}
                       alt="Verification"
                       className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-600"
                     />

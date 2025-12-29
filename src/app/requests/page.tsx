@@ -482,7 +482,7 @@ export default function Requests() {
                                 Verification Photo:
                               </p>
                               <img
-                                src={`http://localhost:3000/backend/storage/${request.verification_photo.path}`}
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${request.verification_photo.path}`}
                                 alt="Request verification"
                                 className="rounded-lg border border-gray-200 dark:border-gray-600 max-w-xs"
                               />

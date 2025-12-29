@@ -763,10 +763,7 @@ export default function Page() {
                     </label>
                     <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700/50">
                       <img
-                        src={
-                          'http://localhost:8000/storage/' +
-                          viewRequest.verification_photo.path
-                        }
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${viewRequest.verification_photo.path}`}
                         alt="Verification"
                         className="max-w-full h-auto max-h-64 rounded-lg mx-auto shadow-sm"
                       />

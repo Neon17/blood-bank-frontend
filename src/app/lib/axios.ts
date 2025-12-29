@@ -6,7 +6,10 @@ import { cookies } from 'next/headers';
 
 // Use NEXT_PUBLIC_API_URL env variable or default to local dev URL
 const baseURL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/backend/api';
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NEXT_PUBLIC_BACKEND_URL
+    ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`
+    : 'http://localhost:8000/api');
 
 const api = axios.create({
   baseURL,

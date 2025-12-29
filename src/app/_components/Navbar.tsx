@@ -103,7 +103,7 @@ export default function Navbar() {
                     >
                       {user?.profilePhoto?.url ? (
                         <img
-                          src={`http://localhost:8000${user.profilePhoto.url}`}
+                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}${user.profilePhoto.url}`}
                           alt="Profile"
                           className="w-8 h-8 rounded-full border-2 border-red-400"
                         />
@@ -217,7 +217,7 @@ export default function Navbar() {
                     <div className="flex items-center space-x-3 p-3 bg-red-500 dark:bg-red-600 rounded-lg">
                       {user?.profilePhoto ? (
                         <img
-                          src={`http://localhost:8000${user.profilePhoto.url}`}
+                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}${user.profilePhoto.url}`}
                           alt="Profile"
                           className="w-10 h-10 rounded-full border-2 border-red-400"
                         />

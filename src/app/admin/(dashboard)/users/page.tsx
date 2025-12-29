@@ -467,7 +467,7 @@ export default function Page() {
                             {user.profile_photo ? (
                               <img
                                 className="h-10 w-10 rounded-full object-cover"
-                                src={`http://localhost:8000/storage/${user.profile_photo}`}
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/storage/${user.profile_photo}`}
                                 alt={user.name}
                               />
                             ) : (
